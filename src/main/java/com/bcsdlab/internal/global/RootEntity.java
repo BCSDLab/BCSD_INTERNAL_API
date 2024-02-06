@@ -20,10 +20,10 @@ import lombok.NoArgsConstructor;
 public abstract class RootEntity<ID> {
 
     @CreatedDate
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
 
     public abstract ID getId();
 

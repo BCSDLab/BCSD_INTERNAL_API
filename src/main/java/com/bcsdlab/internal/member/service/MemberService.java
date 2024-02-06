@@ -23,6 +23,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public MemberLoginResponse login(MemberLoginRequest request) {
         Member member = memberRepository.getByStudentNumber(request.studentNumber());
         member.matchPassword(request.password(), passwordEncoder);
