@@ -21,9 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({BcsdException.class})
-    public ResponseEntity<ErrorResponse> handleBcsdException(BcsdException e) {
+    public ResponseEntity<ErrorResponse> handleBcsdException(HttpServletRequest request, BcsdException e) {
         BcsdExceptionType exceptionType = e.getExceptionType();
-        log.warn("BcsdException: {}", exceptionType.getMessage());
+        log.error("[{}] 잘못된 요청입니다. uri: {} {}, ",
+            MDC.get(REQUEST_ID), request.getMethod(), request.getRequestURI(), e);
+        log.info("[{}] request header: {}", MDC.get(REQUEST_ID), getHeaders(request));
+        log.info("[{}] request body: {}", MDC.get(REQUEST_ID), getRequestBody(request));
         return ResponseEntity.status(exceptionType.getHttpStatus()).body(new ErrorResponse(exceptionType.getMessage()));
     }
 

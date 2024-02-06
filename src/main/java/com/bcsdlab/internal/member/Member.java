@@ -1,15 +1,10 @@
 package com.bcsdlab.internal.member;
 
-import java.nio.charset.StandardCharsets;
-
 import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.exception.MemberException;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
-import at.favre.lib.crypto.bcrypt.BCrypt.Result;
-import static at.favre.lib.crypto.bcrypt.BCrypt.Version.VERSION_2Y;
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
 import jakarta.persistence.Column;
@@ -19,10 +14,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import static java.nio.charset.StandardCharsets.*;
 import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +33,6 @@ public class Member extends RootEntity<Long> {
     @Column(name = "student_number", nullable = false, unique = true)
     private String studentNumber;
 
-    @Lob
     @NotBlank
     @Column(name = "password", nullable = false)
     private String password;
@@ -56,6 +48,9 @@ public class Member extends RootEntity<Long> {
 
     @Column(name = "is_authorized")
     private boolean isAuthorized;
+
+    @Column(name = "is_delete")
+    private boolean isDelete;
 
     public Member(
         String studentNumber,
