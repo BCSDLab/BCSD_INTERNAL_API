@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/dues")
-public class DuesController {
+public class DuesController implements DuesApi {
 
     private final DuesService duesService;
 
@@ -39,7 +39,7 @@ public class DuesController {
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long duesId,
         @RequestBody @Valid DuesUpdateRequest updateRequest
-        ) {
+    ) {
         duesService.updateDues(duesId, updateRequest);
         return ResponseEntity.ok().build();
     }

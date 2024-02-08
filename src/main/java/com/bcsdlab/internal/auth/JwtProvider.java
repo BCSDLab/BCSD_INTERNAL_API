@@ -1,6 +1,5 @@
 package com.bcsdlab.internal.auth;
 
-import java.security.Key;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
@@ -23,21 +22,26 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtProvider {
 
-    @Value("${jwt.secretKey}")
-    private String secretKey;
+    private final SecretKey secretKey;
+    private final Long expirationTime;
 
-    @Value("${jwt.expirationTime}")
-    private Long expirationTime;
+    public JwtProvider(
+        @Value("${jwt.secretKey}") String secretKey,
+        @Value("${jwt.expirationTime}") Long expirationTime
+    ) {
+        String encoded = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        this.secretKey = Keys.hmacShaKeyFor(encoded.getBytes());
+        this.expirationTime = expirationTime;
+    }
 
     public String createToken(Member member) {
         if (member == null) {
             throw new MemberException(MEMBER_NOT_FOUND);
         } else {
-            Key key = getSecretKey();
-            return Jwts.builder().signWith(key)
+            return Jwts.builder().signWith(secretKey)
                 .header()
                 .add("typ", "JWT")
-                .add("alg", key.getAlgorithm())
+                .add("alg", secretKey.getAlgorithm())
                 .and()
                 .claim("id", member.getId())
                 .expiration(new Date(Instant.now().toEpochMilli() + expirationTime)).compact();
@@ -46,7 +50,7 @@ public class JwtProvider {
 
     public Long getUserId(String token) {
         try {
-            String userId = Jwts.parser().verifyWith(getSecretKey())
+            String userId = Jwts.parser().verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
@@ -55,10 +59,5 @@ public class JwtProvider {
         } catch (JwtException e) {
             throw new AuthException(INVALID_TOKEN);
         }
-    }
-
-    private SecretKey getSecretKey() {
-        String encoded = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        return Keys.hmacShaKeyFor(encoded.getBytes());
     }
 }

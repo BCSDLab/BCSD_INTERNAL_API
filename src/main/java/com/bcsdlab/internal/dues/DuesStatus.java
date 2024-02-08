@@ -2,8 +2,9 @@ package com.bcsdlab.internal.dues;
 
 import java.util.Arrays;
 
+import com.bcsdlab.internal.dues.exception.DuesExceptionType;
 import com.bcsdlab.internal.member.exception.MemberException;
-import com.bcsdlab.internal.member.exception.MemberExceptionType;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum DuesStatus {
     NOT_PAID,
@@ -11,10 +12,11 @@ public enum DuesStatus {
     SKIP,
     ;
 
+    @JsonCreator
     public static DuesStatus from(String status) {
         return Arrays.stream(values())
-            .filter(type -> type.name().equals(status))
+            .filter(type -> type.name().equals(status.toUpperCase()))
             .findAny()
-            .orElseThrow(() -> new MemberException(MemberExceptionType.TRACK_NOT_FOUND));
+            .orElseThrow(() -> new MemberException(DuesExceptionType.DUES_STATUS_NOT_FOUND));
     }
 }

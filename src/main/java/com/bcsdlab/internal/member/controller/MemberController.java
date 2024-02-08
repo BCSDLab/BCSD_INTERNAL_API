@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/members")
-public class MemberController {
+public class MemberController implements MemberApi {
 
     private final MemberService memberService;
 
@@ -58,7 +58,7 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<PageResponse<MemberResponse>> getAll(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
-        @PageableDefault() Pageable pageable
+        @PageableDefault Pageable pageable
     ) {
         var result = memberService.findAll(pageable);
         return ResponseEntity.ok(PageResponse.from(result));
@@ -66,7 +66,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberResponse> getMemberById(
-        @Auth(permit = {ADMIN}) Long id,
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long id,
         @PathVariable Long memberId
     ) {
         var result = memberService.getById(memberId);

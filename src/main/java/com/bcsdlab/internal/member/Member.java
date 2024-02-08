@@ -1,5 +1,7 @@
 package com.bcsdlab.internal.member;
 
+import java.time.LocalDate;
+
 import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.global.RootEntity;
@@ -12,7 +14,7 @@ import jakarta.persistence.Entity;
 import static jakarta.persistence.EnumType.STRING;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
 import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
@@ -24,21 +26,23 @@ import lombok.NoArgsConstructor;
 public class Member extends RootEntity<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "year")
-    private String year;
+    @Column(name = "join_date")
+    private LocalDate joinDate;
 
     @Enumerated(STRING)
     @Column(name = "track")
     private Track track;
 
+    @Enumerated(STRING)
     @Column(name = "member_type")
     private MemberType memberType;
 
+    @Enumerated(STRING)
     @Column(name = "status")
-    private String status;
+    private MemberStatus status;
 
     @Column(name = "name")
     private String name;
@@ -61,8 +65,8 @@ public class Member extends RootEntity<Long> {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "authority")
     @Enumerated(STRING)
+    @Column(name = "authority")
     private Authority authority;
 
     @Column(name = "github_name")
@@ -75,10 +79,10 @@ public class Member extends RootEntity<Long> {
     private boolean isDeleted;
 
     public Member(
-        String year,
+        LocalDate joinDate,
         Track track,
         MemberType memberType,
-        String status,
+        MemberStatus status,
         String name,
         String company,
         String department,
@@ -88,7 +92,7 @@ public class Member extends RootEntity<Long> {
         String password,
         String githubName
     ) {
-        this.year = year;
+        this.joinDate = joinDate;
         this.track = track;
         this.memberType = memberType;
         this.status = status;

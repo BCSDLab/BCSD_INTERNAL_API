@@ -8,15 +8,26 @@ import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.DuesStatus;
 import com.bcsdlab.internal.member.Member;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public record DuesGroupResponse(
     List<DuesResponse> dues
 ) {
 
     private record DuesResponse(
+        @Schema(example = "1")
         Long memberId,
+
+        @Schema(example = "최준호")
         String name,
+
+        @Schema(example = "BACKEND")
         String track,
+
+        @Schema(example = "3", description = "회비 미납 횟수")
         long unPaidCount,
+
+        @Schema(description = "회비 납입여부 상세정보")
         List<DuesDetailResponse> detail
     ) {
 
@@ -50,6 +61,7 @@ public record DuesGroupResponse(
         return new DuesGroupResponse(result);
     }
 
+    // TODO: 회비 미납 횟수 계산 리팩터링
     private static long getUnPaidCount(List<Dues> memberDues) {
         return memberDues.stream().filter(it -> it.getStatus() == DuesStatus.NOT_PAID).count();
     }

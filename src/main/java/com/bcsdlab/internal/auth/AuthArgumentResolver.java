@@ -16,9 +16,12 @@ import com.bcsdlab.internal.auth.exception.AuthExceptionType;
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import static java.util.Objects.requireNonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
@@ -32,9 +35,12 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-
+    public Object resolveArgument(
+        MethodParameter parameter,
+        ModelAndViewContainer mavContainer,
+        NativeWebRequest webRequest,
+        WebDataBinderFactory binderFactory
+    ) {
         Auth authAt = parameter.getParameterAnnotation(Auth.class);
         requireNonNull(authAt);
         List<Authority> permitStatus = Arrays.asList(authAt.permit());
@@ -42,6 +48,8 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
         if (permitStatus.contains(member.getAuthority())) {
             return member.getId();
         }
-        throw new AuthException(AuthExceptionType.INVALID_TOKEN);
+        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+        log.info("{} 권한을 가진 회원의 [{} {}] 접근 차단.", member.getAuthority(), request.getMethod(), request.getRequestURI());
+        throw new AuthException(AuthExceptionType.FORBIDDEN);
     }
 }

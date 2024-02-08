@@ -1,0 +1,138 @@
+package com.bcsdlab.internal.member.controller;
+
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.bcsdlab.internal.auth.Auth;
+import com.bcsdlab.internal.global.controller.dto.PageResponse;
+import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
+import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
+import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
+
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+
+@Tag(name = "회원 관리 API")
+public interface MemberApi {
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    ResponseEntity<MemberLoginResponse> login(
+        @RequestBody @Valid MemberLoginRequest request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "400"),
+        }
+    )
+    @Operation(summary = "회원가입")
+    @PostMapping("/register")
+    ResponseEntity<Void> register(
+        @RequestBody @Valid MemberRegisterRequest request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "내 정보 확인")
+    @SecurityRequirement(name = "JWT")
+    @GetMapping("/me")
+    ResponseEntity<MemberResponse> getMemberMe(
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "회원정보 전체조회")
+    @SecurityRequirement(name = "JWT")
+    @GetMapping
+    ResponseEntity<PageResponse<MemberResponse>> getAll(
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
+
+        @ParameterObject
+        @PageableDefault Pageable pageable
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "내 정보 확인")
+    @SecurityRequirement(name = "JWT")
+    @GetMapping("/{memberId}")
+    ResponseEntity<MemberResponse> getMemberById(
+        @Auth(permit = {ADMIN}) Long id,
+        @Parameter(in = PATH) @PathVariable Long memberId
+    );
+}

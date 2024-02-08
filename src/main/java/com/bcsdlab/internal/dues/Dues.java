@@ -2,7 +2,6 @@ package com.bcsdlab.internal.dues;
 
 import java.time.LocalDateTime;
 
-import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.Member;
 
@@ -16,13 +15,13 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
+import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 public class Dues extends RootEntity<Long> {
 
     @Id
@@ -39,8 +38,8 @@ public class Dues extends RootEntity<Long> {
     @Column(name = "date")
     private LocalDateTime date;
 
-    @Column(name = "status")
     @Enumerated(STRING)
+    @Column(name = "status")
     private DuesStatus status;
 
     @Column(name = "is_delete")

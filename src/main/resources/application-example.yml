@@ -1,4 +1,10 @@
 spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
   jpa:
     properties:
       hibernate:
@@ -6,7 +12,7 @@ spring:
         format_sql: true
         use_sql_comments: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
 
 logging:
   level:
@@ -23,3 +29,6 @@ jwt:
 password:
   salt: "helloworldisgood"
   salt-cost: 6
+
+swagger:
+  server-url: localhost:8080
