@@ -7,6 +7,8 @@ import com.bcsdlab.internal.member.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import static jakarta.persistence.EnumType.STRING;
+import jakarta.persistence.Enumerated;
 import static jakarta.persistence.FetchType.LAZY;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -37,7 +39,8 @@ public class Dues extends RootEntity<Long> {
     private LocalDateTime date;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(STRING)
+    private DuesStatus status;
 
     @Column(name = "is_delete")
     private boolean isDelete;

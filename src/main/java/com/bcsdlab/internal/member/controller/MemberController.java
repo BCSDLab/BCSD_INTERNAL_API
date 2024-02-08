@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
-import com.bcsdlab.internal.global.dto.PageResponse;
+import com.bcsdlab.internal.global.controller.dto.PageResponse;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
@@ -56,7 +56,7 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<MemberResponse>> findAll(
+    public ResponseEntity<PageResponse<MemberResponse>> getAll(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @PageableDefault() Pageable pageable
     ) {

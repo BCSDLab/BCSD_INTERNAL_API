@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.global.dto;
+package com.bcsdlab.internal.global.controller.dto;
 
 import java.util.List;
 
