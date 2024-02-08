@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.DuesRepository;
+import com.bcsdlab.internal.dues.DuesStatus;
+import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesGroupResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -21,5 +23,12 @@ public class DuesService {
     public DuesGroupResponse getAll() {
         List<Dues> dues = duesRepository.findAll();
         return DuesGroupResponse.of(dues);
+    }
+
+    @Transactional
+    public void updateDues(Long duesId, DuesUpdateRequest request) {
+        Dues dues = duesRepository.getById(duesId);
+        dues.update(request.memo(), DuesStatus.from(request.status()));
+        duesRepository.save(dues);
     }
 }

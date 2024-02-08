@@ -2,6 +2,7 @@ package com.bcsdlab.internal.dues;
 
 import java.time.LocalDateTime;
 
+import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.Member;
 
@@ -44,4 +45,9 @@ public class Dues extends RootEntity<Long> {
 
     @Column(name = "is_delete")
     private boolean isDelete;
+
+    public void update(String memo, DuesStatus status) {
+        this.memo = memo;
+        this.status = status;
+    }
 }
