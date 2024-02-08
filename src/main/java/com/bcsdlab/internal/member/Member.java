@@ -53,13 +53,13 @@ public class Member extends RootEntity<Long> {
     @Column(name = "department")
     private String department;
 
-    @Column(name = "student_number")
+    @Column(name = "student_number", unique = true)
     private String studentNumber;
 
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
