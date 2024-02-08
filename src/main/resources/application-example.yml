@@ -24,11 +24,20 @@ logging:
 
 jwt:
   secretKey: "helloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworld"
-  expirationTime: 86400000
+  expirationDay: 30
 
 password:
   salt: "helloworldisgood"
   salt-cost: 6
 
 swagger:
-  server-url: localhost:8080
+  server-url: http://localhost:8080
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /api-ui.html
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-produces-media-type: application/json

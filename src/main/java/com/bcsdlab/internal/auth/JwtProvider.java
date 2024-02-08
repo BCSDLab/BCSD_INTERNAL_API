@@ -3,6 +3,7 @@ package com.bcsdlab.internal.auth;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.SecretKey;
 
@@ -27,11 +28,11 @@ public class JwtProvider {
 
     public JwtProvider(
         @Value("${jwt.secretKey}") String secretKey,
-        @Value("${jwt.expirationTime}") Long expirationTime
+        @Value("${jwt.expirationDay}") Long expirationDay
     ) {
         String encoded = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.secretKey = Keys.hmacShaKeyFor(encoded.getBytes());
-        this.expirationTime = expirationTime;
+        this.expirationTime = TimeUnit.DAYS.toMillis(expirationDay);
     }
 
     public String createToken(Member member) {
