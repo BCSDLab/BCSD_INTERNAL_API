@@ -14,8 +14,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,40 +27,79 @@ public class Member extends RootEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(name = "student_number", nullable = false, unique = true)
+    @Column(name = "year")
+    private String year;
+
+    @Enumerated(STRING)
+    @Column(name = "track")
+    private Track track;
+
+    @Column(name = "member_type")
+    private MemberType memberType;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "company")
+    private String company;
+
+    @Column(name = "department")
+    private String department;
+
+    @Column(name = "student_number")
     private String studentNumber;
 
-    @NotBlank
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-    @NotBlank
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
-    @NotNull
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "authority")
     @Enumerated(STRING)
-    @Column(name = "authority", nullable = false)
     private Authority authority;
+
+    @Column(name = "github_name")
+    private String githubName;
 
     @Column(name = "is_authorized")
     private boolean isAuthorized;
 
-    @Column(name = "is_delete")
-    private boolean isDelete;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
     public Member(
+        String year,
+        Track track,
+        MemberType memberType,
+        String status,
+        String name,
+        String company,
+        String department,
         String studentNumber,
-        String password,
+        String phoneNumber,
         String email,
-        Authority authority
+        String password,
+        String githubName
     ) {
+        this.year = year;
+        this.track = track;
+        this.memberType = memberType;
+        this.status = status;
+        this.name = name;
+        this.company = company;
+        this.department = department;
         this.studentNumber = studentNumber;
-        this.password = password;
+        this.phoneNumber = phoneNumber;
         this.email = email;
-        this.authority = authority;
-        this.isAuthorized = false;
+        this.password = password;
+        this.githubName = githubName;
     }
 
     public void register(String studentNumber, String password, PasswordEncoder passwordEncoder) {
@@ -70,6 +107,7 @@ public class Member extends RootEntity<Long> {
         this.password = passwordEncoder.encode(password);
         this.authority = NORMAL;
         this.isAuthorized = false;
+        this.isDeleted = false;
     }
 
     public void matchPassword(String password, PasswordEncoder passwordEncoder) {

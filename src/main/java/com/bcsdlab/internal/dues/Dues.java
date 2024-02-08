@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.payment;
+package com.bcsdlab.internal.dues;
 
 import java.time.LocalDateTime;
 

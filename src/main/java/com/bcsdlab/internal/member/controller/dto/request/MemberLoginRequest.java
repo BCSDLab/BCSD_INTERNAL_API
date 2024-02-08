@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.member.controller.dto;
+package com.bcsdlab.internal.member.controller.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

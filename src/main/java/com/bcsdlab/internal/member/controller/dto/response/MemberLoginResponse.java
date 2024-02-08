@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.member.controller.dto;
+package com.bcsdlab.internal.member.controller.dto.response;
 
 
 public record MemberLoginResponse(
