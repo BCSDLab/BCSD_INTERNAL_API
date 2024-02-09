@@ -5,5 +5,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface MemberCustomRepository {
 
-    Page<Member> searchMembers(String name, Boolean deleted, Boolean authorized, Pageable pageable);
+    Page<Member> searchMembers(String name, Boolean deleted, Boolean authed, Pageable pageable);
 }

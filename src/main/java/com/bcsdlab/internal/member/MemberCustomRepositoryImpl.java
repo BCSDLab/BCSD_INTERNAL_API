@@ -20,12 +20,12 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Member> searchMembers(String name, Boolean deleted, Boolean authorized, Pageable pageable) {
+    public Page<Member> searchMembers(String name, Boolean deleted, Boolean authed, Pageable pageable) {
         List<Member> result = jpaQueryFactory.selectFrom(member)
             .where(
                 containName(name),
                 inDeleted(deleted),
-                isAuthed(authorized)
+                isAuthed(authed)
             )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())

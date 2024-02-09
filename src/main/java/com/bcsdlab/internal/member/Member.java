@@ -76,7 +76,7 @@ public class Member extends RootEntity<Long> {
     @Column(name = "github_name")
     private String githubName;
 
-    @Column(name = "is_authorized")
+    @Column(name = "is_authed")
     private boolean isAuthed;
 
     @Column(name = "is_deleted")
