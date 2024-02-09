@@ -9,8 +9,6 @@ import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.exception.MemberException;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_AUTHORIZED;
@@ -146,25 +144,11 @@ public class Member extends RootEntity<Long> {
         this.githubName = updated.githubName;
     }
 
-    public void accept(Member member) {
-        validateAdmin();
-        member.isAuthed = true;
+    public void withdraw() {
+        this.isDeleted = true;
     }
 
-    public void withdraw(Member member) {
-        validateAdmin();
-        member.isDeleted = true;
-    }
-
-    public void changeStatus(Member member, MemberStatus status) {
-        validateAdmin();
-        member.status = status;
-    }
-
-    public void validateAdmin() {
-        if (!this.isDeleted && (this.authority == ADMIN || this.authority != MANAGER)) {
-            return;
-        }
-        throw new MemberException(MEMBER_NOT_AUTHORIZED);
+    public void accept() {
+        this.isAuthed = true;
     }
 }

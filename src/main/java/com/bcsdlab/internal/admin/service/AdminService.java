@@ -17,16 +17,14 @@ public class AdminService {
 
     private final MemberRepository memberRepository;
 
-    public void acceptMember(Long adminId, Long memberId) {
-        Member admin = memberRepository.getById(adminId);
+    public void acceptMember(Long memberId) {
         Member member = memberRepository.getById(memberId);
-        admin.accept(member);
+        member.accept();
     }
 
-    public void withdrawMember(Long adminId, Long memberId) {
-        Member admin = memberRepository.getById(adminId);
+    public void withdrawMember(Long memberId) {
         Member member = memberRepository.getById(memberId);
-        admin.withdraw(member);
+        member.withdraw();
     }
 
     public MemberResponse updateMember(Long memberId, AdminMemberUpdateRequest request) {

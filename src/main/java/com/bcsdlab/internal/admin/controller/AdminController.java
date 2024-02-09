@@ -40,7 +40,7 @@ public class AdminController implements AdminApi {
         @Auth(permit = ADMIN) Long adminId,
         @PathVariable Long memberId
     ) {
-        adminService.withdrawMember(adminId, memberId);
+        adminService.withdrawMember(memberId);
         return ResponseEntity.ok().build();
     }
 
@@ -49,7 +49,7 @@ public class AdminController implements AdminApi {
         @Auth(permit = ADMIN) Long adminId,
         @PathVariable Long memberId
     ) {
-        adminService.acceptMember(adminId, memberId);
+        adminService.acceptMember(memberId);
         return ResponseEntity.ok().build();
     }
 }

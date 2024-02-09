@@ -18,7 +18,6 @@ import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.exception.MemberException;
 
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
     private final JwtProvider jwtProvider;
-    private final EntityManager entityManager;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
 
@@ -60,13 +58,11 @@ public class MemberService {
         return members.map(MemberResponse::from);
     }
 
-
     @Transactional
     public MemberResponse update(Long memberId, MemberUpdateRequest request) {
         Member member = memberRepository.getById(memberId);
         Member updated = request.toEntity();
         member.update(updated);
-        memberRepository.save(member);
         return MemberResponse.from(member);
     }
 }
