@@ -5,14 +5,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.global.controller.dto.PageResponse;
+import com.bcsdlab.internal.member.controller.dto.request.MemberFindAllRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
@@ -104,11 +108,14 @@ public interface MemberApi {
     @Operation(summary = "회원정보 전체조회")
     @SecurityRequirement(name = "JWT")
     @GetMapping
-    ResponseEntity<PageResponse<MemberResponse>> getAll(
+    ResponseEntity<PageResponse<MemberResponse>> getMembers(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
 
         @ParameterObject
-        @PageableDefault Pageable pageable
+        @PageableDefault Pageable pageable,
+
+        @ParameterObject
+        @ModelAttribute MemberFindAllRequest request
     );
 
     @ApiResponses(
@@ -128,11 +135,36 @@ public interface MemberApi {
             ),
         }
     )
-    @Operation(summary = "내 정보 확인")
+    @Operation(summary = "회원 정보 확인")
     @SecurityRequirement(name = "JWT")
     @GetMapping("/{memberId}")
     ResponseEntity<MemberResponse> getMemberById(
         @Auth(permit = {ADMIN}) Long id,
         @Parameter(in = PATH) @PathVariable Long memberId
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "본인 정보 수정")
+    @SecurityRequirement(name = "JWT")
+    @PutMapping
+    ResponseEntity<MemberResponse> updateMemberMe(
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
+        @RequestBody @Valid MemberUpdateRequest request
     );
 }

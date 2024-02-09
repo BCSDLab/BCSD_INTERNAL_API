@@ -4,16 +4,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.global.controller.dto.PageResponse;
+import com.bcsdlab.internal.member.controller.dto.request.MemberFindAllRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.service.MemberService;
@@ -56,11 +60,12 @@ public class MemberController implements MemberApi {
     }
 
     @GetMapping
-    public ResponseEntity<PageResponse<MemberResponse>> getAll(
+    public ResponseEntity<PageResponse<MemberResponse>> getMembers(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
-        @PageableDefault Pageable pageable
+        @PageableDefault Pageable pageable,
+        @ModelAttribute MemberFindAllRequest request
     ) {
-        var result = memberService.findAll(pageable);
+        var result = memberService.getMembers(request, pageable);
         return ResponseEntity.ok(PageResponse.from(result));
     }
 
@@ -70,6 +75,15 @@ public class MemberController implements MemberApi {
         @PathVariable Long memberId
     ) {
         var result = memberService.getById(memberId);
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping
+    public ResponseEntity<MemberResponse> updateMemberMe(
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
+        @RequestBody @Valid MemberUpdateRequest request
+    ) {
+        var result = memberService.update(memberId, request);
         return ResponseEntity.ok(result);
     }
 }

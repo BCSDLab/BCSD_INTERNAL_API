@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record MemberResponse(
-
     @Schema(example = "1", description = "사용자 고유 ID")
     Long id,
 
@@ -55,9 +54,15 @@ public record MemberResponse(
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdAt,
 
-    @Schema(example = "C2024-02-01 21:22:10", description = "수정 일자")
+    @Schema(example = "2024-02-01 21:22:10", description = "수정 일자")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+
+    @Schema(example = "true", description = "승인 여부")
+    boolean isAuthed,
+
+    @Schema(example = "false", description = "삭제 여부")
+    boolean isDeleted
 ) {
 
     public static MemberResponse from(Member member) {
@@ -76,7 +81,9 @@ public record MemberResponse(
             member.getAuthority().name(),
             member.getGithubName(),
             member.getCreatedAt(),
-            member.getUpdatedAt()
+            member.getUpdatedAt(),
+            member.isAuthed(),
+            member.isDeleted()
         );
     }
 }

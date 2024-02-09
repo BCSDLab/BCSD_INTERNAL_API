@@ -2,13 +2,18 @@ package com.bcsdlab.internal.member;
 
 import java.time.LocalDate;
 
+import org.hibernate.annotations.SQLDelete;
+
 import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.exception.MemberException;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_AUTHORIZED;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import static jakarta.persistence.EnumType.STRING;
@@ -23,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@SQLDelete(sql = "UPDATE member SET is_deleted = true WHERE id = ?")
 public class Member extends RootEntity<Long> {
 
     @Id
@@ -73,7 +79,7 @@ public class Member extends RootEntity<Long> {
     private String githubName;
 
     @Column(name = "is_authorized")
-    private boolean isAuthorized;
+    private boolean isAuthed;
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
@@ -110,7 +116,7 @@ public class Member extends RootEntity<Long> {
         this.studentNumber = studentNumber;
         this.password = passwordEncoder.encode(password);
         this.authority = NORMAL;
-        this.isAuthorized = false;
+        this.isAuthed = false;
         this.isDeleted = false;
     }
 
@@ -118,5 +124,47 @@ public class Member extends RootEntity<Long> {
         if (passwordEncoder.match(password, this.password)) {
             throw new MemberException(INVALID_LOGIN);
         }
+    }
+
+    public void checkAuthorized() {
+        if (!isAuthed) {
+            throw new MemberException(MEMBER_NOT_AUTHORIZED);
+        }
+    }
+
+    public void update(Member updated) {
+        this.joinDate = updated.joinDate;
+        this.track = updated.track;
+        this.memberType = updated.memberType;
+        this.status = updated.status;
+        this.name = updated.name;
+        this.company = updated.company;
+        this.department = updated.department;
+        this.studentNumber = updated.studentNumber;
+        this.phoneNumber = updated.phoneNumber;
+        this.email = updated.email;
+        this.githubName = updated.githubName;
+    }
+
+    public void accept(Member member) {
+        validateAdmin();
+        member.isAuthed = true;
+    }
+
+    public void withdraw(Member member) {
+        validateAdmin();
+        member.isDeleted = true;
+    }
+
+    public void changeStatus(Member member, MemberStatus status) {
+        validateAdmin();
+        member.status = status;
+    }
+
+    public void validateAdmin() {
+        if (!this.isDeleted && (this.authority == ADMIN || this.authority != MANAGER)) {
+            return;
+        }
+        throw new MemberException(MEMBER_NOT_AUTHORIZED);
     }
 }

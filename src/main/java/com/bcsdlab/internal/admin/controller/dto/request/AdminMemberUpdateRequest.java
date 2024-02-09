@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.member.controller.dto.request;
+package com.bcsdlab.internal.admin.controller.dto.request;
 
 import java.time.LocalDate;
 
@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record MemberRegisterRequest(
+public record AdminMemberUpdateRequest(
     @Schema(example = "2023-01-01", description = "가입 시기")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull LocalDate year,
@@ -63,12 +63,8 @@ public record MemberRegisterRequest(
     @Schema(example = "example@koreatech.ac.kr", description = "이메일")
     @NotBlank String email,
 
-    @Schema(example = "asdf1234!", description = "비밀번호 (SHA256으로 암호화)")
-    @NotBlank String password,
-
     @Schema(example = "CHOI-JJUNHO", description = "깃허브 이름")
     @NotBlank String githubName
-
 ) {
 
     public Member toEntity() {
@@ -83,7 +79,7 @@ public record MemberRegisterRequest(
             studentNumber,
             phoneNumber,
             email,
-            password,
+            null,
             githubName
         );
     }

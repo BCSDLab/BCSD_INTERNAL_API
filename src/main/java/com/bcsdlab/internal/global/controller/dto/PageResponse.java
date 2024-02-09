@@ -8,6 +8,8 @@ public record PageResponse<T>(
     List<T> content,
     boolean hasNext,
     int currentPage,
+    long totalElements,
+    int totalPage,
     int pageSize
 ) {
 
@@ -16,6 +18,8 @@ public record PageResponse<T>(
             result.getContent(),
             result.hasNext(),
             result.getNumber(),
+            result.getTotalElements(),
+            result.getTotalPages(),
             result.getSize()
         );
     }

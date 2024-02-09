@@ -8,7 +8,7 @@ import com.bcsdlab.internal.member.exception.MemberException;
 
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberCustomRepository {
 
     Optional<Member> findByStudentNumber(String studentNumber);
 
