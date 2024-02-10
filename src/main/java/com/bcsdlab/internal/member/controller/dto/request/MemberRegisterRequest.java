@@ -67,8 +67,10 @@ public record MemberRegisterRequest(
     @NotBlank String password,
 
     @Schema(example = "CHOI-JJUNHO", description = "깃허브 이름")
-    @NotBlank String githubName
+    @NotBlank String githubName,
 
+    @Schema(example = "https://example.com/image.png", description = "프로필 이미지 URL")
+    String profileImageUrl
 ) {
 
     public Member toEntity() {
@@ -84,7 +86,8 @@ public record MemberRegisterRequest(
             phoneNumber,
             email,
             password,
-            githubName
+            githubName,
+            profileImageUrl
         );
     }
 }

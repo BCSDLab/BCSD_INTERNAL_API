@@ -50,6 +50,9 @@ public record MemberResponse(
     @Schema(example = "CHOI-JJUNHO", description = "깃허브 이름")
     String githubName,
 
+    @Schema(example = "https://profile-image-url", description = "프로필 이미지 URL")
+    String profileImageUrl,
+
     @Schema(example = "2024-02-01 21:22:10", description = "생성 일자")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdAt,
@@ -80,6 +83,7 @@ public record MemberResponse(
             member.getEmail(),
             member.getAuthority().name(),
             member.getGithubName(),
+            member.getProfileImageUrl(),
             member.getCreatedAt(),
             member.getUpdatedAt(),
             member.isAuthed(),

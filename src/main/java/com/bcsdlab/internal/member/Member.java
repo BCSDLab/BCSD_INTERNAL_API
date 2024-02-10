@@ -51,6 +51,9 @@ public class Member extends RootEntity<Long> {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
     @Column(name = "company")
     private String company;
 
@@ -94,7 +97,8 @@ public class Member extends RootEntity<Long> {
         String phoneNumber,
         String email,
         String password,
-        String githubName
+        String githubName,
+        String profileImageUrl
     ) {
         this.joinDate = joinDate;
         this.track = track;
@@ -108,6 +112,7 @@ public class Member extends RootEntity<Long> {
         this.email = email;
         this.password = password;
         this.githubName = githubName;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public void register(String studentNumber, String password, PasswordEncoder passwordEncoder) {
