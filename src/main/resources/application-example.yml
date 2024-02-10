@@ -41,3 +41,9 @@ springdoc:
     path: /api-docs
   show-actuator: true
   default-produces-media-type: application/json
+
+aws:
+  s3:
+    bucket: "example-bucket-12"
+    image-path: "images/"  # 마지막 / 필수
+    presigned-url-expires-minutes: 10

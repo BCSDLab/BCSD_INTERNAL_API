@@ -15,7 +15,6 @@ import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
