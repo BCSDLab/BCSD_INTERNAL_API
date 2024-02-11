@@ -30,7 +30,7 @@ public class AdminService {
     public MemberResponse updateMember(Long memberId, AdminMemberUpdateRequest request) {
         Member member = memberRepository.getById(memberId);
         Member updated = request.toEntity();
-        member.update(updated);
+        member.updateAll(updated);
         return MemberResponse.from(member);
     }
 }

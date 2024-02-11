@@ -144,6 +144,13 @@ public class Member extends RootEntity<Long> {
         this.phoneNumber = updated.phoneNumber;
         this.email = updated.email;
         this.githubName = updated.githubName;
+        this.profileImageUrl = updated.profileImageUrl;
+    }
+
+    public void updateAll(Member updated) {
+        this.update(updated);
+        this.isAuthed = updated.isAuthed;
+        this.isDeleted = updated.isDeleted;
     }
 
     public void withdraw() {
