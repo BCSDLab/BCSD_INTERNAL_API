@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 public record AdminMemberUpdateRequest(
     @Schema(example = "2023-01-01", description = "가입 시기")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull LocalDate year,
+    @NotNull LocalDate joinDate,
 
     @Schema(example = "BACKEND", description = """
         UIUX
@@ -78,7 +78,7 @@ public record AdminMemberUpdateRequest(
 
     public Member toEntity() {
         return new Member(
-            year,
+            joinDate,
             track,
             memberType,
             status,
