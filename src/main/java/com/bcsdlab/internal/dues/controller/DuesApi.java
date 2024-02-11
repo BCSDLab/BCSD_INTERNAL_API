@@ -55,7 +55,9 @@ public interface DuesApi {
     @GetMapping
     ResponseEntity<DuesGroupResponse> getAll(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
-        @ParameterObject @ModelAttribute DuesQueryRequest request
+
+        @ParameterObject
+        @ModelAttribute DuesQueryRequest request
     );
 
     @ApiResponses(
@@ -81,7 +83,10 @@ public interface DuesApi {
     @PutMapping
     ResponseEntity<DuesResponse> updateDues(
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+
+        @ParameterObject
         @ModelAttribute DuesUpdateQueryRequest queryRequest,
+
         @RequestBody @Valid DuesUpdateRequest updateRequest
     );
 
