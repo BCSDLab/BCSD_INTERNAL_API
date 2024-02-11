@@ -18,6 +18,7 @@ import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.exception.MemberException;
 
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_AUTHORIZED;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,8 +32,8 @@ public class MemberService {
 
     public MemberLoginResponse login(MemberLoginRequest request) {
         Member member = memberRepository.getByStudentNumber(request.studentNumber());
+        checkAuthorized(member);
         member.matchPassword(request.password(), passwordEncoder);
-        member.checkAuthorized();
         String token = jwtProvider.createToken(member);
         return new MemberLoginResponse(token);
     }
@@ -64,5 +65,11 @@ public class MemberService {
         Member updated = request.toEntity();
         member.update(updated);
         return MemberResponse.from(member);
+    }
+
+    private void checkAuthorized(Member member) {
+        if (!member.isAuthed() || member.isDeleted()) {
+            throw new MemberException(MEMBER_NOT_AUTHORIZED);
+        }
     }
 }

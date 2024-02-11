@@ -11,7 +11,6 @@ import com.bcsdlab.internal.member.exception.MemberException;
 
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
-import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_AUTHORIZED;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import static jakarta.persistence.EnumType.STRING;
@@ -126,12 +125,6 @@ public class Member extends RootEntity<Long> {
     public void matchPassword(String password, PasswordEncoder passwordEncoder) {
         if (passwordEncoder.match(password, this.password)) {
             throw new MemberException(INVALID_LOGIN);
-        }
-    }
-
-    public void checkAuthorized() {
-        if (!isAuthed) {
-            throw new MemberException(MEMBER_NOT_AUTHORIZED);
         }
     }
 
