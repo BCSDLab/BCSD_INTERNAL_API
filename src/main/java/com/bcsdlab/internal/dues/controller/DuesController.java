@@ -3,7 +3,6 @@ package com.bcsdlab.internal.dues.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesCreateRequest;
-import com.bcsdlab.internal.dues.controller.dto.request.DuesFindRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesGroupResponse;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
@@ -34,19 +34,19 @@ public class DuesController implements DuesApi {
     @GetMapping
     public ResponseEntity<DuesGroupResponse> getAll(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
-        @ModelAttribute DuesFindRequest request
+        @ModelAttribute DuesQueryRequest request
     ) {
         var result = duesService.getAll(request);
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/{duesId}")
+    @PutMapping
     public ResponseEntity<DuesResponse> updateDues(
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
-        @PathVariable Long duesId,
+        @ModelAttribute DuesUpdateQueryRequest queryRequest,
         @RequestBody @Valid DuesUpdateRequest updateRequest
     ) {
-        var result = duesService.updateDues(duesId, updateRequest);
+        var result = duesService.updateDues(queryRequest, updateRequest);
         return ResponseEntity.ok(result);
     }
 

@@ -2,8 +2,6 @@ package com.bcsdlab.internal.dues.controller.dto.request;
 
 import java.time.YearMonth;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.DuesStatus;
 import com.bcsdlab.internal.member.Member;
@@ -13,11 +11,13 @@ import jakarta.validation.constraints.NotNull;
 
 public record DuesCreateRequest(
     @Schema(example = "1", description = "회원 ID")
-    Long memberId,
+    @NotNull Long memberId,
 
-    @DateTimeFormat(pattern = "yyyy-MM")
-    @Schema(example = "2021-01", description = "회비 납부월")
-    YearMonth date,
+    @Schema(example = "2021", description = "년도")
+    @NotNull Integer year,
+
+    @Schema(example = "1", description = "월")
+    @NotNull Integer month,
 
     @Schema(example = "SKIP", description = """
         NOT_PAID
@@ -34,7 +34,7 @@ public record DuesCreateRequest(
         return new Dues(
             memo,
             member,
-            date,
+            YearMonth.of(year, month),
             status,
             false
         );

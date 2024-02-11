@@ -1,32 +1,25 @@
 package com.bcsdlab.internal.member.controller.dto.request;
 
-import java.time.LocalDate;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import java.time.YearMonth;
 
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberStatus;
 import com.bcsdlab.internal.member.MemberType;
-import com.bcsdlab.internal.member.Track;
+import com.bcsdlab.internal.track.Track;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record MemberRegisterRequest(
-    @Schema(example = "2023-01-01", description = "가입 시기")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull LocalDate joinDate,
+    @Schema(example = "2023", description = "가입 년도")
+    Integer joinedYear,
 
-    @Schema(example = "BACKEND", description = """
-        UIUX
-        FRONTEND
-        BACKEND
-        GAME
-        ANDROID
-        IOS
-        """)
-    @NotNull Track track,
+    @Schema(example = "3", description = "가입 월")
+    Integer joinedMonth,
+
+    @Schema(example = "1", description = "트랙 ID")
+    @NotNull Long trackId,
 
     @Schema(example = "REGULAR", description = """
         BEGINNER
@@ -73,9 +66,9 @@ public record MemberRegisterRequest(
     String profileImageUrl
 ) {
 
-    public Member toEntity() {
+    public Member toEntity(Track track) {
         return new Member(
-            joinDate,
+            YearMonth.of(joinedYear, joinedMonth),
             track,
             memberType,
             status,

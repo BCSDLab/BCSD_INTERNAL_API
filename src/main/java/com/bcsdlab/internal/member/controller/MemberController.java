@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.global.controller.dto.PageResponse;
-import com.bcsdlab.internal.member.controller.dto.request.MemberFindAllRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberQueryRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
@@ -63,7 +63,7 @@ public class MemberController implements MemberApi {
     public ResponseEntity<PageResponse<MemberResponse>> getMembers(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @PageableDefault Pageable pageable,
-        @ModelAttribute MemberFindAllRequest request
+        @ModelAttribute MemberQueryRequest request
     ) {
         var result = memberService.getMembers(request, pageable);
         return ResponseEntity.ok(PageResponse.from(result));

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.global.controller.dto.PageResponse;
-import com.bcsdlab.internal.member.controller.dto.request.MemberFindAllRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
@@ -115,7 +114,7 @@ public interface MemberApi {
         @PageableDefault Pageable pageable,
 
         @ParameterObject
-        @ModelAttribute MemberFindAllRequest request
+        @ModelAttribute MemberQueryRequest request
     );
 
     @ApiResponses(

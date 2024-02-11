@@ -6,7 +6,7 @@ import com.bcsdlab.internal.dues.Dues;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public record DuesResponse(
-    long duesId,
+    long id,
     String status,
     String memo,
     @JsonFormat(pattern = "yyyy-MM")

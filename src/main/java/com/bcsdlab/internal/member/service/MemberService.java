@@ -9,13 +9,15 @@ import com.bcsdlab.internal.auth.JwtProvider;
 import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberRepository;
-import com.bcsdlab.internal.member.controller.dto.request.MemberFindAllRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberQueryRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.exception.MemberException;
+import com.bcsdlab.internal.track.Track;
+import com.bcsdlab.internal.track.TrackRepository;
 
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS_EMAIL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS_STUDENT_NUMBER;
@@ -30,6 +32,7 @@ public class MemberService {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final TrackRepository trackRepository;
 
     public MemberLoginResponse login(MemberLoginRequest request) {
         Member member = memberRepository.getByStudentNumber(request.studentNumber());
@@ -47,8 +50,8 @@ public class MemberService {
         memberRepository.findByEmail(request.email()).ifPresent(member -> {
             throw new MemberException(MEMBER_ALREADY_EXISTS_EMAIL);
         });
-
-        Member member = request.toEntity();
+        Track track = trackRepository.getById(request.trackId());
+        Member member = request.toEntity(track);
         member.register(request.studentNumber(), request.password(), passwordEncoder);
         memberRepository.save(member);
     }
@@ -58,16 +61,18 @@ public class MemberService {
         return MemberResponse.from(member);
     }
 
-    public Page<MemberResponse> getMembers(MemberFindAllRequest request, Pageable pageable) {
+    public Page<MemberResponse> getMembers(MemberQueryRequest request, Pageable pageable) {
+        Track track = trackRepository.getById(request.trackId());
         Page<Member> members = memberRepository
-            .searchMembers(request.name(), request.track(), request.deleted(), request.authed(), pageable);
+            .searchMembers(request.name(), track.getId(), request.deleted(), request.authed(), pageable);
         return members.map(MemberResponse::from);
     }
 
     @Transactional
     public MemberResponse update(Long memberId, MemberUpdateRequest request) {
         Member member = memberRepository.getById(memberId);
-        Member updated = request.toEntity();
+        Track track = trackRepository.getById(request.trackId());
+        Member updated = request.toEntity(track);
         member.update(updated);
         return MemberResponse.from(member);
     }

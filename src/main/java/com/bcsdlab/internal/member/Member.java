@@ -1,6 +1,6 @@
 package com.bcsdlab.internal.member;
 
-import java.time.LocalDate;
+import java.time.YearMonth;
 
 import org.hibernate.annotations.SQLDelete;
 
@@ -8,6 +8,7 @@ import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.exception.MemberException;
+import com.bcsdlab.internal.track.Track;
 
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
@@ -15,9 +16,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import static jakarta.persistence.EnumType.STRING;
 import jakarta.persistence.Enumerated;
+import static jakarta.persistence.FetchType.LAZY;
 import jakarta.persistence.GeneratedValue;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +37,10 @@ public class Member extends RootEntity<Long> {
     private Long id;
 
     @Column(name = "join_date")
-    private LocalDate joinDate;
+    private YearMonth joinDate;
 
-    @Enumerated(STRING)
-    @Column(name = "track")
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "track_id")
     private Track track;
 
     @Enumerated(STRING)
@@ -85,7 +89,7 @@ public class Member extends RootEntity<Long> {
     private boolean isDeleted;
 
     public Member(
-        LocalDate joinDate,
+        YearMonth joinDate,
         Track track,
         MemberType memberType,
         MemberStatus status,

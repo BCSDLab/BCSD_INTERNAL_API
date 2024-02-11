@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface CustomDuesRepository {
 
-    List<Dues> searchDues(String year, String track);
+    List<Dues> searchDues(Integer year, Long trackId);
 }

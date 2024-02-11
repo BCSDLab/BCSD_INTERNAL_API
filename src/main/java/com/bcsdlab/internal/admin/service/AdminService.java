@@ -7,6 +7,8 @@ import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateReques
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberRepository;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
+import com.bcsdlab.internal.track.Track;
+import com.bcsdlab.internal.track.TrackRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminService {
 
     private final MemberRepository memberRepository;
+    private final TrackRepository trackRepository;
 
     public void acceptMember(Long memberId) {
         Member member = memberRepository.getById(memberId);
@@ -29,7 +32,8 @@ public class AdminService {
 
     public MemberResponse updateMember(Long memberId, AdminMemberUpdateRequest request) {
         Member member = memberRepository.getById(memberId);
-        Member updated = request.toEntity();
+        Track track = trackRepository.getById(request.trackId());
+        Member updated = request.toEntity(track);
         member.updateAll(updated);
         return MemberResponse.from(member);
     }

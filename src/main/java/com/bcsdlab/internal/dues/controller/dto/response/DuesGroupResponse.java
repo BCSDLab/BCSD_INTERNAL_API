@@ -9,26 +9,30 @@ import java.util.stream.Collectors;
 import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.DuesStatus;
 import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record DuesGroupResponse(
-    String year,
-    List<DuesResponse> dues
+    @Schema(example = "2021", description = "년도")
+    Integer year,
+
+    @Schema(description = "회비 납입여부 목록")
+    List<InnerDuesResponse> dues
 ) {
 
-    private record DuesResponse(
+    private record InnerDuesResponse(
         @Schema(example = "1")
         Long memberId,
 
         @Schema(example = "최준호")
         String name,
 
-        @Schema(example = "BACKEND")
-        String track,
+        @Schema(description = "트랙 정보")
+        TrackResponse track,
 
         @Schema(example = "3", description = "회비 미납 횟수")
-        long unPaidCount,
+        long unpaidCount,
 
         @Schema(description = "회비 납입여부 상세정보")
         List<DuesDetailResponse> detail
@@ -39,9 +43,6 @@ public record DuesGroupResponse(
     private record DuesDetailResponse(
         @Schema(example = "1", description = "월")
         int month,
-
-        @Schema(example = "1", description = "회비 납입 고유 ID")
-        Long duesId,
 
         @Schema(example = "NOT_PAID", description = """
             NOT_PAID
@@ -56,7 +57,7 @@ public record DuesGroupResponse(
 
     }
 
-    public static DuesGroupResponse of(String year, List<Member> members, List<Dues> dues) {
+    public static DuesGroupResponse of(Integer year, List<Member> members, List<Dues> dues) {
         Map<Member, List<Dues>> groupByMember = dues.stream()
             .collect(Collectors.groupingBy(Dues::getMember));
 
@@ -68,10 +69,10 @@ public record DuesGroupResponse(
             .map(entry -> {
                     Member member = entry.getKey();
                     List<Dues> memberDues = entry.getValue();
-                    return new DuesResponse(
+                    return new InnerDuesResponse(
                         member.getId(),
                         member.getName(),
-                        member.getTrack().name(),
+                        TrackResponse.from(member.getTrack()),
                         getUnPaidCount(memberDues),
                         getDetails(memberDues)
                     );
@@ -93,7 +94,6 @@ public record DuesGroupResponse(
                 .map(dues ->
                     new DuesDetailResponse(
                         dues.getDate().getMonthValue(),
-                        dues.getId(),
                         dues.getStatus().name(),
                         dues.getMemo()
                     )
@@ -101,7 +101,6 @@ public record DuesGroupResponse(
                 .orElseGet(() ->
                     new DuesDetailResponse(
                         month.getValue(),
-                        null,
                         null,
                         null
                     )

@@ -1,10 +1,10 @@
 package com.bcsdlab.internal.member.controller.dto.response;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,12 +13,14 @@ public record MemberResponse(
     @Schema(example = "1", description = "사용자 고유 ID")
     Long id,
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Schema(example = "2023-01-01", description = "가입 일자")
-    LocalDate joinDate,
+    @Schema(example = "2023", description = "가입 년도")
+    Integer joinedYear,
 
-    @Schema(example = "BACKEND", description = "트랙")
-    String track,
+    @Schema(example = "2", description = "가입 월")
+    Integer joinedMonth,
+
+    @Schema(description = "트랙 정보")
+    TrackResponse track,
 
     @Schema(example = "REGULAR", description = "회원 등급 (비기너, 레귤러, 멘토)")
     String memberType,
@@ -71,8 +73,9 @@ public record MemberResponse(
     public static MemberResponse from(Member member) {
         return new MemberResponse(
             member.getId(),
-            member.getJoinDate(),
-            member.getTrack().name(),
+            member.getJoinDate().getYear(),
+            member.getJoinDate().getMonthValue(),
+            TrackResponse.from(member.getTrack()),
             member.getMemberType().name(),
             member.getStatus().getView(),
             member.getName(),

@@ -20,11 +20,11 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Member> searchMembers(String name, String track, Boolean deleted, Boolean authed, Pageable pageable) {
+    public Page<Member> searchMembers(String name, Long trackId, Boolean deleted, Boolean authed, Pageable pageable) {
         List<Member> result = jpaQueryFactory.selectFrom(member)
             .where(
                 containName(name),
-                containTrack(track),
+                eqTrackId(trackId),
                 inDeleted(deleted),
                 isAuthed(authed)
             )
@@ -46,7 +46,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
         return name == null ? null : member.name.contains(name);
     }
 
-    private BooleanExpression containTrack(String track) {
-        return track == null ? null : member.track.stringValue().equalsIgnoreCase(track);
+    private BooleanExpression eqTrackId(Long trackId) {
+        return trackId == null ? null : member.track.id.eq(trackId);
     }
 }

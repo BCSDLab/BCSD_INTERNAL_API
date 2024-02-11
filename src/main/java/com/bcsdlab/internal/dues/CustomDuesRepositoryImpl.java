@@ -20,25 +20,25 @@ public class CustomDuesRepositoryImpl implements CustomDuesRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Dues> searchDues(String year, String track) {
+    public List<Dues> searchDues(Integer year, Long trackId) {
         return jpaQueryFactory.selectFrom(dues)
             .where(
                 containYear(year),
-                containTrack(track)
+                eqTrackId(trackId)
             )
             .fetch();
     }
 
-    private BooleanExpression containTrack(String track) {
-        return track == null ? null : dues.member.track.stringValue().equalsIgnoreCase(track);
+    private BooleanExpression eqTrackId(Long trackId) {
+        return trackId == null ? null : dues.member.track.id.eq(trackId);
     }
 
-    private BooleanExpression containYear(String year) {
+    private BooleanExpression containYear(Integer year) {
         if (year == null) {
             return null;
         }
-        YearMonth start = YearMonth.of(Integer.parseInt(year), JANUARY);
-        YearMonth end = YearMonth.of(Integer.parseInt(year), DECEMBER);
+        YearMonth start = YearMonth.of(year, JANUARY);
+        YearMonth end = YearMonth.of(year, DECEMBER);
         return dues.date.between(start, end);
     }
 }
