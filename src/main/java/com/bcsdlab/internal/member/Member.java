@@ -7,12 +7,14 @@ import org.hibernate.annotations.SQLDelete;
 import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.global.RootEntity;
+import com.bcsdlab.internal.global.config.YearMonthDateAttributeConverter;
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.track.Track;
 
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import static jakarta.persistence.EnumType.STRING;
 import jakarta.persistence.Enumerated;
@@ -36,7 +38,8 @@ public class Member extends RootEntity<Long> {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "join_date")
+    @Column(name = "join_date", columnDefinition = "date")
+    @Convert(converter = YearMonthDateAttributeConverter.class)
     private YearMonth joinDate;
 
     @ManyToOne(fetch = LAZY)

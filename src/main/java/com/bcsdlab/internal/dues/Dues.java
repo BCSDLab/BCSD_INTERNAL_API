@@ -3,9 +3,11 @@ package com.bcsdlab.internal.dues;
 import java.time.YearMonth;
 
 import com.bcsdlab.internal.global.RootEntity;
+import com.bcsdlab.internal.global.config.YearMonthDateAttributeConverter;
 import com.bcsdlab.internal.member.Member;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import static jakarta.persistence.EnumType.STRING;
 import jakarta.persistence.Enumerated;
@@ -35,7 +37,9 @@ public class Dues extends RootEntity<Long> {
     @JoinColumn(name = "member_id")
     private Member member;
 
+
     @Column(name = "date")
+    @Convert(converter = YearMonthDateAttributeConverter.class)
     private YearMonth date;
 
     @Enumerated(STRING)
