@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.global;
+package com.bcsdlab.internal.global.exception;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.Map;
 import org.jboss.logging.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -20,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({BcsdException.class})
+    @ExceptionHandler({BcsdException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponse> handleBcsdException(HttpServletRequest request, BcsdException e) {
         BcsdExceptionType exceptionType = e.getExceptionType();
         log.error("[{}] 잘못된 요청입니다. uri: {} {}, ",

@@ -2,7 +2,7 @@ package com.bcsdlab.internal.member.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.bcsdlab.internal.global.BcsdExceptionType;
+import com.bcsdlab.internal.global.exception.BcsdExceptionType;
 
 public enum MemberExceptionType implements BcsdExceptionType {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원을 찾을 수 없습니다."),

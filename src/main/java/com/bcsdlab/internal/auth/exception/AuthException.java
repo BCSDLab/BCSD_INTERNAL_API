@@ -1,7 +1,7 @@
 package com.bcsdlab.internal.auth.exception;
 
-import com.bcsdlab.internal.global.BcsdException;
-import com.bcsdlab.internal.global.BcsdExceptionType;
+import com.bcsdlab.internal.global.exception.BcsdException;
+import com.bcsdlab.internal.global.exception.BcsdExceptionType;
 
 public class AuthException extends BcsdException {
 

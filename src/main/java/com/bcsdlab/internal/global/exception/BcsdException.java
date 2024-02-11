@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.global;
+package com.bcsdlab.internal.global.exception;
 
 public abstract class BcsdException extends RuntimeException {
 

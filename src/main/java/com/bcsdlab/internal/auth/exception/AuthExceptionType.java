@@ -2,7 +2,7 @@ package com.bcsdlab.internal.auth.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.bcsdlab.internal.global.BcsdExceptionType;
+import com.bcsdlab.internal.global.exception.BcsdExceptionType;
 
 public enum AuthExceptionType implements BcsdExceptionType {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
