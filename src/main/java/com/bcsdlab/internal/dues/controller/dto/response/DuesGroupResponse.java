@@ -34,8 +34,20 @@ public record DuesGroupResponse(
     }
 
     private record DuesDetailResponse(
+        @Schema(example = "1", description = "월")
         int month,
+
+        @Schema(example = "1", description = "회비 납입 고유 ID")
+        Long id,
+
+        @Schema(example = "NOT_PAID", description = """
+            NOT_PAID
+            PAID
+            SKIP
+            """)
         String status,
+
+        @Schema(example = "회장", description = "메모")
         String memo
     ) {
 
@@ -70,7 +82,8 @@ public record DuesGroupResponse(
         return memberDues.stream()
             .map(dues ->
                 new DuesDetailResponse(
-                    dues.getDate().getMonth().getValue(),
+                    dues.getDate().getMonthValue(),
+                    dues.getId(),
                     dues.getStatus().name(),
                     dues.getMemo()
                 )

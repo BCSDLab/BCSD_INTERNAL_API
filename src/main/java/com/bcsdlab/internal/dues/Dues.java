@@ -45,8 +45,16 @@ public class Dues extends RootEntity<Long> {
     @Column(name = "is_delete")
     private boolean isDelete;
 
-    public void update(String memo, DuesStatus status) {
+    public Dues(String memo, Member member, LocalDateTime date, DuesStatus status, boolean isDelete) {
         this.memo = memo;
+        this.member = member;
+        this.date = date;
         this.status = status;
+        this.isDelete = isDelete;
+    }
+
+    public void update(DuesStatus status, String memo) {
+        this.status = status;
+        this.memo = memo;
     }
 }

@@ -3,19 +3,20 @@ package com.bcsdlab.internal.dues.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bcsdlab.internal.auth.Auth;
+import com.bcsdlab.internal.dues.controller.dto.request.DuesCreateRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesGroupResponse;
+import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
 
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -71,9 +72,32 @@ public interface DuesApi {
         }
     )
     @PutMapping("/{duesId}")
-    ResponseEntity<Void> updateDues(
+    ResponseEntity<DuesResponse> updateDues(
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
-        @Parameter(in = PATH) @PathVariable Long duesId,
+        @PathVariable Long duesId,
         @RequestBody @Valid DuesUpdateRequest updateRequest
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @PostMapping
+    ResponseEntity<DuesResponse> createDues(
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @RequestBody @Valid DuesCreateRequest request
     );
 }
