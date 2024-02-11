@@ -29,6 +29,6 @@ public enum MemberStatus {
         return Arrays.stream(values())
             .filter(type -> type.name().equals(status.toUpperCase()))
             .findAny()
-            .orElseThrow(() -> new MemberException(MEMBER_STATUS_NOT_FOUND));
+            .orElseThrow(() -> new MemberException(MEMBER_STATUS_NOT_FOUND.withDetail(status)));
     }
 }

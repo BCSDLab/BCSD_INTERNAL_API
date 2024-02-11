@@ -1,5 +1,6 @@
 package com.bcsdlab.internal.member;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     Optional<Member> findByStudentNumber(String studentNumber);
 
+    Optional<Member> findByEmail(String email);
+
     default Member getById(Long id) {
         return findById(id)
             .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
@@ -21,4 +24,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
         return findByStudentNumber(studentNumber)
             .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
+
+    List<Member> findAllByIsDeletedFalse();
 }

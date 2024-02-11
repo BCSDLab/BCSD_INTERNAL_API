@@ -1,17 +1,16 @@
 package com.bcsdlab.internal.member.exception;
 
 import com.bcsdlab.internal.global.exception.BcsdException;
-import com.bcsdlab.internal.global.exception.BcsdExceptionType;
 
 public class MemberException extends BcsdException {
 
-    private final transient BcsdExceptionType exceptionType;
+    private final MemberExceptionType memberExceptionType;
 
-    public MemberException(BcsdExceptionType exceptionType) {
-        this.exceptionType = exceptionType;
+    public MemberException(MemberExceptionType memberExceptionType) {
+        this.memberExceptionType = memberExceptionType;
     }
 
-    public BcsdExceptionType getExceptionType() {
-        return exceptionType;
+    public MemberExceptionType getExceptionType() {
+        return memberExceptionType;
     }
 }

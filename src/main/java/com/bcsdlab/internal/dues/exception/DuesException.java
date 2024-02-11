@@ -1,17 +1,16 @@
 package com.bcsdlab.internal.dues.exception;
 
 import com.bcsdlab.internal.global.exception.BcsdException;
-import com.bcsdlab.internal.global.exception.BcsdExceptionType;
 
 public class DuesException extends BcsdException {
 
-    private final transient BcsdExceptionType exceptionType;
+    private final DuesExceptionType duesExceptionType;
 
-    public DuesException(BcsdExceptionType exceptionType) {
-        this.exceptionType = exceptionType;
+    public DuesException(DuesExceptionType duesExceptionType) {
+        this.duesExceptionType = duesExceptionType;
     }
 
-    public BcsdExceptionType getExceptionType() {
-        return exceptionType;
+    public DuesExceptionType getExceptionType() {
+        return duesExceptionType;
     }
 }

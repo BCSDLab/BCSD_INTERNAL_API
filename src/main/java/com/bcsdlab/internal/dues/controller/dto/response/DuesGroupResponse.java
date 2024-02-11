@@ -1,5 +1,7 @@
 package com.bcsdlab.internal.dues.controller.dto.response;
 
+import java.time.Month;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,6 +13,7 @@ import com.bcsdlab.internal.member.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record DuesGroupResponse(
+    String year,
     List<DuesResponse> dues
 ) {
 
@@ -38,7 +41,7 @@ public record DuesGroupResponse(
         int month,
 
         @Schema(example = "1", description = "회비 납입 고유 ID")
-        Long id,
+        Long duesId,
 
         @Schema(example = "NOT_PAID", description = """
             NOT_PAID
@@ -53,9 +56,14 @@ public record DuesGroupResponse(
 
     }
 
-    public static DuesGroupResponse of(List<Dues> dues) {
+    public static DuesGroupResponse of(String year, List<Member> members, List<Dues> dues) {
         Map<Member, List<Dues>> groupByMember = dues.stream()
             .collect(Collectors.groupingBy(Dues::getMember));
+
+        members.stream()
+            .filter(member -> !groupByMember.containsKey(member))
+            .forEach(member -> groupByMember.put(member, List.of()));
+
         var result = groupByMember.entrySet().stream()
             .map(entry -> {
                     Member member = entry.getKey();
@@ -70,23 +78,34 @@ public record DuesGroupResponse(
                 }
             ).toList();
 
-        return new DuesGroupResponse(result);
+        return new DuesGroupResponse(year, result);
     }
 
-    // TODO: 회비 미납 횟수 계산 리팩터링
     private static long getUnPaidCount(List<Dues> memberDues) {
         return memberDues.stream().filter(it -> it.getStatus() == DuesStatus.NOT_PAID).count();
     }
 
     private static List<DuesDetailResponse> getDetails(List<Dues> memberDues) {
-        return memberDues.stream()
-            .map(dues ->
-                new DuesDetailResponse(
-                    dues.getDate().getMonthValue(),
-                    dues.getId(),
-                    dues.getStatus().name(),
-                    dues.getMemo()
+        return Arrays.stream(Month.values()).map(
+            month -> memberDues.stream()
+                .filter(dues -> dues.getDate().getMonth() == month)
+                .findFirst()
+                .map(dues ->
+                    new DuesDetailResponse(
+                        dues.getDate().getMonthValue(),
+                        dues.getId(),
+                        dues.getStatus().name(),
+                        dues.getMemo()
+                    )
                 )
-            ).toList();
+                .orElseGet(() ->
+                    new DuesDetailResponse(
+                        month.getValue(),
+                        null,
+                        null,
+                        null
+                    )
+                )
+        ).toList();
     }
 }

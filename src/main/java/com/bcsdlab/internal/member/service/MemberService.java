@@ -17,7 +17,8 @@ import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.exception.MemberException;
 
-import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS_EMAIL;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS_STUDENT_NUMBER;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_AUTHORIZED;
 import lombok.RequiredArgsConstructor;
 
@@ -41,8 +42,12 @@ public class MemberService {
     @Transactional
     public void register(MemberRegisterRequest request) {
         memberRepository.findByStudentNumber(request.studentNumber()).ifPresent(member -> {
-            throw new MemberException(MEMBER_ALREADY_EXISTS);
+            throw new MemberException(MEMBER_ALREADY_EXISTS_STUDENT_NUMBER);
         });
+        memberRepository.findByEmail(request.email()).ifPresent(member -> {
+            throw new MemberException(MEMBER_ALREADY_EXISTS_EMAIL);
+        });
+
         Member member = request.toEntity();
         member.register(request.studentNumber(), request.password(), passwordEncoder);
         memberRepository.save(member);

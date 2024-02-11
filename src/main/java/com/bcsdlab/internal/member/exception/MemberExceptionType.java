@@ -12,10 +12,13 @@ public enum MemberExceptionType implements BcsdExceptionType {
     MEMBER_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상태입니다."),
     MEMBER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자 타입입니다."),
     MEMBER_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 회원입니다."),
+    MEMBER_ALREADY_EXISTS_STUDENT_NUMBER(HttpStatus.CONFLICT, "이미 존재하는 학번입니다."),
+    MEMBER_ALREADY_EXISTS_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
     ;
 
     private final HttpStatus status;
     private final String message;
+    private String detailMessage;
 
     MemberExceptionType(HttpStatus status, String message) {
         this.status = status;
@@ -29,6 +32,15 @@ public enum MemberExceptionType implements BcsdExceptionType {
 
     @Override
     public String getMessage() {
-        return this.message;
+        if (detailMessage == null) {
+            return message;
+        }
+        return MESSAGE_FORMAT.formatted(message, detailMessage).strip();
+    }
+
+    @Override
+    public MemberExceptionType withDetail(String detailMessage) {
+        this.detailMessage = detailMessage;
+        return this;
     }
 }

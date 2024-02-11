@@ -1,6 +1,6 @@
 package com.bcsdlab.internal.dues;
 
-import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.Member;
@@ -36,7 +36,7 @@ public class Dues extends RootEntity<Long> {
     private Member member;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    private YearMonth date;
 
     @Enumerated(STRING)
     @Column(name = "status")
@@ -45,7 +45,7 @@ public class Dues extends RootEntity<Long> {
     @Column(name = "is_delete")
     private boolean isDelete;
 
-    public Dues(String memo, Member member, LocalDateTime date, DuesStatus status, boolean isDelete) {
+    public Dues(String memo, Member member, YearMonth date, DuesStatus status, boolean isDelete) {
         this.memo = memo;
         this.member = member;
         this.date = date;

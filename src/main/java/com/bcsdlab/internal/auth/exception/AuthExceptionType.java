@@ -12,6 +12,7 @@ public enum AuthExceptionType implements BcsdExceptionType {
 
     private final HttpStatus status;
     private final String message;
+    private String detailMessage;
 
     AuthExceptionType(HttpStatus status, String message) {
         this.status = status;
@@ -25,6 +26,15 @@ public enum AuthExceptionType implements BcsdExceptionType {
 
     @Override
     public String getMessage() {
-        return message;
+        if (detailMessage == null) {
+            return message;
+        }
+        return MESSAGE_FORMAT.formatted(message, detailMessage).strip();
+    }
+
+    @Override
+    public AuthExceptionType withDetail(String detailMessage) {
+        this.detailMessage = detailMessage;
+        return this;
     }
 }

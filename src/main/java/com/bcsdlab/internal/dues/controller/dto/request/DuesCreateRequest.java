@@ -1,6 +1,6 @@
 package com.bcsdlab.internal.dues.controller.dto.request;
 
-import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +16,8 @@ public record DuesCreateRequest(
     Long memberId,
 
     @DateTimeFormat(pattern = "yyyy-MM")
-    LocalDateTime date,
+    @Schema(example = "2021-01", description = "회비 납부월")
+    YearMonth date,
 
     @Schema(example = "SKIP", description = """
         NOT_PAID
