@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.auth.Auth;
@@ -49,7 +49,7 @@ public interface AdminApi {
     ResponseEntity<MemberResponse> changeMemberStatus(
         @Auth(permit = ADMIN) Long adminId,
         @PathVariable Long memberId,
-        @RequestParam @Valid AdminMemberUpdateRequest request
+        @RequestBody @Valid AdminMemberUpdateRequest request
     );
 
     @ApiResponses(
