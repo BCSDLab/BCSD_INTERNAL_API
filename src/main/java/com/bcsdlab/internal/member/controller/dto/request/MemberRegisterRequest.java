@@ -87,7 +87,9 @@ public record MemberRegisterRequest(
             email,
             password,
             githubName,
-            profileImageUrl
+            profileImageUrl,
+            false,
+            false
         );
     }
 }

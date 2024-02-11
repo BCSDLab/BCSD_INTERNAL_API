@@ -84,7 +84,9 @@ public record MemberUpdateRequest(
             email,
             null,
             githubName,
-            profileImageUrl
+            profileImageUrl,
+            false,
+            false
         );
     }
 }

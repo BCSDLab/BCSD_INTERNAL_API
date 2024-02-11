@@ -67,7 +67,13 @@ public record AdminMemberUpdateRequest(
     @NotBlank String githubName,
 
     @Schema(example = "https://profile-image-url", description = "프로필 이미지 URL")
-    String profileImageUrl
+    String profileImageUrl,
+
+    @Schema(example = "true", description = "인증 여부")
+    @NotNull Boolean isAuthed,
+
+    @Schema(example = "false", description = "삭제 여부")
+    @NotNull Boolean isDeleted
 ) {
 
     public Member toEntity() {
@@ -84,7 +90,9 @@ public record AdminMemberUpdateRequest(
             email,
             null,
             githubName,
-            profileImageUrl
+            profileImageUrl,
+            isAuthed,
+            isDeleted
         );
     }
 }

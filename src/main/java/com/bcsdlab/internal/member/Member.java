@@ -97,7 +97,9 @@ public class Member extends RootEntity<Long> {
         String email,
         String password,
         String githubName,
-        String profileImageUrl
+        String profileImageUrl,
+        boolean isAuthed,
+        boolean isDeleted
     ) {
         this.joinDate = joinDate;
         this.track = track;
@@ -112,6 +114,8 @@ public class Member extends RootEntity<Long> {
         this.password = password;
         this.githubName = githubName;
         this.profileImageUrl = profileImageUrl;
+        this.isAuthed = isAuthed;
+        this.isDeleted = isDeleted;
     }
 
     public void register(String studentNumber, String password, PasswordEncoder passwordEncoder) {
