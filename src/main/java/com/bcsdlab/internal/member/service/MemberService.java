@@ -62,9 +62,8 @@ public class MemberService {
     }
 
     public Page<MemberResponse> getMembers(MemberQueryRequest request, Pageable pageable) {
-        Track track = trackRepository.getById(request.trackId());
         Page<Member> members = memberRepository
-            .searchMembers(request.name(), track.getId(), request.deleted(), request.authed(), pageable);
+            .searchMembers(request.name(), request.trackId(), request.deleted(), request.authed(), pageable);
         return members.map(MemberResponse::from);
     }
 
