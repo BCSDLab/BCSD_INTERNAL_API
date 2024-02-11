@@ -31,7 +31,20 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
-        return new PageImpl<>(result, pageable, result.size());
+        return new PageImpl<>(result, pageable, countMembers(name, trackId, deleted, authed));
+    }
+
+    private Long countMembers(String name, Long trackId, Boolean deleted, Boolean authed) {
+        return jpaQueryFactory
+            .select(member.count())
+            .from(member)
+            .where(
+                containName(name),
+                eqTrackId(trackId),
+                inDeleted(deleted),
+                isAuthed(authed)
+            )
+            .fetchOne();
     }
 
     private BooleanExpression inDeleted(Boolean deleted) {
