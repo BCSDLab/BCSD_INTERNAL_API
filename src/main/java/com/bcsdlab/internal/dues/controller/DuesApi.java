@@ -18,6 +18,7 @@ import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
 
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -53,7 +54,7 @@ public interface DuesApi {
     @Operation(summary = "회비 전체 조회")
     @GetMapping
     ResponseEntity<DuesGroupResponse> getAll(
-//        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @ParameterObject @ModelAttribute DuesFindRequest request
     );
 
@@ -100,7 +101,7 @@ public interface DuesApi {
     )
     @PostMapping
     ResponseEntity<DuesResponse> createDues(
-//        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid DuesCreateRequest request
     );
 }

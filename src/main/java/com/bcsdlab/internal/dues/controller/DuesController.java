@@ -20,6 +20,7 @@ import com.bcsdlab.internal.dues.service.DuesService;
 
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +33,7 @@ public class DuesController implements DuesApi {
 
     @GetMapping
     public ResponseEntity<DuesGroupResponse> getAll(
-//        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @ModelAttribute DuesFindRequest request
     ) {
         var result = duesService.getAll(request);
@@ -51,7 +52,7 @@ public class DuesController implements DuesApi {
 
     @PostMapping
     public ResponseEntity<DuesResponse> createDues(
-//        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid DuesCreateRequest request
     ) {
         var result = duesService.create(request);
