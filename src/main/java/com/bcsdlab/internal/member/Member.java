@@ -47,11 +47,11 @@ public class Member extends RootEntity<Long> {
     private Track track;
 
     @Enumerated(STRING)
-    @Column(name = "member_type")
+    @Column(name = "member_type", columnDefinition = "varchar(255)")
     private MemberType memberType;
 
     @Enumerated(STRING)
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "varchar(255)")
     private MemberStatus status;
 
     @Column(name = "name")
@@ -79,7 +79,7 @@ public class Member extends RootEntity<Long> {
     private String password;
 
     @Enumerated(STRING)
-    @Column(name = "authority")
+    @Column(name = "authority", columnDefinition = "varchar(255)")
     private Authority authority;
 
     @Column(name = "github_name")

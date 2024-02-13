@@ -43,7 +43,7 @@ public class Dues extends RootEntity<Long> {
     private YearMonth date;
 
     @Enumerated(STRING)
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "varchar(255)")
     private DuesStatus status;
 
     @Column(name = "is_delete")
