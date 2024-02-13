@@ -4,9 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
@@ -26,6 +28,33 @@ import jakarta.validation.Valid;
 @Tag(name = "어드민 API")
 @SecurityRequirement(name = "JWT")
 public interface AdminApi {
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "201"),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @PostMapping("/members")
+    ResponseEntity<Void> createMember(
+        @Auth(permit = ADMIN) Long adminId,
+        @RequestBody @Valid AdminMemberCreateRequest request
+    );
 
     @ApiResponses(
         value = {

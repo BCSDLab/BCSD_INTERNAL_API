@@ -26,10 +26,6 @@ jwt:
   secretKey: "helloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworldhelloworld"
   expirationDay: 30
 
-password:
-  salt: "helloworldisgood"
-  salt-cost: 6
-
 swagger:
   server-url: http://localhost:8080
 

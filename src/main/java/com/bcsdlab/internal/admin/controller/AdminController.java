@@ -1,15 +1,19 @@
 package com.bcsdlab.internal.admin.controller;
 
 
+import java.net.URI;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.admin.service.AdminService;
 import com.bcsdlab.internal.auth.Auth;
@@ -25,6 +29,15 @@ import lombok.RequiredArgsConstructor;
 public class AdminController implements AdminApi {
 
     private final AdminService adminService;
+
+    @PostMapping("/members")
+    public ResponseEntity<Void> createMember(
+        @Auth(permit = ADMIN) Long adminId,
+        @RequestBody @Valid AdminMemberCreateRequest request
+    ) {
+        var memberId = adminService.createMember(request);
+        return ResponseEntity.created(URI.create("/members/" + memberId)).build();
+    }
 
     @PutMapping("/members/{memberId}")
     public ResponseEntity<MemberResponse> changeMemberStatus(

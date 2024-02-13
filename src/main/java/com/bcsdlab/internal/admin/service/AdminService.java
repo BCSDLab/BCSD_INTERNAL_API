@@ -1,8 +1,10 @@
 package com.bcsdlab.internal.admin.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberRepository;
@@ -19,6 +21,7 @@ public class AdminService {
 
     private final MemberRepository memberRepository;
     private final TrackRepository trackRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void acceptMember(Long memberId) {
         Member member = memberRepository.getById(memberId);
@@ -36,5 +39,14 @@ public class AdminService {
         Member updated = request.toEntity(track);
         member.updateAll(updated);
         return MemberResponse.from(member);
+    }
+
+    public Long createMember(AdminMemberCreateRequest request) {
+        Track track = trackRepository.getById(request.trackId());
+        Member member = request.toEntity(track);
+        member.register(request.studentNumber(), request.password(), passwordEncoder);
+        member.accept();
+        memberRepository.save(member);
+        return member.getId();
     }
 }
