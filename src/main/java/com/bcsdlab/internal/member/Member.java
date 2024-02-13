@@ -3,9 +3,9 @@ package com.bcsdlab.internal.member;
 import java.time.YearMonth;
 
 import org.hibernate.annotations.SQLDelete;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bcsdlab.internal.auth.Authority;
-import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.global.config.YearMonthDateAttributeConverter;
 import com.bcsdlab.internal.member.exception.MemberException;
@@ -134,7 +134,7 @@ public class Member extends RootEntity<Long> {
     }
 
     public void matchPassword(String password, PasswordEncoder passwordEncoder) {
-        if (!passwordEncoder.match(password, this.password)) {
+        if (!passwordEncoder.matches(password, this.password)) {
             throw new MemberException(INVALID_LOGIN);
         }
     }

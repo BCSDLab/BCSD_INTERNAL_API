@@ -2,11 +2,11 @@ package com.bcsdlab.internal.member.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bcsdlab.internal.auth.JwtProvider;
-import com.bcsdlab.internal.auth.PasswordEncoder;
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberRepository;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
@@ -77,7 +77,7 @@ public class MemberService {
     }
 
     private void checkAuthorized(Member member) {
-        if (!member.isAuthed() || member.isDeleted()) {
+        if (member == null || !member.isAuthed() || member.isDeleted()) {
             throw new MemberException(MEMBER_NOT_AUTHORIZED);
         }
     }
