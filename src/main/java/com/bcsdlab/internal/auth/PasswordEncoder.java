@@ -21,7 +21,7 @@ public class PasswordEncoder {
     public String encode(String password) {
         HashData hashData = BCrypt.with(VERSION_2Y)
             .hashRaw(cost, passwordSalt.getBytes(UTF_8), password.getBytes(UTF_8));
-        return hashData.toString();
+        return new String(hashData.rawHash);
     }
 
     public boolean match(String password, String hashedPassword) {

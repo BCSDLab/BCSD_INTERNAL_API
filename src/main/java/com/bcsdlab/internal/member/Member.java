@@ -134,7 +134,7 @@ public class Member extends RootEntity<Long> {
     }
 
     public void matchPassword(String password, PasswordEncoder passwordEncoder) {
-        if (passwordEncoder.match(password, this.password)) {
+        if (!passwordEncoder.match(password, this.password)) {
             throw new MemberException(INVALID_LOGIN);
         }
     }
