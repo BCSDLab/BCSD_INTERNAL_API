@@ -4,7 +4,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.MDC;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -49,7 +51,18 @@ public class GlobalExceptionHandler {
         BcsdException cause = (BcsdException) e.getCause().getCause();
         return ResponseEntity.status(BAD_REQUEST).body(new ErrorResponse(cause.getExceptionType().getMessage()));
     }
-    
+
+    @ExceptionHandler({DataIntegrityViolationException.class, ConstraintViolationException.class})
+    public ResponseEntity<ErrorResponse> handleJpaException(
+        HttpServletRequest request,
+        Exception e
+    ) {
+        logRequestAndResponse(request, e);
+        return ResponseEntity.status(BAD_REQUEST)
+            .body(new ErrorResponse("제약조건에 위배되는 값입니다."));
+    }
+
+
     private void logRequestAndResponse(HttpServletRequest request, Exception e) {
         log.error("[{}] 잘못된 요청입니다. uri: {} {}, ",
             MDC.get(REQUEST_ID), request.getMethod(), request.getRequestURI(), e);
