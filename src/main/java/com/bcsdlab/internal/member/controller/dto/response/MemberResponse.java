@@ -77,7 +77,7 @@ public record MemberResponse(
             member.getJoinDate().getMonthValue(),
             TrackResponse.from(member.getTrack()),
             member.getMemberType().name(),
-            member.getStatus().getView(),
+            member.getStatus().name(),
             member.getName(),
             member.getCompany(),
             member.getDepartment(),
