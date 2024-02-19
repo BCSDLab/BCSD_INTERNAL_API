@@ -37,7 +37,6 @@ public class Dues extends RootEntity<Long> {
     @JoinColumn(name = "member_id")
     private Member member;
 
-
     @Column(name = "date")
     @Convert(converter = YearMonthDateAttributeConverter.class)
     private YearMonth date;
