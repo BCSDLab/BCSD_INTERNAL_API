@@ -50,6 +50,7 @@ public interface AdminApi {
             ),
         }
     )
+    @Operation(summary = "회원 생성")
     @PostMapping("/members")
     ResponseEntity<Void> createMember(
         @Auth(permit = ADMIN) Long adminId,

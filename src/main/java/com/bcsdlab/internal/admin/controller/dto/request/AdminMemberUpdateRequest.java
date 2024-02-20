@@ -13,10 +13,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record AdminMemberUpdateRequest(
     @Schema(example = "2023", description = "가입 년도")
-    @NotNull Integer year,
+    @NotNull Integer joinedYear,
 
     @Schema(example = "3", description = "가입 월")
-    @NotNull Integer month,
+    @NotNull Integer joinedMonth,
 
     @Schema(example = "1", description = "트랙 ID")
     @NotNull Long trackId,
@@ -71,7 +71,7 @@ public record AdminMemberUpdateRequest(
 
     public Member toEntity(Track track) {
         return new Member(
-            YearMonth.of(year, month),
+            YearMonth.of(joinedYear, joinedMonth),
             track,
             memberType,
             status,
