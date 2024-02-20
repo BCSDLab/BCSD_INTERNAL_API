@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.member.service;
 
-import java.util.Objects;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,13 +77,20 @@ public class MemberService {
         return MemberResponse.from(member);
     }
 
-    private static void validateDuplication(MemberUpdateRequest request, Member member) {
-        if (Objects.equals(member.getEmail(), request.email())) {
-            throw new MemberException(MEMBER_ALREADY_EXISTS_EMAIL);
-        }
-        if (Objects.equals(member.getStudentNumber(), request.studentNumber())) {
-            throw new MemberException(MEMBER_ALREADY_EXISTS_STUDENT_NUMBER);
-        }
+    private void validateDuplication(MemberUpdateRequest request, Member member) {
+        memberRepository.findByStudentNumber(request.studentNumber())
+            .ifPresent(it -> {
+                if (!it.getId().equals(member.getId())) {
+                    throw new MemberException(MEMBER_ALREADY_EXISTS_STUDENT_NUMBER);
+                }
+            });
+
+        memberRepository.findByEmail(request.email())
+            .ifPresent(it -> {
+                if (!it.getId().equals(member.getId())) {
+                    throw new MemberException(MEMBER_ALREADY_EXISTS_EMAIL);
+                }
+            });
     }
 
     private void checkAuthorized(Member member) {
