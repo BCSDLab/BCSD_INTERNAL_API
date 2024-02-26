@@ -139,7 +139,7 @@ public interface MemberApi {
     @SecurityRequirement(name = "JWT")
     @GetMapping("/{memberId}")
     ResponseEntity<MemberResponse> getMemberById(
-        @Auth(permit = {ADMIN}) Long id,
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long id,
         @Parameter(in = PATH) @PathVariable Long memberId
     );
 

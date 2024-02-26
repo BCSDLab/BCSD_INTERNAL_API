@@ -21,6 +21,8 @@ import com.bcsdlab.internal.track.controller.dto.request.TrackUpdateRequest;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
 import lombok.RequiredArgsConstructor;
 
 @Transactional
@@ -40,7 +42,7 @@ public class TrackController implements TrackApi {
 
     @PostMapping
     public ResponseEntity<Void> createTrack(
-        @Auth(permit = {ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
         @RequestBody TrackCreateRequest request
     ) {
         trackRepository.save(new Track(request.name()));
@@ -49,7 +51,7 @@ public class TrackController implements TrackApi {
 
     @PutMapping("/{id}")
     public ResponseEntity<TrackResponse> updateTrack(
-        @Auth(permit = {ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
         @PathVariable Long id,
         @RequestBody TrackUpdateRequest request
     ) {
@@ -60,7 +62,7 @@ public class TrackController implements TrackApi {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrack(
-        @Auth(permit = {ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
         @PathVariable Long id
     ) {
         trackRepository.deleteById(id);

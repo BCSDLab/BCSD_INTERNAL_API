@@ -16,6 +16,8 @@ import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -53,7 +55,7 @@ public interface AdminApi {
     @Operation(summary = "회원 생성")
     @PostMapping("/members")
     ResponseEntity<Void> createMember(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @RequestBody @Valid AdminMemberCreateRequest request
     );
 
@@ -77,7 +79,7 @@ public interface AdminApi {
     @Operation(summary = "회원 수정")
     @PutMapping("/members/{memberId}")
     ResponseEntity<MemberResponse> changeMemberStatus(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @PathVariable Long memberId,
         @RequestBody @Valid AdminMemberUpdateRequest request
     );
@@ -102,7 +104,7 @@ public interface AdminApi {
     @Operation(summary = "회원 삭제", description = "Soft Delete")
     @DeleteMapping("/members/{memberId}")
     ResponseEntity<Void> withdrawMember(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @Parameter(in = PATH) @PathVariable Long memberId
     );
 
@@ -126,7 +128,7 @@ public interface AdminApi {
     @Operation(summary = "회원 가입 승인")
     @PatchMapping("/members/{memberId}/accept")
     ResponseEntity<Void> acceptMember(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @PathVariable Long memberId
     );
 }

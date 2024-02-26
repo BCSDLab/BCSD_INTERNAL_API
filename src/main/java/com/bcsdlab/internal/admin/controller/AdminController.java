@@ -20,6 +20,8 @@ import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +34,7 @@ public class AdminController implements AdminApi {
 
     @PostMapping("/members")
     public ResponseEntity<Void> createMember(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @RequestBody @Valid AdminMemberCreateRequest request
     ) {
         var memberId = adminService.createMember(request);
@@ -41,7 +43,7 @@ public class AdminController implements AdminApi {
 
     @PutMapping("/members/{memberId}")
     public ResponseEntity<MemberResponse> changeMemberStatus(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @PathVariable Long memberId,
         @RequestBody @Valid AdminMemberUpdateRequest request
     ) {
@@ -51,7 +53,7 @@ public class AdminController implements AdminApi {
 
     @DeleteMapping("/members/{memberId}")
     public ResponseEntity<Void> withdrawMember(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @PathVariable Long memberId
     ) {
         adminService.withdrawMember(memberId);
@@ -60,7 +62,7 @@ public class AdminController implements AdminApi {
 
     @PatchMapping("/members/{memberId}/accept")
     public ResponseEntity<Void> acceptMember(
-        @Auth(permit = ADMIN) Long adminId,
+        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
         @PathVariable Long memberId
     ) {
         adminService.acceptMember(memberId);
