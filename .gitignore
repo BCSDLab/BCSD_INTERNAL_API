@@ -39,4 +39,4 @@ application.properties
 application.yml
 
 ### DB ###
-src/main/resources/data.sql
+data.sql
