@@ -23,8 +23,9 @@ public record DuesCreateRequest(
         NOT_PAID
         PAID
         SKIP
+        NONE
         """)
-    @NotNull DuesStatus status,
+    DuesStatus status,
 
     @Schema(example = "회장", description = "메모")
     String memo

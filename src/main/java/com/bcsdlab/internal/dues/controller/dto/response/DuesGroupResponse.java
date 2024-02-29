@@ -48,6 +48,7 @@ public record DuesGroupResponse(
             NOT_PAID
             PAID
             SKIP
+            NONE
             """)
         String status,
 

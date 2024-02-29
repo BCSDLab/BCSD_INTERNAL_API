@@ -11,6 +11,7 @@ public enum DuesStatus {
     NOT_PAID,
     PAID,
     SKIP,
+    NONE,
     ;
 
     @JsonCreator
