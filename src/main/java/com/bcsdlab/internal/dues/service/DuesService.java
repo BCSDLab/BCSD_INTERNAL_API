@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.DuesRepository;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesCreateRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.DuesDeleteQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
@@ -34,6 +35,14 @@ public class DuesService {
         List<Member> members = memberRepository.findAllByIsDeletedFalse();
         List<Dues> dues = duesRepository.searchDues(request.year(), request.trackId());
         return DuesGroupResponse.of(request.year(), members, dues);
+    }
+
+    @Transactional
+    public void delete(DuesDeleteQueryRequest queryRequest) {
+        Dues dues = duesRepository.findByDateAndMemberId(
+                YearMonth.of(queryRequest.year(), queryRequest.month()), queryRequest.memberId())
+            .orElseThrow(() -> new DuesException(DUES_NOT_FOUND));
+        duesRepository.delete(dues);
     }
 
     @Transactional

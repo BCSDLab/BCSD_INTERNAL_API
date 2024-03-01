@@ -1,6 +1,7 @@
 package com.bcsdlab.internal.dues.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesCreateRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.DuesDeleteQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
@@ -57,5 +59,14 @@ public class DuesController implements DuesApi {
     ) {
         var result = duesService.create(request);
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteDues(
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @RequestBody @Valid DuesDeleteQueryRequest queryRequest
+    ) {
+        duesService.delete(queryRequest);
+        return ResponseEntity.noContent().build();
     }
 }

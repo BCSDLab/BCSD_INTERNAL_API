@@ -2,6 +2,7 @@ package com.bcsdlab.internal.dues.controller;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesCreateRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.DuesDeleteQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
@@ -88,6 +90,34 @@ public interface DuesApi {
         @ModelAttribute DuesUpdateQueryRequest queryRequest,
 
         @RequestBody @Valid DuesUpdateRequest updateRequest
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "204"
+            ),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "회비 삭제")
+    @DeleteMapping
+    ResponseEntity<Void> deleteDues(
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+
+        @ParameterObject
+        @ModelAttribute DuesDeleteQueryRequest queryRequest
     );
 
     @ApiResponses(

@@ -50,7 +50,7 @@ public record DuesGroupResponse(
             SKIP
             NONE
             """)
-        String status,
+        DuesStatus status,
 
         @Schema(example = "회장", description = "메모")
         String memo
@@ -95,7 +95,7 @@ public record DuesGroupResponse(
                 .map(dues ->
                     new DuesDetailResponse(
                         dues.getDate().getMonthValue(),
-                        dues.getStatus().name(),
+                        dues.getStatus(),
                         dues.getMemo()
                     )
                 )
