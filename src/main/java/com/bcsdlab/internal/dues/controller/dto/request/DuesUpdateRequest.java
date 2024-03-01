@@ -10,9 +10,8 @@ public record DuesUpdateRequest(
         NOT_PAID
         PAID
         SKIP
-        NONE
         """)
-    DuesStatus status,
+    @NotNull DuesStatus status,
 
     @Schema(example = "회장", description = "메모")
     String memo

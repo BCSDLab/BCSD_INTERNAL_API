@@ -52,19 +52,12 @@ public class Dues extends RootEntity<Long> {
         this.memo = memo;
         this.member = member;
         this.date = date;
-        this.status = checkNone(status);
+        this.status = status;
         this.isDelete = isDelete;
     }
 
     public void update(DuesStatus status, String memo) {
-        this.status = checkNone(status);
+        this.status = status;
         this.memo = memo;
-    }
-
-    private DuesStatus checkNone(DuesStatus status) {
-        if (status.equals(DuesStatus.NONE)) {
-            return null;
-        }
-        return status;
     }
 }

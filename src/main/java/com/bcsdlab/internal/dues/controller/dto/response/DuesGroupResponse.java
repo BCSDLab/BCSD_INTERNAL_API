@@ -12,6 +12,7 @@ import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 public record DuesGroupResponse(
     @Schema(example = "2021", description = "년도")
@@ -48,9 +49,8 @@ public record DuesGroupResponse(
             NOT_PAID
             PAID
             SKIP
-            NONE
             """)
-        DuesStatus status,
+        @NotNull String status,
 
         @Schema(example = "회장", description = "메모")
         String memo
@@ -95,7 +95,7 @@ public record DuesGroupResponse(
                 .map(dues ->
                     new DuesDetailResponse(
                         dues.getDate().getMonthValue(),
-                        dues.getStatus(),
+                        dues.getStatus().name(),
                         dues.getMemo()
                     )
                 )

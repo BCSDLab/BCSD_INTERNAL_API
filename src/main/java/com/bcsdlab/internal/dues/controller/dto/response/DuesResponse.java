@@ -1,11 +1,10 @@
 package com.bcsdlab.internal.dues.controller.dto.response;
 
 import com.bcsdlab.internal.dues.Dues;
-import com.bcsdlab.internal.dues.DuesStatus;
 
 public record DuesResponse(
     long id,
-    DuesStatus status,
+    String status,
     String memo,
     Integer year,
     Integer month
@@ -14,7 +13,7 @@ public record DuesResponse(
     public static DuesResponse from(Dues dues) {
         return new DuesResponse(
             dues.getId(),
-            dues.getStatus(),
+            dues.getStatus().name(),
             dues.getMemo(),
             dues.getDate().getYear(),
             dues.getDate().getMonthValue()
