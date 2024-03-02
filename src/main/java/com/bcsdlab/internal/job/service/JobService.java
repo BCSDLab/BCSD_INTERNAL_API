@@ -1,6 +1,7 @@
 package com.bcsdlab.internal.job.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,7 @@ public class JobService {
         return JobGroupResponse.of(request.year(), jobs);
     }
 
+    @Transactional
     public JobResponse create(JobCreateQueryRequest request) {
         Member member = memberRepository.getById(request.memberId());
         Job savedJob = jobRepository.save(request.toEntity(member));
@@ -47,7 +49,10 @@ public class JobService {
 
     @Transactional
     public void delete(JobDeleteQueryRequest request) {
-        Job foundJob = jobRepository.getById(request.id());
-        jobRepository.delete(foundJob);
+        Optional<Job> foundJob = jobRepository.findById(request.id());
+        if (foundJob.isEmpty()) {
+            return;
+        }
+        jobRepository.delete(foundJob.get());
     }
 }
