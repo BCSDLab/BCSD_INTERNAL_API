@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.track.controller;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -14,9 +17,7 @@ import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.track.controller.dto.request.TrackCreateRequest;
 import com.bcsdlab.internal.track.controller.dto.request.TrackUpdateRequest;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
-
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import com.bcsdlab.internal.track.controller.dto.response.TrackWithLeaderResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,7 +41,7 @@ public interface TrackApi {
     )
     @Operation(summary = "트랙 전체 조회")
     @GetMapping
-    ResponseEntity<List<TrackResponse>> getTrack();
+    ResponseEntity<List<TrackWithLeaderResponse>> getTrack();
 
     @ApiResponses(
         value = {

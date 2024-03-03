@@ -1,6 +1,12 @@
 package com.bcsdlab.internal.track.controller;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
+import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
+import com.bcsdlab.internal.job.JobRepository;
+import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.MemberRepository;
 import com.bcsdlab.internal.track.Track;
 import com.bcsdlab.internal.track.TrackRepository;
 import com.bcsdlab.internal.track.controller.dto.request.TrackCreateRequest;
 import com.bcsdlab.internal.track.controller.dto.request.TrackUpdateRequest;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
-
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import com.bcsdlab.internal.track.controller.dto.response.TrackWithLeaderResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,17 +39,31 @@ import lombok.RequiredArgsConstructor;
 public class TrackController implements TrackApi {
 
     private final TrackRepository trackRepository;
+    private final JobRepository jobRepository;
+    private final MemberRepository memberRepository;
 
     @GetMapping
-    public ResponseEntity<List<TrackResponse>> getTrack() {
+    public ResponseEntity<List<TrackWithLeaderResponse>> getTrack() {
+        List<TrackWithLeaderResponse> result = new ArrayList<>();
         var tracks = trackRepository.findAll();
-        var result = tracks.stream().map(TrackResponse::from).toList();
+        for (long trackId = 1; trackId <= tracks.size(); trackId++) {
+            Optional<Member> trackLeader = jobRepository.searchJob(Year.now().getValue(), trackId)
+                .stream()
+                .map(job -> memberRepository.getById(job.getMember().getId()))
+                .findFirst();
+
+            if (trackLeader.isEmpty()) {
+                result.add(TrackWithLeaderResponse.of(tracks.get((int)trackId - 1), null));
+            } else {
+                result.add(TrackWithLeaderResponse.of(tracks.get((int)trackId - 1), trackLeader.get()));
+            }
+        }
         return ResponseEntity.ok(result);
     }
 
     @PostMapping
     public ResponseEntity<Void> createTrack(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody TrackCreateRequest request
     ) {
         trackRepository.save(new Track(request.name()));
@@ -51,7 +72,7 @@ public class TrackController implements TrackApi {
 
     @PutMapping("/{id}")
     public ResponseEntity<TrackResponse> updateTrack(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id,
         @RequestBody TrackUpdateRequest request
     ) {
@@ -62,7 +83,7 @@ public class TrackController implements TrackApi {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrack(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     ) {
         trackRepository.deleteById(id);
