@@ -3,7 +3,6 @@ package com.bcsdlab.internal.track.controller;
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +46,7 @@ public class TrackController implements TrackApi {
         List<TrackWithLeaderResponse> result = new ArrayList<>();
         var tracks = trackRepository.findAll();
         for (long trackId = 1; trackId <= tracks.size(); trackId++) {
-            Optional<Member> trackLeader = jobRepository.searchJob(Year.now().getValue(), trackId)
+            Optional<Member> trackLeader = jobRepository.searchJobWithLeader(trackId)
                 .stream()
                 .map(job -> memberRepository.getById(job.getMember().getId()))
                 .findFirst();

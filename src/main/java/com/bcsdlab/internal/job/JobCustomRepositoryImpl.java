@@ -30,6 +30,22 @@ public class JobCustomRepositoryImpl implements JobCustomRepository {
             .fetch();
     }
 
+    @Override
+    public List<Job> searchJobWithLeader(Long trackId) {
+        return queryFactory.selectFrom(job)
+            .join(job.member).fetchJoin()
+            .where(
+                isNow(),
+                eqTrackId(trackId)
+            )
+            .fetch();
+    }
+
+    private BooleanExpression isNow() {
+        return job.startDate.loe(YearMonth.now())
+            .and(job.endDate.goe(YearMonth.now()));
+    }
+
     private BooleanExpression eqTrackId(Long trackId) {
         if (trackId == null) {
             return null;
