@@ -103,6 +103,42 @@ public class Member extends RootEntity<Long> {
         String phoneNumber,
         String email,
         String password,
+        Authority authority,
+        String githubName,
+        String profileImageUrl,
+        boolean isAuthed,
+        boolean isDeleted
+    ) {
+        this.joinDate = joinDate;
+        this.track = track;
+        this.memberType = memberType;
+        this.status = status;
+        this.name = name;
+        this.company = company;
+        this.department = department;
+        this.studentNumber = studentNumber;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.authority = authority;
+        this.githubName = githubName;
+        this.profileImageUrl = profileImageUrl;
+        this.isAuthed = isAuthed;
+        this.isDeleted = isDeleted;
+    }
+
+    public Member(
+        YearMonth joinDate,
+        Track track,
+        MemberType memberType,
+        MemberStatus status,
+        String name,
+        String company,
+        String department,
+        String studentNumber,
+        String phoneNumber,
+        String email,
+        String password,
         String githubName,
         String profileImageUrl,
         boolean isAuthed,
@@ -128,9 +164,16 @@ public class Member extends RootEntity<Long> {
     public void register(String studentNumber, String password, PasswordEncoder passwordEncoder) {
         this.studentNumber = studentNumber;
         this.password = passwordEncoder.encode(password);
-        this.authority = NORMAL;
+        this.authority = checkAuthority();
         this.isAuthed = false;
         this.isDeleted = false;
+    }
+
+    private Authority checkAuthority() {
+        if (this.authority == null) {
+            return NORMAL;
+        }
+        return this.authority;
     }
 
     public void matchPassword(String password, PasswordEncoder passwordEncoder) {
@@ -150,6 +193,7 @@ public class Member extends RootEntity<Long> {
         this.studentNumber = updated.studentNumber;
         this.phoneNumber = updated.phoneNumber;
         this.email = updated.email;
+        this.authority = updated.authority;
         this.githubName = updated.githubName;
         this.profileImageUrl = updated.profileImageUrl;
     }

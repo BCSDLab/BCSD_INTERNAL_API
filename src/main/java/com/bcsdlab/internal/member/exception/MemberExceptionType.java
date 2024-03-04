@@ -10,6 +10,7 @@ public enum MemberExceptionType implements BcsdExceptionType {
     INVALID_LOGIN(HttpStatus.UNAUTHORIZED, "잘못된 아이디 혹은 비밀번호입니다."),
     TRACK_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 트랙입니다."),
     MEMBER_STATUS_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상태입니다."),
+    MEMBER_AUTHORITY_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 권한입니다."),
     MEMBER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자 타입입니다."),
     MEMBER_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 회원입니다."),
     MEMBER_ALREADY_EXISTS_STUDENT_NUMBER(HttpStatus.CONFLICT, "이미 존재하는 학번입니다."),
