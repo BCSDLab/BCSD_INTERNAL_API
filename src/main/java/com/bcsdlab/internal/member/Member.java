@@ -1,5 +1,12 @@
 package com.bcsdlab.internal.member;
 
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+
 import java.time.YearMonth;
 
 import org.hibernate.annotations.SQLDelete;
@@ -11,20 +18,14 @@ import com.bcsdlab.internal.global.config.YearMonthDateAttributeConverter;
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.track.Track;
 
-import static com.bcsdlab.internal.auth.Authority.NORMAL;
-import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import static jakarta.persistence.EnumType.STRING;
 import jakarta.persistence.Enumerated;
-import static jakarta.persistence.FetchType.LAZY;
 import jakarta.persistence.GeneratedValue;
-import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -166,5 +167,9 @@ public class Member extends RootEntity<Long> {
 
     public void accept() {
         this.isAuthed = true;
+    }
+
+    public void resetPassword(String password, PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
     }
 }

@@ -13,7 +13,10 @@ public enum MemberExceptionType implements BcsdExceptionType {
     MEMBER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자 타입입니다."),
     MEMBER_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 회원입니다."),
     MEMBER_ALREADY_EXISTS_STUDENT_NUMBER(HttpStatus.CONFLICT, "이미 존재하는 학번입니다."),
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "이메일을 찾을 수 없습니다."),
     MEMBER_ALREADY_EXISTS_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
+    CERTIFICATION_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "인증 번호가 일치하지 않습니다."),
+    PASSWORD_RESET_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "비밀번호 변경 요청을 찾을 수 없습니다."),
     ;
 
     private final HttpStatus status;

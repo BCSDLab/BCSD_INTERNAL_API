@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.member.controller;
 
+import static com.bcsdlab.internal.auth.Authority.*;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
+
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -13,19 +16,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.global.controller.dto.PageResponse;
+import com.bcsdlab.internal.member.controller.dto.request.MemberEmailRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberQueryRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberResetPasswordRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberResetTokenRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -166,5 +168,50 @@ public interface MemberApi {
     ResponseEntity<MemberResponse> updateMemberMe(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid MemberUpdateRequest request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "비밀번호 변경 요청 (이메일 전송)")
+    @PostMapping("/password/change")
+    ResponseEntity<Void> requestResetPassword(
+        @RequestBody @Valid MemberEmailRequest request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "비밀번호 변경 이메일 인증번호 확인")
+    @PostMapping("/password/certification")
+    ResponseEntity<Void> certificateResetToken(
+        @RequestBody @Valid MemberResetTokenRequest request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "비밀번호 변경 (이메일 인증 후)")
+    @PostMapping("/password")
+    ResponseEntity<Void> resetPassword(
+        @RequestBody @Valid MemberResetPasswordRequest request
     );
 }

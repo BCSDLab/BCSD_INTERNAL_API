@@ -1,5 +1,7 @@
 package com.bcsdlab.internal.member.controller;
 
+import static com.bcsdlab.internal.auth.Authority.*;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.global.controller.dto.PageResponse;
+import com.bcsdlab.internal.member.controller.dto.request.MemberEmailRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberQueryRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberResetPasswordRequest;
+import com.bcsdlab.internal.member.controller.dto.request.MemberResetTokenRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.service.MemberService;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -85,5 +87,25 @@ public class MemberController implements MemberApi {
     ) {
         var result = memberService.update(memberId, request);
         return ResponseEntity.ok(result);
+    }
+
+    @Override
+    public ResponseEntity<Void> requestResetPassword(
+        @RequestBody @Valid MemberEmailRequest request
+    ) {
+        memberService.requestResetPassword(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> certificateResetToken(MemberResetTokenRequest request) {
+        memberService.certificateResetToken(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<Void> resetPassword(MemberResetPasswordRequest request) {
+        memberService.resetPassword(request);
+        return ResponseEntity.ok().build();
     }
 }
