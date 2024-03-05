@@ -4,6 +4,9 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
 
   h2:
     console:
@@ -47,4 +50,8 @@ aws:
   s3:
     bucket: "example-bucket-12"
     image-path: "images/"  # 마지막 / 필수
-    presigned-url-expires-minutes: 10
+    presigned-url-expires-minutes: 5
+  ses:
+    access-key:
+    secret-key:
+

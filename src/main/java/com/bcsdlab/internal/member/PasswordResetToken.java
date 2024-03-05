@@ -6,20 +6,23 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
 import jakarta.persistence.Id;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @RedisHash("passwordResetToken")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PasswordResetToken {
 
-    private static final long REFRESH_TOKEN_EXPIRE_MINUTE = 5L;
+    private static final long REFRESH_TOKEN_EXPIRE_HOUR = 2L;
 
     @Id
     private Long id;
 
     private String certificationCode;
 
-    @TimeToLive(unit = TimeUnit.MINUTES)
+    @TimeToLive(unit = TimeUnit.HOURS)
     private Long expiration;
 
     private PasswordResetToken(Long id, String certificationCode, Long expiration) {
@@ -29,6 +32,6 @@ public class PasswordResetToken {
     }
 
     public static PasswordResetToken create(Long userId, String certificationCode) {
-        return new PasswordResetToken(userId, certificationCode, REFRESH_TOKEN_EXPIRE_MINUTE);
+        return new PasswordResetToken(userId, certificationCode, REFRESH_TOKEN_EXPIRE_HOUR);
     }
 }

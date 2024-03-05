@@ -125,17 +125,18 @@ public class MemberService {
         validateToken(foundMember.getId(), request.token());
     }
 
-    @Transactional
-    public void resetPassword(MemberResetPasswordRequest request) {
-        Member foundMember = memberRepository.getByEmail(request.email());
-        validateToken(foundMember.getId(), request.token());
-        foundMember.resetPassword(request.password(), passwordEncoder);
-    }
-
     private void validateToken(Long memberId, String token) {
         PasswordResetToken foundToken = passwordResetTokenRepository.getById(memberId);
         if (!foundToken.getCertificationCode().equals(token)) {
             throw new MemberException(CERTIFICATION_CODE_NOT_MATCH);
         }
+    }
+
+    @Transactional
+    public void resetPassword(MemberResetPasswordRequest request) {
+        Member foundMember = memberRepository.getByEmail(request.email());
+        validateToken(foundMember.getId(), request.token());
+        foundMember.resetPassword(request.password(), passwordEncoder);
+        passwordResetTokenRepository.deleteById(foundMember.getId());
     }
 }

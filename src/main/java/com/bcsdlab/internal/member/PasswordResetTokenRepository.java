@@ -9,7 +9,9 @@ import com.bcsdlab.internal.member.exception.MemberExceptionType;
 
 public interface PasswordResetTokenRepository extends Repository<PasswordResetToken, Long> {
     PasswordResetToken save(PasswordResetToken passwordResetToken);
-    // TODO: 인증 후 제거 필요
+
+    void deleteById(Long id);
+
     Optional<PasswordResetToken> findById(Long id);
 
     default PasswordResetToken getById(Long id) {
