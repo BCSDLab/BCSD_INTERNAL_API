@@ -2,6 +2,7 @@ package com.bcsdlab.internal.admin.controller.dto.request;
 
 import java.time.YearMonth;
 
+import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberStatus;
 import com.bcsdlab.internal.member.MemberType;
@@ -56,6 +57,9 @@ public record AdminMemberUpdateRequest(
     @Schema(example = "example@koreatech.ac.kr", description = "이메일")
     @NotBlank String email,
 
+    @Schema(example = "MANAGER", description = "권한")
+    @NotNull Authority authority,
+
     @Schema(example = "CHOI-JJUNHO", description = "깃허브 이름")
     @NotBlank String githubName,
 
@@ -82,6 +86,7 @@ public record AdminMemberUpdateRequest(
             phoneNumber,
             email,
             null,
+            authority,
             githubName,
             profileImageUrl,
             isAuthed,
