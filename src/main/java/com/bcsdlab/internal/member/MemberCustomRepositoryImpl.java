@@ -1,5 +1,7 @@
 package com.bcsdlab.internal.member;
 
+import static com.bcsdlab.internal.member.QMember.member;
+
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import static com.bcsdlab.internal.member.QMember.member;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -28,6 +29,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 inDeleted(deleted),
                 isAuthed(authed)
             )
+            .orderBy(
+                member.joinDate.asc(),
+                member.name.asc()
+                )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
