@@ -18,6 +18,8 @@ public enum MemberExceptionType implements BcsdExceptionType {
     MEMBER_ALREADY_EXISTS_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
     CERTIFICATION_CODE_NOT_MATCH(HttpStatus.BAD_REQUEST, "인증 번호가 일치하지 않습니다."),
     PASSWORD_RESET_TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "비밀번호 변경 요청을 찾을 수 없습니다."),
+    PASSWORD_SAME_AS_BEFORE(HttpStatus.BAD_REQUEST, "기존 비밀번호와 동일합니다."),
+    PASSWORD_EMPTY(HttpStatus.BAD_REQUEST, "비밀번호가 비어있습니다."),
     ;
 
     private final HttpStatus status;

@@ -136,7 +136,17 @@ public class MemberService {
     public void resetPassword(MemberResetPasswordRequest request) {
         Member foundMember = memberRepository.getByEmail(request.email());
         validateToken(foundMember.getId(), request.token());
+        validateNewPassword(request.password(), foundMember);
         foundMember.resetPassword(request.password(), passwordEncoder);
         passwordResetTokenRepository.deleteById(foundMember.getId());
+    }
+
+    private void validateNewPassword(String password, Member foundMember) {
+        if (passwordEncoder.matches(password, foundMember.getPassword())) {
+            throw new MemberException(PASSWORD_SAME_AS_BEFORE);
+        }
+        if (password.isEmpty()) {
+            throw new MemberException(PASSWORD_EMPTY);
+        }
     }
 }
