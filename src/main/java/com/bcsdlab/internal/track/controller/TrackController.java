@@ -44,7 +44,7 @@ public class TrackController implements TrackApi {
     @GetMapping
     public ResponseEntity<List<TrackWithLeaderResponse>> getTrack() {
         List<TrackWithLeaderResponse> result = new ArrayList<>();
-        var tracks = trackRepository.findAll();
+        var tracks = trackRepository.findAllByIsDeleted(false);
         for (long trackId = 1; trackId <= tracks.size(); trackId++) {
             Optional<Member> trackLeader = jobRepository.searchJobWithLeader(trackId)
                 .stream()
