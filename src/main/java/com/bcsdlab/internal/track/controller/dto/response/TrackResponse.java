@@ -13,6 +13,9 @@ public record TrackResponse(
 ) {
 
     public static TrackResponse from(Track track) {
+        if (track == null) {
+            return null;
+        }
         return new TrackResponse(track.getId(), track.getName());
     }
 }

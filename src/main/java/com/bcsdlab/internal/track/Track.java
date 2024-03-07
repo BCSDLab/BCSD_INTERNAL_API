@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.track;
 
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+
 import org.hibernate.annotations.SQLDelete;
 
 import com.bcsdlab.internal.global.RootEntity;
@@ -7,9 +10,7 @@ import com.bcsdlab.internal.global.RootEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
-import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,5 +36,9 @@ public class Track extends RootEntity<Long> {
 
     public void update(String name) {
         this.name = name;
+    }
+
+    public void undelete() {
+        this.isDeleted = false;
     }
 }

@@ -216,4 +216,8 @@ public class Member extends RootEntity<Long> {
     public void resetPassword(String password, PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
+
+    public void deleteTrack() {
+      track = null;
+    }
 }

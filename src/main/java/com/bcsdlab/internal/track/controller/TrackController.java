@@ -65,7 +65,12 @@ public class TrackController implements TrackApi {
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody TrackCreateRequest request
     ) {
-        trackRepository.save(new Track(request.name()));
+        Optional<Track> deletedTrack = trackRepository.findByNameAndIsDeleted(request.name(), true);
+        if (deletedTrack.isPresent()) {
+            deletedTrack.get().undelete();
+        } else {
+            trackRepository.save(new Track(request.name()));
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -85,6 +90,8 @@ public class TrackController implements TrackApi {
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     ) {
+        List<Member> members = memberRepository.findAllByTrackId(id);
+        members.forEach(Member::deleteTrack);
         trackRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }

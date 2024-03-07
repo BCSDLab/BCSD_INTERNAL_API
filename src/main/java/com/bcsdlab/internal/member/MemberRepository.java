@@ -12,6 +12,8 @@ import com.bcsdlab.internal.member.exception.MemberException;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberCustomRepository {
 
+    List<Member> findAllByTrackId(Long id);
+
     Optional<Member> findByStudentNumber(String studentNumber);
 
     Optional<Member> findByEmail(String email);

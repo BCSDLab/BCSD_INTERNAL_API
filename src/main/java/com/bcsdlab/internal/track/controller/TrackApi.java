@@ -98,6 +98,10 @@ public interface TrackApi {
         value = {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(
+                responseCode = "400",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
                 responseCode = "401",
                 content = @Content(schema = @Schema(hidden = true))
             ),
