@@ -1,7 +1,6 @@
 package com.bcsdlab.internal.job.controller;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.*;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class JobController implements JobApi {
 
     @Override
     public ResponseEntity<JobGroupResponse> getAll(
-        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @ParameterObject
         @ModelAttribute JobQueryRequest request
     ) {
