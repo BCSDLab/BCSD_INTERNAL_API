@@ -8,6 +8,6 @@ class BcsdlabInternalApiApplicationTests {
 
     @Test
     void contextLoads() {
-    }
 
+    }
 }
