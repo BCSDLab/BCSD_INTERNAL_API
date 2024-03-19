@@ -128,40 +128,6 @@ public class Member extends RootEntity<Long> {
         this.isDeleted = isDeleted;
     }
 
-    public Member(
-        YearMonth joinDate,
-        Track track,
-        MemberType memberType,
-        MemberStatus status,
-        String name,
-        String company,
-        String department,
-        String studentNumber,
-        String phoneNumber,
-        String email,
-        String password,
-        String githubName,
-        String profileImageUrl,
-        boolean isAuthed,
-        boolean isDeleted
-    ) {
-        this.joinDate = joinDate;
-        this.track = track;
-        this.memberType = memberType;
-        this.status = status;
-        this.name = name;
-        this.company = company;
-        this.department = department;
-        this.studentNumber = studentNumber;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.password = password;
-        this.githubName = githubName;
-        this.profileImageUrl = profileImageUrl;
-        this.isAuthed = isAuthed;
-        this.isDeleted = isDeleted;
-    }
-
     public void register(String studentNumber, String password, PasswordEncoder passwordEncoder) {
         this.studentNumber = studentNumber;
         this.password = passwordEncoder.encode(password);

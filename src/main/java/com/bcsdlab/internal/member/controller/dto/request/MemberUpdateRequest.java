@@ -2,6 +2,7 @@ package com.bcsdlab.internal.member.controller.dto.request;
 
 import java.time.YearMonth;
 
+import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.member.Member;
 import com.bcsdlab.internal.member.MemberStatus;
 import com.bcsdlab.internal.member.MemberType;
@@ -12,6 +13,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record MemberUpdateRequest(
+
+    @Schema(example = "NORMAL", description = """
+        NORMAL
+        MANAGER
+        ADMIN
+        """)
+    @NotNull Authority authority,
+
     @Schema(example = "2023", description = "가입 년도")
     Integer joinedYear,
 
@@ -76,6 +85,7 @@ public record MemberUpdateRequest(
             phoneNumber,
             email,
             null,
+            authority,
             githubName,
             profileImageUrl,
             false,
