@@ -3,16 +3,12 @@ package com.bcsdlab.internal.reservation.controller.dto.request;
 import java.time.LocalDateTime;
 
 import com.bcsdlab.internal.global.config.CustomLocalDateTimeDeserializer;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-@JsonNaming(value = SnakeCaseStrategy.class)
 public record ReservationModifyRequest(
 
     @NotNull

@@ -4,13 +4,10 @@ import java.time.LocalDateTime;
 
 import com.bcsdlab.internal.global.config.CustomLocalDateTimeSerializer;
 import com.bcsdlab.internal.reservation.model.Reservation;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@JsonNaming(value = SnakeCaseStrategy.class)
 public record ReservationResponse(
 
     @Schema(example = "1", description = "예약 ID")

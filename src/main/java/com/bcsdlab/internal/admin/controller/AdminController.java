@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
+import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.admin.service.AdminService;
 import com.bcsdlab.internal.auth.Auth;
@@ -51,12 +52,12 @@ public class AdminController implements AdminApi {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/members/{memberId}")
+    @DeleteMapping("/members")
     public ResponseEntity<Void> withdrawMember(
         @Auth(permit = {MANAGER,ADMIN}) Long adminId,
-        @PathVariable Long memberId
+        @RequestBody @Valid AdminMemberDeleteRequest adminMemberDeleteRequest
     ) {
-        adminService.withdrawMember(memberId);
+        adminService.withdrawMember(adminMemberDeleteRequest);
         return ResponseEntity.ok().build();
     }
 

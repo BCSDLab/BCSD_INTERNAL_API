@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.job.JobRepository;
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberRepository;
 import com.bcsdlab.internal.track.Track;
 import com.bcsdlab.internal.track.TrackRepository;

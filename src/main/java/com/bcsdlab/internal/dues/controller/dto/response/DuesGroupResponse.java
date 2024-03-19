@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.DuesStatus;
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;

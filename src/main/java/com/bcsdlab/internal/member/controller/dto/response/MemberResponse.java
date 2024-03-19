@@ -3,7 +3,7 @@ package com.bcsdlab.internal.member.controller.dto.response;
 
 import java.time.LocalDateTime;
 
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -67,7 +67,10 @@ public record MemberResponse(
     boolean isAuthed,
 
     @Schema(example = "false", description = "삭제 여부")
-    boolean isDeleted
+    boolean isDeleted,
+
+    @Schema(example = "너무 힘들어요", description = "탈퇴 사유")
+    String deleteReason
 ) {
 
     public static MemberResponse from(Member member) {
@@ -90,7 +93,8 @@ public record MemberResponse(
             member.getCreatedAt(),
             member.getUpdatedAt(),
             member.isAuthed(),
-            member.isDeleted()
+            member.isDeleted(),
+            member.getMemberWithdraw() == null? null: member.getMemberWithdraw().getReason()
         );
     }
 }

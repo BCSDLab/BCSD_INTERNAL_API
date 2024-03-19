@@ -1,6 +1,6 @@
 package com.bcsdlab.internal.member;
 
-import static com.bcsdlab.internal.member.QMember.member;
+import static com.bcsdlab.internal.member.model.QMember.member;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import com.bcsdlab.internal.member.model.Member;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 

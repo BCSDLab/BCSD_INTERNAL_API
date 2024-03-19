@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.member;
+package com.bcsdlab.internal.member.model;
 
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.global.config.YearMonthDateAttributeConverter;
+import com.bcsdlab.internal.member.MemberStatus;
+import com.bcsdlab.internal.member.MemberType;
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.track.Track;
 
@@ -26,6 +28,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -91,6 +94,9 @@ public class Member extends RootEntity<Long> {
 
     @Column(name = "is_deleted")
     private boolean isDeleted;
+
+    @OneToOne(mappedBy = "member")
+    private MemberWithdraw memberWithdraw;
 
     public Member(
         YearMonth joinDate,

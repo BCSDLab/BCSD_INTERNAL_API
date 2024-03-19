@@ -6,7 +6,7 @@ import static lombok.AccessLevel.PROTECTED;
 import java.time.LocalDateTime;
 
 import com.bcsdlab.internal.global.RootEntity;
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

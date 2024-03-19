@@ -6,7 +6,7 @@ import java.time.YearMonth;
 
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.global.config.YearMonthDateAttributeConverter;
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

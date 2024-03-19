@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bcsdlab.internal.auth.JwtProvider;
 import com.bcsdlab.internal.global.ses.CertificationCodeGenerator;
 import com.bcsdlab.internal.global.ses.MailSender;
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberRepository;
 import com.bcsdlab.internal.member.PasswordResetToken;
 import com.bcsdlab.internal.member.PasswordResetTokenRepository;
@@ -73,6 +73,7 @@ public class MemberService {
     public Page<MemberResponse> getMembers(MemberQueryRequest request, Pageable pageable) {
         Page<Member> members = memberRepository
             .searchMembers(request.name(), request.trackId(), request.deleted(), request.authed(), pageable);
+        System.out.println("dsa");
         return members.map(MemberResponse::from);
     }
 

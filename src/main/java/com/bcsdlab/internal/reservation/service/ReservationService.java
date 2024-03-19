@@ -7,16 +7,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberRepository;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationCreateRequest;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModifyRequest;
 import com.bcsdlab.internal.reservation.controller.dto.response.ReservationResponse;
 import com.bcsdlab.internal.reservation.exception.ReservationException;
-import com.bcsdlab.internal.reservation.exception.ReservationExceptionType;
 import com.bcsdlab.internal.reservation.model.Reservation;
 import com.bcsdlab.internal.reservation.repository.ReservationCustomRepository;
-import com.bcsdlab.internal.reservation.repository.ReservationCustomRepositoryImpl;
 import com.bcsdlab.internal.reservation.repository.ReservationRepository;
 
 import lombok.RequiredArgsConstructor;

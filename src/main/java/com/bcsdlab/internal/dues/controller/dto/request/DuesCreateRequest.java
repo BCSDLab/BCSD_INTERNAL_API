@@ -4,7 +4,7 @@ import java.time.YearMonth;
 
 import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.DuesStatus;
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

@@ -3,7 +3,7 @@ package com.bcsdlab.internal.job.controller.dto.request;
 import java.time.YearMonth;
 
 import com.bcsdlab.internal.job.Job;
-import com.bcsdlab.internal.member.Member;
+import com.bcsdlab.internal.member.model.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.admin.controller;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -9,16 +12,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
+import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -102,10 +101,10 @@ public interface AdminApi {
         }
     )
     @Operation(summary = "회원 삭제", description = "Soft Delete")
-    @DeleteMapping("/members/{memberId}")
+    @DeleteMapping("/members")
     ResponseEntity<Void> withdrawMember(
         @Auth(permit = {MANAGER,ADMIN}) Long adminId,
-        @Parameter(in = PATH) @PathVariable Long memberId
+        @RequestBody @Valid AdminMemberDeleteRequest adminMemberDeleteRequest
     );
 
     @ApiResponses(
