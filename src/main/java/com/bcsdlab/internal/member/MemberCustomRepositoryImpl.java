@@ -32,7 +32,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
             .orderBy(
                 member.joinDate.asc(),
                 member.name.asc()
-                )
+            )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

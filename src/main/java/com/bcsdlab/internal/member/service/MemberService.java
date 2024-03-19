@@ -45,6 +45,7 @@ public class MemberService {
     public MemberLoginResponse login(MemberLoginRequest request) {
         Member member = memberRepository.getByStudentNumber(request.studentNumber());
         checkAuthorized(member);
+
         member.matchPassword(request.password(), passwordEncoder);
         String token = jwtProvider.createToken(member);
         return new MemberLoginResponse(token);
