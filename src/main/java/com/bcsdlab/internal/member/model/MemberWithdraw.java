@@ -36,7 +36,6 @@ public class MemberWithdraw extends RootEntity<Long> {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Lob
     @Column(name = "reason")
     private String reason;
 

@@ -73,7 +73,6 @@ public class MemberService {
     public Page<MemberResponse> getMembers(MemberQueryRequest request, Pageable pageable) {
         Page<Member> members = memberRepository
             .searchMembers(request.name(), request.trackId(), request.deleted(), request.authed(), pageable);
-        System.out.println("dsa");
         return members.map(MemberResponse::from);
     }
 
