@@ -80,4 +80,8 @@ public class ReservationService {
         reservation.setEndDateTime(reservationModifyRequest.endDateTime());
         reservation.setMemberCount(reservationModifyRequest.memberCount());
     }
+
+    public List<ReservationResponse> getMemberReservation(Long memberId) {
+        return reservationRepository.findAllByMemberId(memberId).stream().map(ReservationResponse::of).toList();
+    }
 }

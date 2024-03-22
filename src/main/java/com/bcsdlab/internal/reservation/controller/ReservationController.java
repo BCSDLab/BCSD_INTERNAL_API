@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
@@ -22,7 +21,6 @@ import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModify
 import com.bcsdlab.internal.reservation.controller.dto.response.ReservationResponse;
 import com.bcsdlab.internal.reservation.service.ReservationService;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -38,6 +36,14 @@ public class ReservationController implements ReservationApi {
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId
     ) {
         List<ReservationResponse> reservationResponses = reservationService.getAllReservation();
+        return ResponseEntity.ok(reservationResponses);
+    }
+
+    @GetMapping("/member")
+    public ResponseEntity<List<ReservationResponse>> getMemberReservation(
+        @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId
+    ) {
+        List<ReservationResponse> reservationResponses = reservationService.getMemberReservation(memberId);
         return ResponseEntity.ok(reservationResponses);
     }
 
