@@ -36,7 +36,7 @@ public class MemberWithdraw extends RootEntity<Long> {
     private LocalDateTime withdrawDate;
 
     @Builder
-    MemberWithdraw(Long id, Member member, String reason, LocalDateTime withdrawDate) {
+    private MemberWithdraw(Long id, Member member, String reason, LocalDateTime withdrawDate) {
         this.id = id;
         this.member = member;
         this.reason = reason;

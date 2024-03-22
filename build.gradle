@@ -64,7 +64,7 @@ clean {
 }
 
 bootWar {
-    archivesBaseName = 'BCSDLAB_INTERNAL'
+    archiveBaseName = 'BCSDLAB_INTERNAL'
     archiveFileName = 'ROOT.war'
 }
 

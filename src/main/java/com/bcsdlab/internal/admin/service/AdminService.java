@@ -34,25 +34,22 @@ public class AdminService {
         member.accept();
     }
 
-    @Transactional
-    public void withdrawMember(AdminMemberDeleteRequest adminMemberDeleteRequest) {
-        Member member = memberRepository.getById(adminMemberDeleteRequest.id());
-        if (!member.isDeleted()) {
-            MemberWithdraw memberWithdraw = MemberWithdraw.builder()
-                .withdrawDate(LocalDateTime.now())
-                .reason(adminMemberDeleteRequest.reason())
-                .member(member)
-                .build();
-            memberWithdrawRepository.save(memberWithdraw);
-            member.withdraw();
-        }
+    public void withdrawMember(Long memberId, AdminMemberDeleteRequest request) {
+        Member member = memberRepository.getById(memberId);
+        MemberWithdraw memberWithdraw = MemberWithdraw.builder()
+            .withdrawDate(LocalDateTime.now())
+            .reason(request.reason())
+            .member(member)
+            .build();
+        memberWithdrawRepository.save(memberWithdraw);
+        member.withdraw();
     }
 
     public MemberResponse updateMember(Long memberId, AdminMemberUpdateRequest request) {
         Member member = memberRepository.getById(memberId);
         Track track = trackRepository.getById(request.trackId());
         Member updated = request.toEntity(track);
-        if (request.isDeleted() == false) {
+        if (!request.isDeleted()) {
             memberWithdrawRepository.deleteAllByMemberId(memberId);
         }
         member.updateAll(updated);

@@ -51,12 +51,13 @@ public class AdminController implements AdminApi {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/members")
+    @DeleteMapping("/members/{memberId}")
     public ResponseEntity<Void> withdrawMember(
         @Auth(permit = {MANAGER, ADMIN}) Long adminId,
+        @PathVariable Long memberId,
         @RequestBody @Valid AdminMemberDeleteRequest adminMemberDeleteRequest
     ) {
-        adminService.withdrawMember(adminMemberDeleteRequest);
+        adminService.withdrawMember(memberId, adminMemberDeleteRequest);
         return ResponseEntity.ok().build();
     }
 

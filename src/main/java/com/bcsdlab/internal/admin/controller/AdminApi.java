@@ -17,6 +17,8 @@ import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -100,9 +102,10 @@ public interface AdminApi {
         }
     )
     @Operation(summary = "회원 삭제", description = "Soft Delete")
-    @DeleteMapping("/members")
+    @DeleteMapping("/members/{memberId}")
     ResponseEntity<Void> withdrawMember(
         @Auth(permit = {MANAGER, ADMIN}) Long adminId,
+        @Parameter(in = PATH) @PathVariable Long memberId,
         @RequestBody @Valid AdminMemberDeleteRequest adminMemberDeleteRequest
     );
 
