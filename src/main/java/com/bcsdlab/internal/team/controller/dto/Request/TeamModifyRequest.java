@@ -17,4 +17,5 @@ public record TeamModifyRequest(
     @Schema(example = "false", description = "삭제 여부")
     @NotNull Boolean isDeleted
 ) {
+
 }

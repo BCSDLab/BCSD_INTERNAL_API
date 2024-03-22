@@ -1,14 +1,12 @@
 package com.bcsdlab.internal.reservation.service;
 
-import static com.bcsdlab.internal.reservation.exception.ReservationExceptionType.*;
-
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberRepository;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationCreateRequest;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModifyRequest;
 import com.bcsdlab.internal.reservation.controller.dto.response.ReservationResponse;
@@ -17,6 +15,8 @@ import com.bcsdlab.internal.reservation.model.Reservation;
 import com.bcsdlab.internal.reservation.repository.ReservationCustomRepository;
 import com.bcsdlab.internal.reservation.repository.ReservationRepository;
 
+import static com.bcsdlab.internal.reservation.exception.ReservationExceptionType.RESERVATION_EXIST;
+import static com.bcsdlab.internal.reservation.exception.ReservationExceptionType.RESERVATION_TIME_BAD_REQUEST;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -47,10 +47,12 @@ public class ReservationService {
             reservationCreateRequest.startDateTime(),
             reservationCreateRequest.endDateTime()
         );
-        if (reservationCreateRequest.startDateTime().isAfter(reservationCreateRequest.endDateTime()))
+        if (reservationCreateRequest.startDateTime().isAfter(reservationCreateRequest.endDateTime())) {
             throw new ReservationException(RESERVATION_TIME_BAD_REQUEST);
-        if (isExistReservation)
+        }
+        if (isExistReservation) {
             throw new ReservationException(RESERVATION_EXIST);
+        }
         Reservation reservation = Reservation.builder()
             .reason(reservationCreateRequest.reason())
             .detailedReason(reservationCreateRequest.detailedReason())
@@ -70,10 +72,12 @@ public class ReservationService {
             reservationModifyRequest.endDateTime(),
             id
         );
-        if (reservationModifyRequest.startDateTime().isAfter(reservationModifyRequest.endDateTime()))
+        if (reservationModifyRequest.startDateTime().isAfter(reservationModifyRequest.endDateTime())) {
             throw new ReservationException(RESERVATION_TIME_BAD_REQUEST);
-        if (isExistReservation)
+        }
+        if (isExistReservation) {
             throw new ReservationException(RESERVATION_EXIST);
+        }
         reservation.setDetailedReason(reservationModifyRequest.detailedReason());
         reservation.setReason(reservationModifyRequest.reason());
         reservation.setStartDateTime(reservationModifyRequest.startDateTime());

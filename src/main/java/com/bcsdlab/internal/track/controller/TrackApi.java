@@ -1,8 +1,5 @@
 package com.bcsdlab.internal.track.controller;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,8 @@ import com.bcsdlab.internal.track.controller.dto.request.TrackUpdateRequest;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 import com.bcsdlab.internal.track.controller.dto.response.TrackWithLeaderResponse;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -64,7 +63,7 @@ public interface TrackApi {
     @SecurityRequirement(name = "JWT")
     @PostMapping
     ResponseEntity<Void> createTrack(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody TrackCreateRequest request
     );
 
@@ -89,7 +88,7 @@ public interface TrackApi {
     @SecurityRequirement(name = "JWT")
     @PutMapping("/{id}")
     ResponseEntity<TrackResponse> updateTrack(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id,
         @RequestBody TrackUpdateRequest request
     );
@@ -119,7 +118,7 @@ public interface TrackApi {
     @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteTrack(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     );
 }

@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.member.controller;
 
-import static com.bcsdlab.internal.auth.Authority.*;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +25,9 @@ import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.service.MemberService;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

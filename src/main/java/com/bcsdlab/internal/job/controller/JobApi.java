@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.job.controller;
 
-import static com.bcsdlab.internal.auth.Authority.*;
-
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +16,9 @@ import com.bcsdlab.internal.job.controller.dto.request.JobUpdateQueryRequest;
 import com.bcsdlab.internal.job.controller.dto.response.JobGroupResponse;
 import com.bcsdlab.internal.job.controller.dto.response.JobResponse;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

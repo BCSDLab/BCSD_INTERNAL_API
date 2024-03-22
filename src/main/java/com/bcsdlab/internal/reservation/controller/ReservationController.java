@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.reservation.controller;
 
-import static com.bcsdlab.internal.auth.Authority.*;
-
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -21,6 +19,9 @@ import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModify
 import com.bcsdlab.internal.reservation.controller.dto.response.ReservationResponse;
 import com.bcsdlab.internal.reservation.service.ReservationService;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/reservations")
 public class ReservationController implements ReservationApi {
 
-    private  final ReservationService reservationService;
+    private final ReservationService reservationService;
 
     @GetMapping
     public ResponseEntity<List<ReservationResponse>> getAllReservation(

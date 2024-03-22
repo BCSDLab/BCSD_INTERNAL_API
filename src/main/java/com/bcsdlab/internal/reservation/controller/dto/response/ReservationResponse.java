@@ -33,6 +33,7 @@ public record ReservationResponse(
     @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
     LocalDateTime endDateTime
 ) {
+
     public static ReservationResponse of(Reservation reservation) {
         return new ReservationResponse(
             reservation.getId(),

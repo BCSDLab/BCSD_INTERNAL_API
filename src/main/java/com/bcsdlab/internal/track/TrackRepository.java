@@ -1,13 +1,13 @@
 package com.bcsdlab.internal.track;
 
-import static com.bcsdlab.internal.track.exception.TrackExceptionType.TRACK_NOT_FOUND;
-
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.bcsdlab.internal.track.exception.TrackException;
+
+import static com.bcsdlab.internal.track.exception.TrackExceptionType.TRACK_NOT_FOUND;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
 

@@ -12,4 +12,5 @@ public record MemberResetPasswordRequest(
     @Schema(example = "password", description = "비밀번호")
     String password
 ) {
+
 }

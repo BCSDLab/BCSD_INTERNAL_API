@@ -11,6 +11,7 @@ public record TeamMemberResponse(
     @Schema(description = "팀")
     TeamResponse teamResponse
 ) {
+
     public static TeamMemberResponse of(TeamMap teamMap) {
         return new TeamMemberResponse(
             teamMap.getId(),

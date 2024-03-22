@@ -94,7 +94,7 @@ public record MemberResponse(
             member.getUpdatedAt(),
             member.isAuthed(),
             member.isDeleted(),
-            member.getMemberWithdraw() == null? null: member.getMemberWithdraw().getReason()
+            member.getMemberWithdraw() == null ? null : member.getMemberWithdraw().getReason()
         );
     }
 }

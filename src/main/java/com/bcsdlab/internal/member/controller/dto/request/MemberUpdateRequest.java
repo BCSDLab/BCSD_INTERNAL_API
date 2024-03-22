@@ -3,9 +3,9 @@ package com.bcsdlab.internal.member.controller.dto.request;
 import java.time.YearMonth;
 
 import com.bcsdlab.internal.auth.Authority;
-import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberStatus;
 import com.bcsdlab.internal.member.MemberType;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
 
 import io.swagger.v3.oas.annotations.media.Schema;

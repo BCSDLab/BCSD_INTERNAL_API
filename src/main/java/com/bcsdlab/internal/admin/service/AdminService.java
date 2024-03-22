@@ -37,7 +37,7 @@ public class AdminService {
     @Transactional
     public void withdrawMember(AdminMemberDeleteRequest adminMemberDeleteRequest) {
         Member member = memberRepository.getById(adminMemberDeleteRequest.id());
-        if(!member.isDeleted()) {
+        if (!member.isDeleted()) {
             MemberWithdraw memberWithdraw = MemberWithdraw.builder()
                 .withdrawDate(LocalDateTime.now())
                 .reason(adminMemberDeleteRequest.reason())
@@ -52,7 +52,9 @@ public class AdminService {
         Member member = memberRepository.getById(memberId);
         Track track = trackRepository.getById(request.trackId());
         Member updated = request.toEntity(track);
-        if(request.isDeleted() == false) memberWithdrawRepository.deleteAllByMemberId(memberId);
+        if (request.isDeleted() == false) {
+            memberWithdrawRepository.deleteAllByMemberId(memberId);
+        }
         member.updateAll(updated);
         return MemberResponse.from(member);
     }

@@ -11,4 +11,5 @@ public record AdminMemberDeleteRequest(
     @Schema(example = "너무 힘들어서 못하겠어요 ㅠ", description = "탈퇴 사유")
     String reason
 ) {
+
 }

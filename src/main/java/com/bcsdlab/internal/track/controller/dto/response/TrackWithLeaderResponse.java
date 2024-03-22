@@ -1,7 +1,7 @@
 package com.bcsdlab.internal.track.controller.dto.response;
 
-import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
 
 import io.swagger.v3.oas.annotations.media.Schema;

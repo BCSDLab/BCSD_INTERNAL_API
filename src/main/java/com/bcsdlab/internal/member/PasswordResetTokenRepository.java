@@ -8,6 +8,7 @@ import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.member.exception.MemberExceptionType;
 
 public interface PasswordResetTokenRepository extends Repository<PasswordResetToken, Long> {
+
     PasswordResetToken save(PasswordResetToken passwordResetToken);
 
     void deleteById(Long id);

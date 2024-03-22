@@ -1,8 +1,5 @@
 package com.bcsdlab.internal.track.controller;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.job.JobRepository;
-import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberRepository;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
 import com.bcsdlab.internal.track.TrackRepository;
 import com.bcsdlab.internal.track.controller.dto.request.TrackCreateRequest;
@@ -29,6 +26,8 @@ import com.bcsdlab.internal.track.controller.dto.request.TrackUpdateRequest;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 import com.bcsdlab.internal.track.controller.dto.response.TrackWithLeaderResponse;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import lombok.RequiredArgsConstructor;
 
 @Transactional
@@ -52,9 +51,9 @@ public class TrackController implements TrackApi {
                 .findFirst();
 
             if (trackLeader.isEmpty()) {
-                result.add(TrackWithLeaderResponse.of(tracks.get((int)trackId - 1), null));
+                result.add(TrackWithLeaderResponse.of(tracks.get((int) trackId - 1), null));
             } else {
-                result.add(TrackWithLeaderResponse.of(tracks.get((int)trackId - 1), trackLeader.get()));
+                result.add(TrackWithLeaderResponse.of(tracks.get((int) trackId - 1), trackLeader.get()));
             }
         }
         return ResponseEntity.ok(result);

@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.team.repository;
 
-import static com.bcsdlab.internal.team.exception.TeamExceptionType.TEAM_NOT_FOUND;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.bcsdlab.internal.team.exception.TeamException;
 import com.bcsdlab.internal.team.model.Team;
+
+import static com.bcsdlab.internal.team.exception.TeamExceptionType.TEAM_NOT_FOUND;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
 

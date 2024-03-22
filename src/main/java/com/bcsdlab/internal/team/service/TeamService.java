@@ -21,8 +21,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class TeamService {
 
-    private  final TeamRepository teamRepository;
-    private  final MemberRepository memberRepository;
+    private final TeamRepository teamRepository;
+    private final MemberRepository memberRepository;
 
     public List<TeamResponse> getTeam(TeamRequest teamRequest) {
         return teamRepository.findAllByIsDeleted(teamRequest.isDeleted()).stream().map(TeamResponse::of).toList();

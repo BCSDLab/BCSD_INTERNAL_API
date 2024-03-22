@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.reservation.controller;
 
-import static com.bcsdlab.internal.auth.Authority.*;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,9 @@ import com.bcsdlab.internal.reservation.controller.dto.request.ReservationCreate
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModifyRequest;
 import com.bcsdlab.internal.reservation.controller.dto.response.ReservationResponse;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -14,8 +14,8 @@ import com.bcsdlab.internal.job.controller.dto.request.JobQueryRequest;
 import com.bcsdlab.internal.job.controller.dto.request.JobUpdateQueryRequest;
 import com.bcsdlab.internal.job.controller.dto.response.JobGroupResponse;
 import com.bcsdlab.internal.job.controller.dto.response.JobResponse;
-import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberRepository;
+import com.bcsdlab.internal.member.model.Member;
 
 import lombok.RequiredArgsConstructor;
 

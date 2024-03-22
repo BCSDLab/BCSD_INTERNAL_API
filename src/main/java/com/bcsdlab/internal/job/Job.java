@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.job;
 
-import static lombok.AccessLevel.PROTECTED;
-
 import java.time.YearMonth;
 
 import com.bcsdlab.internal.global.RootEntity;
@@ -19,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

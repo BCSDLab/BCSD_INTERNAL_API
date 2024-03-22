@@ -6,4 +6,5 @@ public record JobDeleteQueryRequest(
     @Schema(description = "직무 ID", example = "1")
     Long id
 ) {
+
 }

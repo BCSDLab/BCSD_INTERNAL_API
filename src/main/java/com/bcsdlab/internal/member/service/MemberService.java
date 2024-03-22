@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.member.service;
 
-import static com.bcsdlab.internal.member.exception.MemberExceptionType.*;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bcsdlab.internal.auth.JwtProvider;
 import com.bcsdlab.internal.global.ses.CertificationCodeGenerator;
 import com.bcsdlab.internal.global.ses.MailSender;
-import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.MemberRepository;
 import com.bcsdlab.internal.member.PasswordResetToken;
 import com.bcsdlab.internal.member.PasswordResetTokenRepository;
@@ -25,9 +22,16 @@ import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.exception.MemberException;
+import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
 import com.bcsdlab.internal.track.TrackRepository;
 
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.CERTIFICATION_CODE_NOT_MATCH;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS_EMAIL;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS_STUDENT_NUMBER;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_AUTHORIZED;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.PASSWORD_EMPTY;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.PASSWORD_SAME_AS_BEFORE;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -118,7 +122,7 @@ public class MemberService {
             MailSender.PASSWORD_RESET_SUBJECT,
             request.email(),
             certificationCode
-            );
+        );
     }
 
     public void certificateResetToken(MemberResetTokenRequest request) {

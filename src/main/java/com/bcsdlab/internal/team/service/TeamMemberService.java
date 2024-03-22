@@ -47,6 +47,7 @@ public class TeamMemberService {
     }
 
     public List<TeamMemberResponse> getTeamMemberByTeamId(Long teamId, Pageable pageable) {
-        return teamMemberRepository.findAllByTeamIdAndNotDeleted(teamId, pageable).stream().map(TeamMemberResponse::of).toList();
+        return teamMemberRepository.findAllByTeamIdAndNotDeleted(teamId, pageable).stream().map(TeamMemberResponse::of)
+            .toList();
     }
 }

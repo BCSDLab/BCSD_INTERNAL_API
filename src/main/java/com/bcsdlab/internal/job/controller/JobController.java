@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.job.controller;
 
-import static com.bcsdlab.internal.auth.Authority.*;
-
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +14,9 @@ import com.bcsdlab.internal.job.controller.dto.response.JobGroupResponse;
 import com.bcsdlab.internal.job.controller.dto.response.JobResponse;
 import com.bcsdlab.internal.job.service.JobService;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import lombok.RequiredArgsConstructor;
 
 @RestController

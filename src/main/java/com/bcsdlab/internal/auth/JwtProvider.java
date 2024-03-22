@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.bcsdlab.internal.auth.exception.AuthException;
-import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.exception.MemberException;
+import com.bcsdlab.internal.member.model.Member;
 
 import static com.bcsdlab.internal.auth.exception.AuthExceptionType.INVALID_TOKEN;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;

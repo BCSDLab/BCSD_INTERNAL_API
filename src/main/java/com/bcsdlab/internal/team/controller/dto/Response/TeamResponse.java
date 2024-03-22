@@ -5,7 +5,7 @@ import com.bcsdlab.internal.team.model.Team;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public record TeamResponse (
+public record TeamResponse(
     @Schema(example = "1", description = "팀id")
     Long id,
 
@@ -14,7 +14,8 @@ public record TeamResponse (
 
     @Schema(description = "팀 리더")
     MemberResponse memberResponse
-){
+) {
+
     public static TeamResponse of(Team team) {
         return new TeamResponse(
             team.getId(),

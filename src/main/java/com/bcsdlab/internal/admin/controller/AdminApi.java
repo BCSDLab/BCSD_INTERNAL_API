@@ -1,8 +1,5 @@
 package com.bcsdlab.internal.admin.controller;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +14,8 @@ import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateReques
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -54,7 +53,7 @@ public interface AdminApi {
     @Operation(summary = "회원 생성")
     @PostMapping("/members")
     ResponseEntity<Void> createMember(
-        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId,
         @RequestBody @Valid AdminMemberCreateRequest request
     );
 
@@ -78,7 +77,7 @@ public interface AdminApi {
     @Operation(summary = "회원 수정")
     @PutMapping("/members/{memberId}")
     ResponseEntity<MemberResponse> changeMemberStatus(
-        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId,
         @PathVariable Long memberId,
         @RequestBody @Valid AdminMemberUpdateRequest request
     );
@@ -103,7 +102,7 @@ public interface AdminApi {
     @Operation(summary = "회원 삭제", description = "Soft Delete")
     @DeleteMapping("/members")
     ResponseEntity<Void> withdrawMember(
-        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId,
         @RequestBody @Valid AdminMemberDeleteRequest adminMemberDeleteRequest
     );
 
@@ -127,7 +126,7 @@ public interface AdminApi {
     @Operation(summary = "회원 가입 승인")
     @PatchMapping("/members/{memberId}/accept")
     ResponseEntity<Void> acceptMember(
-        @Auth(permit = {MANAGER,ADMIN}) Long adminId,
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId,
         @PathVariable Long memberId
     );
 }

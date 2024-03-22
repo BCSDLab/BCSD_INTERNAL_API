@@ -9,4 +9,5 @@ public record MemberResetTokenRequest(
     @Schema(example = "123456", description = "인증번호")
     String token
 ) {
+
 }

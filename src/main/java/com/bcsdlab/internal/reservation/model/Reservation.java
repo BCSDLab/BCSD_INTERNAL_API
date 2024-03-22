@@ -1,8 +1,5 @@
 package com.bcsdlab.internal.reservation.model;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
-
 import java.time.LocalDateTime;
 
 import com.bcsdlab.internal.global.RootEntity;
@@ -12,10 +9,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import static lombok.AccessLevel.PROTECTED;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,11 +55,11 @@ public class Reservation extends RootEntity<Long> {
 
     @Builder
     public Reservation(Long id, Member member, Integer memberCount, String reason, String detailedReason,
-        LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean isDeleted) {
+                       LocalDateTime startDateTime, LocalDateTime endDateTime, Boolean isDeleted) {
         this.id = id;
         this.member = member;
         this.memberCount = memberCount;
-        this.reason =reason;
+        this.reason = reason;
         this.detailedReason = detailedReason;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;

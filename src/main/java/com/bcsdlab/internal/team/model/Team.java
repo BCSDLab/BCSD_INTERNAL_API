@@ -1,10 +1,6 @@
 package com.bcsdlab.internal.team.model;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.PROTECTED;
-
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.model.Member;
@@ -13,9 +9,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import static lombok.AccessLevel.PROTECTED;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE team SET is_deleted = true WHERE id = ?")
 public class Team extends RootEntity<Long> {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;

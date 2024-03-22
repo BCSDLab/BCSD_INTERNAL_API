@@ -14,6 +14,7 @@ public record JobGroupResponse(
     @Schema(description = "회비 납입여부 목록")
     List<InnerJobResponse> jobs
 ) {
+
     public static JobGroupResponse of(Integer year, List<Job> jobs) {
         return new JobGroupResponse(
             year,
@@ -45,6 +46,7 @@ public record JobGroupResponse(
         @Schema(description = "종료 월", example = "12")
         Integer endMonth
     ) {
+
         public static InnerJobResponse from(Job job) {
             return new InnerJobResponse(
                 job.getId(),

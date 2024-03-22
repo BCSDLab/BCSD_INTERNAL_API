@@ -1,9 +1,5 @@
 package com.bcsdlab.internal.job;
 
-import static com.bcsdlab.internal.job.QJob.job;
-import static java.time.Month.DECEMBER;
-import static java.time.Month.JANUARY;
-
 import java.time.YearMonth;
 import java.util.List;
 
@@ -12,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import static com.bcsdlab.internal.job.QJob.job;
+import static java.time.Month.DECEMBER;
+import static java.time.Month.JANUARY;
 import lombok.RequiredArgsConstructor;
 
 @Repository

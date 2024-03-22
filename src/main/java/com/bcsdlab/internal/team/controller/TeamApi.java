@@ -1,8 +1,5 @@
 package com.bcsdlab.internal.team.controller;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-
 import java.util.List;
 
 import org.springdoc.core.annotations.ParameterObject;
@@ -25,6 +22,8 @@ import com.bcsdlab.internal.team.controller.dto.Request.TeamRequest;
 import com.bcsdlab.internal.team.controller.dto.Response.TeamMemberResponse;
 import com.bcsdlab.internal.team.controller.dto.Response.TeamResponse;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -72,7 +71,7 @@ public interface TeamApi {
     @Operation(summary = "팀 수정")
     @PutMapping
     ResponseEntity<Void> modifyTeam(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid TeamModifyRequest teamModifyRequest
     );
 
@@ -100,7 +99,7 @@ public interface TeamApi {
     @Operation(summary = "팀 삭제")
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteTeam(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     );
 
@@ -124,7 +123,7 @@ public interface TeamApi {
     @Operation(summary = "팀 생성")
     @PostMapping
     ResponseEntity<Void> createTeam(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody TeamCreateRequest teamCreateRequest
     );
 
@@ -171,7 +170,7 @@ public interface TeamApi {
     @Operation(summary = "특정 팀에 멤버 등록")
     @PostMapping("/members")
     ResponseEntity<Void> createTeamMember(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody TeamMapCreateRequest teamMapCreateRequest
     );
 
@@ -187,7 +186,7 @@ public interface TeamApi {
     @Operation(summary = "특정 팀에 멤버 삭제")
     @DeleteMapping("/members/{id}")
     ResponseEntity<Void> deleteTeamMember(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     );
 }

@@ -7,4 +7,5 @@ public record MemberEmailRequest(
     @Schema(example = "example@koreatech.ac.kr", description = "이메일")
     @NotBlank String email
 ) {
+
 }

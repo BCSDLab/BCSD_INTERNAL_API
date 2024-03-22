@@ -1,7 +1,5 @@
 package com.bcsdlab.internal.member;
 
-import static com.bcsdlab.internal.member.model.QMember.member;
-
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -13,6 +11,7 @@ import com.bcsdlab.internal.member.model.Member;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import static com.bcsdlab.internal.member.model.QMember.member;
 import lombok.RequiredArgsConstructor;
 
 @Component

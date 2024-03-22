@@ -1,11 +1,7 @@
 package com.bcsdlab.internal.team.controller;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-
 import java.util.List;
 
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +26,8 @@ import com.bcsdlab.internal.team.controller.dto.Response.TeamResponse;
 import com.bcsdlab.internal.team.service.TeamMemberService;
 import com.bcsdlab.internal.team.service.TeamService;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/teams")
-public class TeamController implements TeamApi{
+public class TeamController implements TeamApi {
 
     private final TeamService teamService;
     private final TeamMemberService teamMemberService;
@@ -54,7 +52,7 @@ public class TeamController implements TeamApi{
     @Override
     @PutMapping
     public ResponseEntity<Void> modifyTeam(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid TeamModifyRequest teamModifyRequest
     ) {
         teamService.modifyTeam(teamModifyRequest);
@@ -64,7 +62,7 @@ public class TeamController implements TeamApi{
     @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeam(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     ) {
         teamService.deleteTeam(id);
@@ -74,7 +72,7 @@ public class TeamController implements TeamApi{
     @Override
     @PostMapping
     public ResponseEntity<Void> createTeam(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody TeamCreateRequest teamCreateRequest
     ) {
         teamService.createTeam(teamCreateRequest);
@@ -103,7 +101,7 @@ public class TeamController implements TeamApi{
     @Override
     @PostMapping("/members")
     public ResponseEntity<Void> createTeamMember(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody TeamMapCreateRequest teamMapCreateRequest
     ) {
         teamMemberService.createTeamMember(teamMapCreateRequest);
@@ -113,7 +111,7 @@ public class TeamController implements TeamApi{
     @Override
     @DeleteMapping("/members/{id}")
     public ResponseEntity<Void> deleteTeamMember(
-        @Auth(permit = {MANAGER,ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     ) {
         teamMemberService.deleteTeamMember(id);

@@ -1,14 +1,12 @@
 package com.bcsdlab.internal.reservation.repository;
 
-import static com.bcsdlab.internal.reservation.model.QReservation.reservation;
-
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import static com.bcsdlab.internal.reservation.model.QReservation.reservation;
 import lombok.RequiredArgsConstructor;
 
 @Repository
