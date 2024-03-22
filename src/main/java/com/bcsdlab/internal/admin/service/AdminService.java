@@ -36,6 +36,7 @@ public class AdminService {
 
     public void withdrawMember(Long memberId, AdminMemberDeleteRequest request) {
         Member member = memberRepository.getById(memberId);
+        memberWithdrawRepository.findByMemberId(memberId).ifPresent(memberWithdrawRepository::delete);
         MemberWithdraw memberWithdraw = MemberWithdraw.builder()
             .withdrawDate(LocalDateTime.now())
             .reason(request.reason())

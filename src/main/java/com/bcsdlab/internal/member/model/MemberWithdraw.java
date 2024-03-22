@@ -42,8 +42,4 @@ public class MemberWithdraw extends RootEntity<Long> {
         this.reason = reason;
         this.withdrawDate = withdrawDate;
     }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
 }
