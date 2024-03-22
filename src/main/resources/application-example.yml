@@ -53,6 +53,5 @@ aws:
     image-path: "images/"  # 마지막 / 필수
     presigned-url-expires-minutes: 5
   ses:
-    access-key:
-    secret-key:
-
+    access-key: test
+    secret-key: test
