@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.team.controller.dto.Request;
+package com.bcsdlab.internal.team.controller.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

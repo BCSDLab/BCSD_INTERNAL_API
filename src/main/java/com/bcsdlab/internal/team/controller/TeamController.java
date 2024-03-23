@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
-import com.bcsdlab.internal.team.controller.dto.Request.TeamCreateRequest;
-import com.bcsdlab.internal.team.controller.dto.Request.TeamMapCreateRequest;
-import com.bcsdlab.internal.team.controller.dto.Request.TeamModifyRequest;
-import com.bcsdlab.internal.team.controller.dto.Request.TeamRequest;
-import com.bcsdlab.internal.team.controller.dto.Response.TeamMemberResponse;
-import com.bcsdlab.internal.team.controller.dto.Response.TeamResponse;
+import com.bcsdlab.internal.team.controller.dto.request.TeamCreateRequest;
+import com.bcsdlab.internal.team.controller.dto.request.TeamMapCreateRequest;
+import com.bcsdlab.internal.team.controller.dto.request.TeamModifyRequest;
+import com.bcsdlab.internal.team.controller.dto.request.TeamRequest;
+import com.bcsdlab.internal.team.controller.dto.response.TeamMemberResponse;
+import com.bcsdlab.internal.team.controller.dto.response.TeamResponse;
 import com.bcsdlab.internal.team.service.TeamMemberService;
 import com.bcsdlab.internal.team.service.TeamService;
 

@@ -31,10 +31,6 @@ public class Team extends RootEntity<Long> {
     @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leader_id")
-    private Member member;
-
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
@@ -42,19 +38,14 @@ public class Team extends RootEntity<Long> {
         this.name = name;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 
     @Builder
-    public Team(Long id, String name, Member member, Boolean isDeleted) {
+    public Team(Long id, String name, Boolean isDeleted) {
         this.id = id;
         this.name = name;
-        this.member = member;
         this.isDeleted = isDeleted;
     }
 }

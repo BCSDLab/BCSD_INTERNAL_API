@@ -4,6 +4,7 @@ package com.bcsdlab.internal.member.controller.dto.response;
 import java.time.LocalDateTime;
 
 import com.bcsdlab.internal.member.model.Member;
+import com.bcsdlab.internal.team.model.TeamMap;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -72,6 +73,10 @@ public record MemberResponse(
     @Schema(example = "너무 힘들어요", description = "탈퇴 사유")
     String deleteReason
 ) {
+
+    public static MemberResponse from(TeamMap teamMap) {
+        return MemberResponse.from(teamMap.getMember());
+    }
 
     public static MemberResponse from(Member member) {
         return new MemberResponse(
