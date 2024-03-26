@@ -29,7 +29,7 @@ public class ReservationService {
     private final ReservationCustomRepository reservationCustomRepository;
 
     public List<ReservationResponse> getAllReservation() {
-        return reservationRepository.findAll().stream().map(ReservationResponse::of).toList();
+        return reservationRepository.findAllByOrderByStartDateTimeAsc().stream().map(ReservationResponse::of).toList();
     }
 
     @Transactional
