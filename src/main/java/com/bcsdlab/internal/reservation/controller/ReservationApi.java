@@ -83,6 +83,10 @@ public interface ReservationApi {
                 responseCode = "400",
                 content = @Content(schema = @Schema(hidden = true))
             ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            )
         }
     )
     @SecurityRequirement(name = "JWT")
