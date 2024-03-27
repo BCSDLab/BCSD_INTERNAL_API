@@ -85,7 +85,7 @@ public class MemberService {
         Member member = memberRepository.getById(memberId);
         validateDuplication(request, member);
         Track track = trackRepository.getById(request.trackId());
-        Member updated = request.toEntity(track);
+        Member updated = request.toEntity(track, member.getMemberType(), member.getAuthority());
         member.update(updated);
         return MemberResponse.from(member);
     }

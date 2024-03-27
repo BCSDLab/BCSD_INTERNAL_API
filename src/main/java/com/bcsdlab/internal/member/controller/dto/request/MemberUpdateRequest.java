@@ -72,7 +72,7 @@ public record MemberUpdateRequest(
     String profileImageUrl
 ) {
 
-    public Member toEntity(Track track) {
+    public Member toEntity(Track track, MemberType memberType, Authority authority) {
         return new Member(
             YearMonth.of(joinedYear, joinedMonth),
             track,
