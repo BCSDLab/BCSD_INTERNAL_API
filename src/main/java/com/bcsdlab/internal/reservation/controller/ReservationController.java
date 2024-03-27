@@ -64,7 +64,7 @@ public class ReservationController implements ReservationApi {
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @PathVariable Long id
     ) {
-        reservationService.deleteReservation(id);
+        reservationService.deleteReservation(memberId, id);
         return ResponseEntity.ok().build();
     }
 

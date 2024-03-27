@@ -1,5 +1,7 @@
 package com.bcsdlab.internal.reservation.service;
 
+import static com.bcsdlab.internal.reservation.exception.ReservationExceptionType.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,8 +17,6 @@ import com.bcsdlab.internal.reservation.model.Reservation;
 import com.bcsdlab.internal.reservation.repository.ReservationCustomRepository;
 import com.bcsdlab.internal.reservation.repository.ReservationRepository;
 
-import static com.bcsdlab.internal.reservation.exception.ReservationExceptionType.RESERVATION_EXIST;
-import static com.bcsdlab.internal.reservation.exception.ReservationExceptionType.RESERVATION_TIME_BAD_REQUEST;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,7 +33,11 @@ public class ReservationService {
     }
 
     @Transactional
-    public void deleteReservation(Long id) {
+    public void deleteReservation(Long memberId, Long id) {
+        Reservation reservation = reservationRepository.getById(id);
+        if (reservation.getMember().getId() != memberId){
+            throw new ReservationException(RESERVATION_INVALID_AUTH);
+        }
         reservationRepository.deleteById(id);
     }
 

@@ -13,7 +13,10 @@ public record ReservationResponse(
     @Schema(example = "1", description = "예약 ID")
     Long id,
 
-    @Schema(example = "1", description = "예약 ID")
+    @Schema(example = "1", description = "예약 멤버 ID")
+    Long memberId,
+
+    @Schema(example = "황현식", description = "예약 멤버 이름")
     String memberName,
 
     @Schema(example = "10", description = "사용인원")
@@ -37,6 +40,7 @@ public record ReservationResponse(
     public static ReservationResponse of(Reservation reservation) {
         return new ReservationResponse(
             reservation.getId(),
+            reservation.getMember().getId(),
             reservation.getMember().getName(),
             reservation.getMemberCount(),
             reservation.getReason(),
