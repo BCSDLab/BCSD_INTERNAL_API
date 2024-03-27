@@ -2,6 +2,7 @@ package com.bcsdlab.internal.dues.controller.dto.response;
 
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,7 +67,7 @@ public record DuesGroupResponse(
             .filter(member -> !groupByMember.containsKey(member))
             .forEach(member -> groupByMember.put(member, List.of()));
 
-        var result = groupByMember.entrySet().stream()
+        List<InnerDuesResponse> result = groupByMember.entrySet().stream()
             .map(entry -> {
                     Member member = entry.getKey();
                     List<Dues> memberDues = entry.getValue();
@@ -78,7 +79,9 @@ public record DuesGroupResponse(
                         getDetails(memberDues)
                     );
                 }
-            ).toList();
+            )
+            .sorted(Comparator.comparingLong(InnerDuesResponse::unpaidCount).reversed())
+            .toList();
 
         return new DuesGroupResponse(year, result);
     }
