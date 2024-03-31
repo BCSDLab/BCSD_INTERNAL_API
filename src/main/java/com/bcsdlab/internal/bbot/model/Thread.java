@@ -19,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -49,7 +50,8 @@ public class Thread extends RootEntity<Long> {
     @Column(name = "writer")
     private String writer;
 
-    public Thread(String prLink, String ts, String reviewer, String writer) {
+    @Builder
+    private Thread(String prLink, String ts, String reviewer, String writer) {
         this.prLink = prLink;
         this.ts = ts;
         this.reviewer = reviewer;
