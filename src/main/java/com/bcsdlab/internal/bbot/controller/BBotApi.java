@@ -48,7 +48,6 @@ public interface BBotApi {
     @Operation(summary = "PR 생성")
     @PostMapping("/b-bot/pull-request/thread")
     ResponseEntity<Void> createThread(
-        @Auth(permit = {MANAGER, ADMIN, NORMAL}) Long adminId,
         @RequestBody @Valid ThreadCreateRequest threadCreateRequest
     );
 
@@ -76,7 +75,6 @@ public interface BBotApi {
     @Operation(summary = "PR 조회")
     @PostMapping("/b-bot/pull-request/thread")
     ResponseEntity<ThreadResponse> getThread(
-        @Auth(permit = {MANAGER, ADMIN, NORMAL}) Long adminId,
         @RequestParam("pullRequestLink") String pullRequestLink
     );
 }

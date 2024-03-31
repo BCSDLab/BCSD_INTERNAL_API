@@ -28,7 +28,6 @@ public class BBotController implements BBotApi {
 
     @PostMapping("/b-bot/pull-request/thread")
     public ResponseEntity<Void> createThread(
-        @Auth(permit = {MANAGER, ADMIN, NORMAL}) Long adminId,
         @RequestBody @Valid ThreadCreateRequest threadCreateRequest
     ) {
         threadService.createThread(threadCreateRequest);
@@ -37,7 +36,6 @@ public class BBotController implements BBotApi {
 
     @GetMapping("/b-bot/pull-request/thread")
     public ResponseEntity<ThreadResponse> getThread(
-        @Auth(permit = {MANAGER, ADMIN, NORMAL}) Long adminId,
         @RequestParam("pullRequestLink") String pullRequestLink
     ) {
         ThreadResponse threadResponse = threadService.getByPrLink(pullRequestLink);

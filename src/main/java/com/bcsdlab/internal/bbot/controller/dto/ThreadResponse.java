@@ -14,7 +14,7 @@ public record ThreadResponse(
     @Schema(example = "이현수", description = "작성자")
     @Size(max = 255) String writer,
 
-    @Schema(example = "2024-03-31 9:27", description = "생성 일시")
+    @Schema(example = "R3UF358B", description = "생성 일시")
     @Size(max = 255) String ts
 ) {
     public static ThreadResponse from(List<Thread> threads) {
