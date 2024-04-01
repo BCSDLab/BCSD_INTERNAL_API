@@ -37,7 +37,7 @@ public class AdminController implements AdminApi {
         @Auth(permit = {MANAGER, ADMIN}) Long adminId,
         @RequestBody @Valid AdminMemberCreateRequest request
     ) {
-        var memberId = adminService.createMember(request);
+        Long memberId = adminService.createMember(request);
         return ResponseEntity.created(URI.create("/members/" + memberId)).build();
     }
 
@@ -47,7 +47,7 @@ public class AdminController implements AdminApi {
         @PathVariable Long memberId,
         @RequestBody @Valid AdminMemberUpdateRequest request
     ) {
-        var result = adminService.updateMember(memberId, request);
+        MemberResponse result = adminService.updateMember(memberId, request);
         return ResponseEntity.ok(result);
     }
 
