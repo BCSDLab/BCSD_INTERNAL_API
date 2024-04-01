@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bcsdlab.internal.job.Job;
-import com.bcsdlab.internal.job.JobRepository;
+import com.bcsdlab.internal.job.repository.JobRepository;
 import com.bcsdlab.internal.job.controller.dto.request.JobCreateQueryRequest;
 import com.bcsdlab.internal.job.controller.dto.request.JobDeleteQueryRequest;
 import com.bcsdlab.internal.job.controller.dto.request.JobQueryRequest;

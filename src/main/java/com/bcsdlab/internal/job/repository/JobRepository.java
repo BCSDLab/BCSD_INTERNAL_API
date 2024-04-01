@@ -1,9 +1,10 @@
-package com.bcsdlab.internal.job;
+package com.bcsdlab.internal.job.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.bcsdlab.internal.job.Job;
 import com.bcsdlab.internal.job.exception.JobException;
 
 import static com.bcsdlab.internal.job.exception.JobExceptionType.JOB_NOT_FOUND;

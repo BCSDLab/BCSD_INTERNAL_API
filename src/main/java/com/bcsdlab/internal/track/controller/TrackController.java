@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
-import com.bcsdlab.internal.job.JobRepository;
+import com.bcsdlab.internal.job.repository.JobRepository;
 import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;

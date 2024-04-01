@@ -1,10 +1,11 @@
-package com.bcsdlab.internal.job;
+package com.bcsdlab.internal.job.repository;
 
 import java.time.YearMonth;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.bcsdlab.internal.job.Job;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
