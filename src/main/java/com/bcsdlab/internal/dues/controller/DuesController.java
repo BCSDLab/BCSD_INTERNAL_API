@@ -38,7 +38,7 @@ public class DuesController implements DuesApi {
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @ModelAttribute DuesQueryRequest request
     ) {
-        var result = duesService.getAll(request);
+        DuesGroupResponse result = duesService.getAll(request);
         return ResponseEntity.ok(result);
     }
 
@@ -48,7 +48,7 @@ public class DuesController implements DuesApi {
         @ModelAttribute DuesUpdateQueryRequest queryRequest,
         @RequestBody @Valid DuesUpdateRequest updateRequest
     ) {
-        var result = duesService.updateDues(queryRequest, updateRequest);
+        DuesResponse result = duesService.updateDues(queryRequest, updateRequest);
         return ResponseEntity.ok(result);
     }
 
@@ -57,7 +57,7 @@ public class DuesController implements DuesApi {
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid DuesCreateRequest request
     ) {
-        var result = duesService.create(request);
+        DuesResponse result = duesService.create(request);
         return ResponseEntity.ok(result);
     }
 
