@@ -1,5 +1,6 @@
 package com.bcsdlab.internal.member.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class MemberController implements MemberApi {
     public ResponseEntity<MemberLoginResponse> login(
         @RequestBody @Valid MemberLoginRequest request
     ) {
-        var result = memberService.login(request);
+        MemberLoginResponse result = memberService.login(request);
         return ResponseEntity.ok(result);
     }
 
@@ -58,7 +59,7 @@ public class MemberController implements MemberApi {
     public ResponseEntity<MemberResponse> getMemberMe(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId
     ) {
-        var result = memberService.getById(memberId);
+        MemberResponse result = memberService.getById(memberId);
         return ResponseEntity.ok(result);
     }
 
@@ -68,7 +69,7 @@ public class MemberController implements MemberApi {
         @PageableDefault Pageable pageable,
         @ModelAttribute MemberQueryRequest request
     ) {
-        var result = memberService.getMembers(request, pageable);
+        Page<MemberResponse> result = memberService.getMembers(request, pageable);
         return ResponseEntity.ok(PageResponse.from(result));
     }
 
@@ -77,7 +78,7 @@ public class MemberController implements MemberApi {
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long id,
         @PathVariable Long memberId
     ) {
-        var result = memberService.getById(memberId);
+        MemberResponse result = memberService.getById(memberId);
         return ResponseEntity.ok(result);
     }
 
@@ -86,7 +87,7 @@ public class MemberController implements MemberApi {
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid MemberUpdateRequest request
     ) {
-        var result = memberService.update(memberId, request);
+        MemberResponse result = memberService.update(memberId, request);
         return ResponseEntity.ok(result);
     }
 
