@@ -1,6 +1,8 @@
-package com.bcsdlab.internal.dues;
+package com.bcsdlab.internal.dues.repository;
 
 import java.util.List;
+
+import com.bcsdlab.internal.dues.Dues;
 
 public interface CustomDuesRepository {
 

@@ -1,10 +1,11 @@
-package com.bcsdlab.internal.dues;
+package com.bcsdlab.internal.dues.repository;
 
 import java.time.YearMonth;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.bcsdlab.internal.dues.Dues;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 

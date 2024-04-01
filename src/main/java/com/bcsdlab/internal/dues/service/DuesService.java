@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bcsdlab.internal.dues.Dues;
-import com.bcsdlab.internal.dues.DuesRepository;
+import com.bcsdlab.internal.dues.repository.DuesRepository;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesCreateRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesDeleteQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;

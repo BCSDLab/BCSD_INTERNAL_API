@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.dues;
+package com.bcsdlab.internal.dues.repository;
 
 import java.time.YearMonth;
 import java.util.Optional;
@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.bcsdlab.internal.dues.Dues;
 import com.bcsdlab.internal.dues.exception.DuesException;
 
 import static com.bcsdlab.internal.dues.exception.DuesExceptionType.DUES_NOT_FOUND;
