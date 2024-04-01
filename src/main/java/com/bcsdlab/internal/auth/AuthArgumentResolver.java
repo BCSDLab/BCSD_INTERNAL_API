@@ -13,7 +13,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.bcsdlab.internal.auth.exception.AuthException;
 import com.bcsdlab.internal.auth.exception.AuthExceptionType;
-import com.bcsdlab.internal.member.MemberRepository;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
 
 import jakarta.servlet.http.HttpServletRequest;

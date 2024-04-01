@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bcsdlab.internal.member.MemberRepository;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationCreateRequest;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModifyRequest;

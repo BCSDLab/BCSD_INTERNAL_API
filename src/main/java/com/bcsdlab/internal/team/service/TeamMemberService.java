@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bcsdlab.internal.member.MemberRepository;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.team.controller.dto.request.TeamMapCreateRequest;
 import com.bcsdlab.internal.team.controller.dto.response.TeamMemberResponse;

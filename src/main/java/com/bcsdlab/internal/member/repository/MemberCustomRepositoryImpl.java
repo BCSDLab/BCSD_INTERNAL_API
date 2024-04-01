@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.member;
+package com.bcsdlab.internal.member.repository;
 
 import java.util.List;
 

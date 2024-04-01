@@ -16,7 +16,7 @@ import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesGroupResponse;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
 import com.bcsdlab.internal.dues.exception.DuesException;
-import com.bcsdlab.internal.member.MemberRepository;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
 
 import static com.bcsdlab.internal.dues.exception.DuesExceptionType.DUES_ALREADY_EXIST;

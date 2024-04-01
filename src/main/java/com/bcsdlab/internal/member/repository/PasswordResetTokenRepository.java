@@ -1,9 +1,10 @@
-package com.bcsdlab.internal.member;
+package com.bcsdlab.internal.member.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.repository.Repository;
 
+import com.bcsdlab.internal.member.PasswordResetToken;
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.member.exception.MemberExceptionType;
 

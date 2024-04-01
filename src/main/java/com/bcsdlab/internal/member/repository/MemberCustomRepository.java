@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.member;
+package com.bcsdlab.internal.member.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
