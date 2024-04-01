@@ -24,7 +24,7 @@ import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
-import com.bcsdlab.internal.track.TrackRepository;
+import com.bcsdlab.internal.track.repository.TrackRepository;
 
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.CERTIFICATION_CODE_NOT_MATCH;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_ALREADY_EXISTS_EMAIL;

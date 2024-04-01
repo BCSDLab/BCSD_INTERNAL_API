@@ -20,7 +20,7 @@ import com.bcsdlab.internal.job.JobRepository;
 import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
-import com.bcsdlab.internal.track.TrackRepository;
+import com.bcsdlab.internal.track.repository.TrackRepository;
 import com.bcsdlab.internal.track.controller.dto.request.TrackCreateRequest;
 import com.bcsdlab.internal.track.controller.dto.request.TrackUpdateRequest;
 import com.bcsdlab.internal.track.controller.dto.response.TrackResponse;
