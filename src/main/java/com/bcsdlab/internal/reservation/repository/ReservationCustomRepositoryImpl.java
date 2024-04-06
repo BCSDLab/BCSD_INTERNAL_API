@@ -17,10 +17,12 @@ public class ReservationCustomRepositoryImpl implements ReservationCustomReposit
 
     @Override
     public boolean isExistReservation(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        LocalDateTime adjustedEndDateTime = endDateTime.minusSeconds(1);
+
         int existCount = queryFactory.select(reservation)
             .from(reservation)
-            .where(reservation.startDateTime.between(startDateTime, endDateTime)
-                .or(reservation.endDateTime.between(startDateTime, endDateTime)))
+            .where(reservation.startDateTime.between(startDateTime, adjustedEndDateTime)
+                .or(reservation.endDateTime.between(startDateTime, adjustedEndDateTime)))
             .fetch()
             .size();
         return existCount > 0;
