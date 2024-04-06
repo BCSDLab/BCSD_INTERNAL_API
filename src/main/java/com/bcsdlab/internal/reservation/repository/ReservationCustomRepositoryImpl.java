@@ -31,11 +31,12 @@ public class ReservationCustomRepositoryImpl implements ReservationCustomReposit
     @Override
     public boolean isExistReservationNotId(LocalDateTime startDateTime, LocalDateTime endDateTime, Long id) {
         LocalDateTime adjustedEndDateTime = endDateTime.minusSeconds(1);
+        LocalDateTime adjustedStartDateTime = startDateTime.plusSeconds(1);
 
         int existCount = queryFactory.select(reservation)
             .from(reservation)
-            .where((reservation.startDateTime.between(startDateTime, adjustedEndDateTime)
-                .or(reservation.endDateTime.between(startDateTime, adjustedEndDateTime))
+            .where((reservation.startDateTime.between(adjustedStartDateTime, adjustedEndDateTime)
+                .or(reservation.endDateTime.between(adjustedStartDateTime, adjustedEndDateTime))
                 .and(reservation.id.ne(id))))
             .fetch()
             .size();
