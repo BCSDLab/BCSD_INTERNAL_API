@@ -1,6 +1,8 @@
 package com.bcsdlab.internal.reservation.controller;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +46,9 @@ public class ReservationController implements ReservationApi {
     public ResponseEntity<List<ReservationResponse>> getMemberReservation(
         @Auth(permit = {NORMAL, MANAGER, ADMIN}) Long memberId
     ) {
-        List<ReservationResponse> reservationResponses = reservationService.getMemberReservation(memberId);
+        List<ReservationResponse> reservationResponses = reservationService.getMemberReservation(memberId).stream()
+            .sorted(Comparator.comparing(ReservationResponse::startDateTime))
+            .collect(Collectors.toList());;
         return ResponseEntity.ok(reservationResponses);
     }
 
