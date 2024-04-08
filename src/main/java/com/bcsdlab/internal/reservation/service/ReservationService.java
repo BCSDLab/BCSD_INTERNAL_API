@@ -37,8 +37,8 @@ public class ReservationService {
     @Transactional
     public void deleteReservation(Long memberId, Long id) {
         Member reservationMember = reservationRepository.getById(id).getMember();
-        Authority accessMemberAuth = memberRepository.getById(memberId).getAuthority();
-        if (accessMemberAuth == NORMAL && memberId != reservationMember.getId()){
+        Member accessMember = memberRepository.getById(memberId);
+        if (accessMember.getAuthority() == NORMAL && memberId != reservationMember.getId()){
             throw new ReservationException(RESERVATION_INVALID_AUTH);
         }
         reservationRepository.deleteById(id);
@@ -72,8 +72,13 @@ public class ReservationService {
     }
 
     @Transactional
-    public void modifyReservation(Long id, ReservationModifyRequest reservationModifyRequest) {
+    public void modifyReservation(Long id, Long memberId, ReservationModifyRequest reservationModifyRequest) {
         Reservation reservation = reservationRepository.getById(id);
+        Member reservationMember = reservation.getMember();
+        Member accessMember = memberRepository.getById(memberId);
+        if (accessMember.getAuthority() == NORMAL && memberId != reservationMember.getId()){
+            throw new ReservationException(RESERVATION_INVALID_AUTH);
+        }
         boolean isExistReservation = reservationCustomRepository.isExistReservationNotId(
             reservationModifyRequest.startDateTime(),
             reservationModifyRequest.endDateTime(),

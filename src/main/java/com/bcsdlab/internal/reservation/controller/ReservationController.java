@@ -55,7 +55,7 @@ public class ReservationController implements ReservationApi {
         @RequestBody ReservationModifyRequest reservationModifyRequest
     ) {
         System.out.println("fds");
-        reservationService.modifyReservation(id, reservationModifyRequest);
+        reservationService.modifyReservation(id, memberId, reservationModifyRequest);
         return ResponseEntity.ok().build();
     }
 
