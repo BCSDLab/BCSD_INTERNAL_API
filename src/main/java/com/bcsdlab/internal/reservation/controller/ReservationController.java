@@ -1,5 +1,7 @@
 package com.bcsdlab.internal.reservation.controller;
 
+import static com.bcsdlab.internal.auth.Authority.*;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,9 +23,6 @@ import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModify
 import com.bcsdlab.internal.reservation.controller.dto.response.ReservationResponse;
 import com.bcsdlab.internal.reservation.service.ReservationService;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -48,7 +47,7 @@ public class ReservationController implements ReservationApi {
     ) {
         List<ReservationResponse> reservationResponses = reservationService.getMemberReservation(memberId).stream()
             .sorted(Comparator.comparing(ReservationResponse::startDateTime))
-            .collect(Collectors.toList());;
+            .collect(Collectors.toList());
         return ResponseEntity.ok(reservationResponses);
     }
 
