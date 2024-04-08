@@ -1,5 +1,6 @@
 package com.bcsdlab.internal.reservation.service;
 
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import static com.bcsdlab.internal.reservation.exception.ReservationExceptionType.*;
 
 import java.util.List;
@@ -7,8 +8,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bcsdlab.internal.member.repository.MemberRepository;
+import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.member.model.Member;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationCreateRequest;
 import com.bcsdlab.internal.reservation.controller.dto.request.ReservationModifyRequest;
 import com.bcsdlab.internal.reservation.controller.dto.response.ReservationResponse;
@@ -34,8 +36,9 @@ public class ReservationService {
 
     @Transactional
     public void deleteReservation(Long memberId, Long id) {
-        Reservation reservation = reservationRepository.getById(id);
-        if (reservation.getMember().getId() != memberId){
+        Member reservationMember = reservationRepository.getById(id).getMember();
+        Authority accessMemberAuth = memberRepository.getById(memberId).getAuthority();
+        if (accessMemberAuth == NORMAL && memberId != reservationMember.getId()){
             throw new ReservationException(RESERVATION_INVALID_AUTH);
         }
         reservationRepository.deleteById(id);
