@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.global.exception;
 
+import static com.bcsdlab.internal.global.log.RequestLoggingFilter.REQUEST_ID;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,10 +19,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.WebUtils;
 
-import static com.bcsdlab.internal.global.log.RequestLoggingFilter.REQUEST_ID;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Slf4j
 @ControllerAdvice
@@ -48,7 +49,7 @@ public class GlobalExceptionHandler {
         HttpMessageNotReadableException e
     ) {
         logRequestAndResponse(request, e);
-        BcsdException cause = (BcsdException) e.getCause().getCause();
+        BcsdException cause = (BcsdException)e.getCause().getCause();
         return ResponseEntity.status(BAD_REQUEST).body(new ErrorResponse(cause.getExceptionType().getMessage()));
     }
 
@@ -62,6 +63,15 @@ public class GlobalExceptionHandler {
             .body(new ErrorResponse("제약조건에 위배되는 값입니다."));
     }
 
+    @ExceptionHandler({ExternalApiException.class})
+    public ResponseEntity<ErrorResponse> handleJpaException(
+        HttpServletRequest request,
+        ExternalApiException e
+    ) {
+        logRequestAndResponse(request, e);
+        return ResponseEntity.status(BAD_REQUEST)
+            .body(new ErrorResponse("제약조건에 위배되는 값입니다."));
+    }
 
     private void logRequestAndResponse(HttpServletRequest request, Exception e) {
         log.error("[{}] 잘못된 요청입니다. uri: {} {}, ",

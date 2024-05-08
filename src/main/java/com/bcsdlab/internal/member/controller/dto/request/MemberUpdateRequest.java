@@ -72,11 +72,11 @@ public record MemberUpdateRequest(
     String profileImageUrl
 ) {
 
-    public Member toEntity(Track track, MemberType memberType, Authority authority) {
+    public Member toEntity(Track track, Member origin) {
         return new Member(
             YearMonth.of(joinedYear, joinedMonth),
             track,
-            memberType,
+            origin.getMemberType(),
             status,
             name,
             company,
@@ -84,12 +84,13 @@ public record MemberUpdateRequest(
             studentNumber,
             phoneNumber,
             email,
-            null,
-            authority,
+            origin.getPassword(),
+            origin.getAuthority(),
             githubName,
             profileImageUrl,
-            false,
-            false
+            origin.getSlackId(),
+            origin.isAuthed(),
+            origin.isDeleted()
         );
     }
 }

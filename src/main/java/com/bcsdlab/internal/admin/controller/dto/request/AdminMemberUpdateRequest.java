@@ -73,7 +73,7 @@ public record AdminMemberUpdateRequest(
     @NotNull Boolean isDeleted
 ) {
 
-    public Member toEntity(Track track) {
+    public Member toEntity(Track track, Member origin) {
         return new Member(
             YearMonth.of(joinedYear, joinedMonth),
             track,
@@ -89,6 +89,7 @@ public record AdminMemberUpdateRequest(
             authority,
             githubName,
             profileImageUrl,
+            origin.getSlackId(),
             isAuthed,
             isDeleted
         );

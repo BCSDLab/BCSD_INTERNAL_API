@@ -83,6 +83,7 @@ public record MemberRegisterRequest(
             Authority.NORMAL,
             githubName,
             profileImageUrl,
+            null,
             false,
             false
         );

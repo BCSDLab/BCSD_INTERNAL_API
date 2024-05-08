@@ -1,6 +1,9 @@
 package com.bcsdlab.internal.admin.controller;
 
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
@@ -16,12 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
+import com.bcsdlab.internal.admin.controller.dto.response.AdminSlackSyncResponse;
 import com.bcsdlab.internal.admin.service.AdminService;
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -68,5 +70,13 @@ public class AdminController implements AdminApi {
     ) {
         adminService.acceptMember(memberId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/members/slack-sync")
+    public ResponseEntity<AdminSlackSyncResponse> sync(
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId
+    ) {
+        var result = adminService.syncWithSlack();
+        return ResponseEntity.ok(result);
     }
 }

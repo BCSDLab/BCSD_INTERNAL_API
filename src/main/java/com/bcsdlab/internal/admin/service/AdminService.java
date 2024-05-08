@@ -1,6 +1,8 @@
 package com.bcsdlab.internal.admin.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,13 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
-import com.bcsdlab.internal.member.repository.MemberRepository;
-import com.bcsdlab.internal.member.repository.MemberWithdrawRepository;
+import com.bcsdlab.internal.admin.controller.dto.response.AdminSlackSyncResponse;
+import com.bcsdlab.internal.global.slack.SlackService;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.model.MemberWithdraw;
+import com.bcsdlab.internal.member.repository.MemberRepository;
+import com.bcsdlab.internal.member.repository.MemberWithdrawRepository;
 import com.bcsdlab.internal.track.Track;
 import com.bcsdlab.internal.track.repository.TrackRepository;
+import com.slack.api.model.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +33,7 @@ public class AdminService {
     private final TrackRepository trackRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberWithdrawRepository memberWithdrawRepository;
+    private final SlackService slackService;
 
     public void acceptMember(Long memberId) {
         Member member = memberRepository.getById(memberId);
@@ -49,7 +55,7 @@ public class AdminService {
     public MemberResponse updateMember(Long memberId, AdminMemberUpdateRequest request) {
         Member member = memberRepository.getById(memberId);
         Track track = trackRepository.getById(request.trackId());
-        Member updated = request.toEntity(track);
+        Member updated = request.toEntity(track, member);
         if (!request.isDeleted()) {
             memberWithdrawRepository.deleteAllByMemberId(memberId);
         }
@@ -64,5 +70,36 @@ public class AdminService {
         member.accept();
         memberRepository.save(member);
         return member.getId();
+    }
+
+    @Transactional
+    public AdminSlackSyncResponse syncWithSlack() {
+        List<User> users = slackService.getMembers();
+        List<Member> members = memberRepository.findAll();
+        int idSyncCount = 0;
+        int imageSyncCount = 0;
+        for (Member member : members) {
+            User emailMatched = users.stream()
+                .filter(user -> Objects.equals(user.getProfile().getEmail(), member.getEmail()))
+                .findAny()
+                .orElse(null);
+
+            if (emailMatched != null) {
+                idSyncCount++;
+                member.updateSlackId(emailMatched.getId());
+            }
+
+            User slackIdMatched = users.stream()
+                .filter(user -> Objects.equals(user.getId(), member.getSlackId()))
+                .findAny()
+                .orElse(null);
+
+            if (slackIdMatched != null) {
+                imageSyncCount++;
+                member.updateImage(slackIdMatched.getProfile().getImage512());
+            }
+        }
+
+        return new AdminSlackSyncResponse(idSyncCount, imageSyncCount);
     }
 }

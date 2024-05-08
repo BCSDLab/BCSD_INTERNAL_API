@@ -92,6 +92,7 @@ public record AdminMemberCreateRequest(
             authority,
             githubName,
             profileImageUrl,
+            null,
             isAuthed,
             isDeleted
         );

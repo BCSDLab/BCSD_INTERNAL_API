@@ -1,5 +1,12 @@
 package com.bcsdlab.internal.member.model;
 
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
+import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
+
 import java.time.YearMonth;
 
 import org.hibernate.annotations.SQLDelete;
@@ -13,21 +20,15 @@ import com.bcsdlab.internal.member.MemberType;
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.track.Track;
 
-import static com.bcsdlab.internal.auth.Authority.NORMAL;
-import static com.bcsdlab.internal.member.exception.MemberExceptionType.INVALID_LOGIN;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import static jakarta.persistence.EnumType.STRING;
 import jakarta.persistence.Enumerated;
-import static jakarta.persistence.FetchType.LAZY;
 import jakarta.persistence.GeneratedValue;
-import static jakarta.persistence.GenerationType.IDENTITY;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -88,6 +89,9 @@ public class Member extends RootEntity<Long> {
     @Column(name = "github_name")
     private String githubName;
 
+    @Column(name = "slack_id")
+    private String slackId;
+
     @Column(name = "is_authed")
     private boolean isAuthed;
 
@@ -112,6 +116,7 @@ public class Member extends RootEntity<Long> {
         Authority authority,
         String githubName,
         String profileImageUrl,
+        String slackId,
         boolean isAuthed,
         boolean isDeleted
     ) {
@@ -129,6 +134,7 @@ public class Member extends RootEntity<Long> {
         this.authority = authority;
         this.githubName = githubName;
         this.profileImageUrl = profileImageUrl;
+        this.slackId = slackId;
         this.isAuthed = isAuthed;
         this.isDeleted = isDeleted;
     }
@@ -168,12 +174,21 @@ public class Member extends RootEntity<Long> {
         this.authority = updated.authority;
         this.githubName = updated.githubName;
         this.profileImageUrl = updated.profileImageUrl;
+        this.slackId = updated.slackId;
     }
 
     public void updateAll(Member updated) {
         this.update(updated);
         this.isAuthed = updated.isAuthed;
         this.isDeleted = updated.isDeleted;
+    }
+
+    public void updateSlackId(String slackId) {
+        this.slackId = slackId;
+    }
+
+    public void updateImage(String image) {
+        this.profileImageUrl = image;
     }
 
     public void withdraw() {
