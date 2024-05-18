@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.bcsdlab.internal.dues.Dues;
+import com.bcsdlab.internal.dues.MemberDuesCount;
 import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
 import com.bcsdlab.internal.dues.repository.DuesRepository;
 import com.bcsdlab.internal.global.exception.ExternalApiException;
@@ -63,18 +63,16 @@ public class SlackService {
         sendChannelMessage(internal, payload);
     }
 
-    public void sendDuesNotificationByDM(List<Dues> dues, String presidentId, String vicePresidentId) {
+    public void sendDuesNotificationByDM(List<MemberDuesCount> dues, String presidentId, String vicePresidentId) {
         dues.forEach(it -> {
-            int count = duesRepository.findAllByMemberId(it.getMember().getId()).size();
             Payload payload = slackNotificationFactory.generateSlackDuesNotificationByDM(
-                count * 10000,
-                count,
+                (int)(it.getCount() * 10000),
+                (int)it.getCount(),
+                it.getMember().getName(),
                 presidentId,
                 vicePresidentId
             );
-
-            // snedDM(it.getMember().getSlackId(), payload);
-            snedDM("U04T349TN6S", payload);
+            snedDM(it.getMember().getSlackId(), payload);
         });
     }
 

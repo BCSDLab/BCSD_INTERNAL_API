@@ -17,15 +17,18 @@ public class SlackNotificationFactory {
     private final String duesPaymentDocumentLink;
     private final String duesManagementDocumentLink;
     private final String internalDuesLink;
+    private final String bankAccount;
 
     public SlackNotificationFactory(
         @Value("${google.docs.dues-payment}") String duesPaymentDocumentLink,
         @Value("${google.docs.dues-management}") String duesManagementDocumentLink,
-        @Value("${internal.link.dues}") String internalDuesLink
+        @Value("${internal.link.dues}") String internalDuesLink,
+        @Value("${bank.account}") String bankAccount
         ) {
         this.duesManagementDocumentLink = duesManagementDocumentLink;
         this.duesPaymentDocumentLink = duesPaymentDocumentLink;
         this.internalDuesLink = internalDuesLink;
+        this.bankAccount = bankAccount;
     }
 
     public Payload generateSlackDuesNotificationByGlobal(
@@ -41,10 +44,11 @@ public class SlackNotificationFactory {
 
         String center = String.format("""
                 • <%s|회비 납부 문서>, <%s|회비 관리 문서>
-                • 회비납부계좌: `신한은행 100-031-597757 비씨에스디랩`
+                • 회비납부계좌: `%s`
                 """,
             duesPaymentDocumentLink,
-            duesManagementDocumentLink);
+            duesManagementDocumentLink,
+            bankAccount);
 
         String footer = String.format("""
                 문의 사항이 있으시다면 <@%s>, <@%s>에게 문의해주시기 바랍니다.
@@ -71,6 +75,7 @@ public class SlackNotificationFactory {
     public Payload generateSlackDuesNotificationByDM(
         int price,
         int unPaidCount,
+        String name,
         String presidentSlackId,
         String vicePresidentSlackId
     ) {
@@ -79,13 +84,15 @@ public class SlackNotificationFactory {
                 """);
 
         String center = String.format("""
-                %d원(%d회)의 회비를 미납하였습니다.
+                %s님은 %d원(%d회)의 회비를 미납하였습니다.
                 아래의 계좌를 통해 회비를 납부해 주시기 바랍니다.
-                회비납부계좌: `신한은행 100-031-597757 비씨에스디랩`
+                회비납부계좌: `%s`
                 참고: <%s|회비 납부 내역>
                 """,
+            name,
             price,
             unPaidCount,
+            bankAccount,
             internalDuesLink);
 
         String footer = String.format("""

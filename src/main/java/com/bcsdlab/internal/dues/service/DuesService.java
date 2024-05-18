@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.dues.service;
 
+import static com.bcsdlab.internal.dues.exception.DuesExceptionType.DUES_ALREADY_EXIST;
+import static com.bcsdlab.internal.dues.exception.DuesExceptionType.DUES_NOT_FOUND;
+
 import java.time.YearMonth;
 import java.util.List;
 
@@ -7,26 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bcsdlab.internal.dues.Dues;
-import com.bcsdlab.internal.dues.DuesStatus;
-import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
-import com.bcsdlab.internal.dues.repository.DuesRepository;
+import com.bcsdlab.internal.dues.MemberDuesCount;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesCreateRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesDeleteQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesGroupResponse;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
 import com.bcsdlab.internal.dues.exception.DuesException;
+import com.bcsdlab.internal.dues.repository.DuesRepository;
 import com.bcsdlab.internal.global.slack.SlackService;
 import com.bcsdlab.internal.global.slack.model.SlackNotificationFactory;
 import com.bcsdlab.internal.job.repository.JobRepository;
-import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
-
-import static com.bcsdlab.internal.dues.DuesStatus.NOT_PAID;
-import static com.bcsdlab.internal.dues.exception.DuesExceptionType.DUES_ALREADY_EXIST;
-import static com.bcsdlab.internal.dues.exception.DuesExceptionType.DUES_NOT_FOUND;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -91,7 +90,7 @@ public class DuesService {
     }
 
     public void sendDuesDM() {
-        List<Dues> dues = duesRepository.findAllByStatus(NOT_PAID);
+        List<MemberDuesCount> dues = duesRepository.countNotPaidDuesByMember();
         Member president = jobRepository.getActiveJobByType("회장").getMember();
         Member vicePresident = jobRepository.getActiveJobByType("부회장").getMember();
         slackService.sendDuesNotificationByDM(

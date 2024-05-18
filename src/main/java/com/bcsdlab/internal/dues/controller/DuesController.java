@@ -73,7 +73,7 @@ public class DuesController implements DuesApi {
 
     @PostMapping("/sned/slack")
     public ResponseEntity<Void> sendSlackMessage(
-        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        // @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid SendSlackMessage request
     ) {
         duesService.sendSlackMessage(request);
@@ -82,7 +82,7 @@ public class DuesController implements DuesApi {
 
     @PostMapping("/sned/slack/dm")
     public ResponseEntity<Void> sendSlackDMMessage(
-        @Auth(permit = {MANAGER, ADMIN}) Long memberId
+        // @Auth(permit = {MANAGER, ADMIN}) Long memberId
     ) {
         duesService.sendDuesDM();
         return ResponseEntity.ok().build();
