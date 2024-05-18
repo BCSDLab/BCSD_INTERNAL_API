@@ -71,18 +71,18 @@ public class DuesController implements DuesApi {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/sned/slack")
+    @PostMapping("/send/slack")
     public ResponseEntity<Void> sendSlackMessage(
-        // @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid SendSlackMessage request
     ) {
         duesService.sendSlackMessage(request);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/sned/slack/dm")
+    @PostMapping("/send/slack/dues/dm")
     public ResponseEntity<Void> sendSlackDMMessage(
-        // @Auth(permit = {MANAGER, ADMIN}) Long memberId
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId
     ) {
         duesService.sendDuesDM();
         return ResponseEntity.ok().build();

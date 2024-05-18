@@ -166,10 +166,10 @@ public interface DuesApi {
             ),
         }
     )
-    @Operation(summary = "회비 납부 슬랙 알림을 보낸다.")
-    @PostMapping("/sned/slack")
+    @Operation(summary = "회비 납부 슬랙 알림을 공지 채널에 보낸다.")
+    @PostMapping("/send/slack/dues/notice-channel")
     ResponseEntity<Void> sendSlackMessage(
-        // @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid SendSlackMessage request
     );
 
@@ -193,8 +193,8 @@ public interface DuesApi {
         }
     )
     @Operation(summary = "회비 미납자에게 회비납부DM을 보낸다.")
-    @PostMapping("/sned/slack/dm")
+    @PostMapping("/send/slack/dues/dm")
     ResponseEntity<Void> sendSlackDMMessage(
-        // @Auth(permit = {MANAGER, ADMIN}) Long memberId
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId
     );
 }
