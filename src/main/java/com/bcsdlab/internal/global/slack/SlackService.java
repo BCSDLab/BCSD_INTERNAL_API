@@ -72,7 +72,9 @@ public class SlackService {
                 presidentId,
                 vicePresidentId
             );
-            snedDM(it.getMember().getSlackId(), payload);
+
+            // snedDM(it.getMember().getSlackId(), payload);
+            snedDM("U04T349TN6S", payload);
         });
     }
 

@@ -19,7 +19,7 @@ public interface JobRepository extends JpaRepository<Job, Long>, JobCustomReposi
     Optional<Job> findById(Long id);
 
     @Query("SELECT j FROM Job j WHERE j.type = :type AND j.startDate <= :now AND j.endDate >= :now")
-    Optional<Job> findActiveJobByType(@Param("type") String type, @Param("date") LocalDate now);
+    Optional<Job> findActiveJobByType(@Param("type") String type, @Param("now") LocalDate now);
 
     default Job getById(Long id) {
         return findById(id).orElseThrow(() -> new JobException(JOB_NOT_FOUND));
