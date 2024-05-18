@@ -15,6 +15,7 @@ import com.bcsdlab.internal.dues.controller.dto.request.DuesDeleteQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesGroupResponse;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
 
@@ -144,5 +145,56 @@ public interface DuesApi {
     ResponseEntity<DuesResponse> createDues(
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid DuesCreateRequest request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200"
+            ),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "회비 납부 슬랙 알림을 보낸다.")
+    @PostMapping("/sned/slack")
+    ResponseEntity<Void> sendSlackMessage(
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @RequestBody @Valid SendSlackMessage request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200"
+            ),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "회비 미납자에게 회비납부DM을 보낸다.")
+    @PostMapping("/sned/slack/dm")
+    ResponseEntity<Void> sendSlackDMMessage(
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId
     );
 }

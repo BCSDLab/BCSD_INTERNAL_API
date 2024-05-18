@@ -1,13 +1,16 @@
 package com.bcsdlab.internal.job.repository;
 
+import static com.bcsdlab.internal.job.exception.JobExceptionType.JOB_NOT_FOUND;
+
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.bcsdlab.internal.job.Job;
 import com.bcsdlab.internal.job.exception.JobException;
-
-import static com.bcsdlab.internal.job.exception.JobExceptionType.JOB_NOT_FOUND;
 
 public interface JobRepository extends JpaRepository<Job, Long>, JobCustomRepository {
 
@@ -15,7 +18,14 @@ public interface JobRepository extends JpaRepository<Job, Long>, JobCustomReposi
 
     Optional<Job> findById(Long id);
 
+    @Query("SELECT j FROM Job j WHERE j.type = :type AND j.startDate <= :now AND j.endDate >= :now")
+    Optional<Job> findActiveJobByType(@Param("type") String type, @Param("date") LocalDate now);
+
     default Job getById(Long id) {
         return findById(id).orElseThrow(() -> new JobException(JOB_NOT_FOUND));
+    }
+
+    default Job getActiveJobByType(String type) {
+        return findActiveJobByType(type, LocalDate.now()).orElseThrow(() -> new JobException(JOB_NOT_FOUND));
     }
 }

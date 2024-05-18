@@ -16,6 +16,7 @@ import com.bcsdlab.internal.dues.controller.dto.request.DuesDeleteQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateQueryRequest;
 import com.bcsdlab.internal.dues.controller.dto.request.DuesUpdateRequest;
+import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesGroupResponse;
 import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
 import com.bcsdlab.internal.dues.service.DuesService;
@@ -68,5 +69,22 @@ public class DuesController implements DuesApi {
     ) {
         duesService.delete(queryRequest);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/sned/slack")
+    public ResponseEntity<Void> sendSlackMessage(
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
+        @RequestBody @Valid SendSlackMessage request
+    ) {
+        duesService.sendSlackMessage(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/sned/slack/dm")
+    public ResponseEntity<Void> sendSlackDMMessage(
+        @Auth(permit = {MANAGER, ADMIN}) Long memberId
+    ) {
+        duesService.sendDuesDM();
+        return ResponseEntity.ok().build();
     }
 }
