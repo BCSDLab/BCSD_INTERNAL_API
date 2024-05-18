@@ -71,7 +71,7 @@ public class DuesController implements DuesApi {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/send/slack")
+    @PostMapping("/send/slack/dues/notice-channel")
     public ResponseEntity<Void> sendSlackMessage(
         @Auth(permit = {MANAGER, ADMIN}) Long memberId,
         @RequestBody @Valid SendSlackMessage request

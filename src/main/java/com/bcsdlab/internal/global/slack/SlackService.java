@@ -26,22 +26,19 @@ public class SlackService {
 
     private final Slack slack;
     private final String token;
-    private final DuesRepository duesRepository;
     private final SlackNotificationFactory slackNotificationFactory;
-    private final String internal;
+    private final String notification;
 
     public SlackService(
         Slack slack,
-        DuesRepository duesRepository,
         SlackNotificationFactory slackNotificationFactory,
         @Value("${slack.api.token}") String token,
-        @Value("${slack.internal}") String internal
+        @Value("${slack.notification}") String notification
     ) {
         this.slack = slack;
         this.token = token;
-        this.duesRepository = duesRepository;
         this.slackNotificationFactory = slackNotificationFactory;
-        this.internal = internal;
+        this.notification = notification;
     }
 
     public List<User> getMembers() {
@@ -60,7 +57,7 @@ public class SlackService {
             presidentId,
             vicePresidentId
         );
-        sendChannelMessage(internal, payload);
+        sendChannelMessage(notification, payload);
     }
 
     public void sendDuesNotificationByDM(List<MemberDuesCount> dues, String presidentId, String vicePresidentId) {
