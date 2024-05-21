@@ -87,6 +87,9 @@ public class AdminService {
             if (emailMatched != null) {
                 idSyncCount++;
                 member.updateSlackId(emailMatched.getId());
+                if (emailMatched.isDeleted()) {
+                    member.withdraw();
+                }
             }
 
             User slackIdMatched = users.stream()
@@ -97,6 +100,9 @@ public class AdminService {
             if (slackIdMatched != null) {
                 imageSyncCount++;
                 member.updateImage(slackIdMatched.getProfile().getImage512());
+                if (slackIdMatched.isDeleted()) {
+                    member.withdraw();
+                }
             }
         }
 
