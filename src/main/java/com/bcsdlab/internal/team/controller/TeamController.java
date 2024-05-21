@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.team.controller;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -26,8 +29,6 @@ import com.bcsdlab.internal.team.controller.dto.response.TeamResponse;
 import com.bcsdlab.internal.team.service.TeamMemberService;
 import com.bcsdlab.internal.team.service.TeamService;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -109,12 +110,13 @@ public class TeamController implements TeamApi {
     }
 
     @Override
-    @DeleteMapping("/members/{id}")
+    @DeleteMapping("/{teamId}/members/{memberId}")
     public ResponseEntity<Void> deleteTeamMember(
-        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
-        @PathVariable Long id
+        @Auth(permit = {MANAGER, ADMIN}) Long managerId,
+        @PathVariable Long teamId,
+        @PathVariable Long memberId
     ) {
-        teamMemberService.deleteTeamMember(id);
+        teamMemberService.deleteTeamMember(teamId, memberId);
         return ResponseEntity.ok().build();
     }
 }

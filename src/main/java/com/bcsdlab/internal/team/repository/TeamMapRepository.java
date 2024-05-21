@@ -19,4 +19,6 @@ public interface TeamMapRepository extends JpaRepository<TeamMap, Long> {
     Page<TeamMap> findAllByNotDeleted(Pageable pageable);
 
     List<TeamMap> findAllByTeamIdAndIsLeader(Long teamId, boolean isLeader);
+
+    void deleteByTeamIdAndMemberId(Long teamId, Long memberId);
 }

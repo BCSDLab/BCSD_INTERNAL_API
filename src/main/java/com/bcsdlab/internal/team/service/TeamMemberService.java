@@ -6,8 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.team.controller.dto.request.TeamMapCreateRequest;
 import com.bcsdlab.internal.team.controller.dto.response.TeamMemberResponse;
 import com.bcsdlab.internal.team.model.Team;
@@ -43,8 +43,8 @@ public class TeamMemberService {
     }
 
     @Transactional
-    public void deleteTeamMember(Long id) {
-        teamMapRepository.deleteById(id);
+    public void deleteTeamMember(Long teamId, Long memberId) {
+        teamMapRepository.deleteByTeamIdAndMemberId(teamId, memberId);
     }
 
     public List<TeamMemberResponse> getTeamMemberByTeamId(Long teamId, Pageable pageable) {

@@ -1,5 +1,8 @@
 package com.bcsdlab.internal.team.controller;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+
 import java.util.List;
 
 import org.springdoc.core.annotations.ParameterObject;
@@ -22,8 +25,6 @@ import com.bcsdlab.internal.team.controller.dto.request.TeamRequest;
 import com.bcsdlab.internal.team.controller.dto.response.TeamMemberResponse;
 import com.bcsdlab.internal.team.controller.dto.response.TeamResponse;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -184,9 +185,10 @@ public interface TeamApi {
         }
     )
     @Operation(summary = "특정 팀에 멤버 삭제")
-    @DeleteMapping("/members/{id}")
+    @DeleteMapping("/{teamId}/members/{memberId}")
     ResponseEntity<Void> deleteTeamMember(
-        @Auth(permit = {MANAGER, ADMIN}) Long memberId,
-        @PathVariable Long id
+        @Auth(permit = {MANAGER, ADMIN}) Long managerId,
+        @PathVariable Long teamId,
+        @PathVariable Long memberId
     );
 }
