@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.bcsdlab.internal.dues.MemberDuesCount;
 import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
-import com.bcsdlab.internal.dues.repository.DuesRepository;
 import com.bcsdlab.internal.global.exception.ExternalApiException;
 import com.bcsdlab.internal.global.slack.model.SlackNotificationFactory;
 import com.slack.api.Slack;
@@ -69,7 +68,7 @@ public class SlackService {
                 presidentId,
                 vicePresidentId
             );
-            snedDM(it.getMember().getSlackId(), payload);
+            sendDM(it.getMember().getSlackId(), payload);
         });
     }
 
@@ -82,7 +81,7 @@ public class SlackService {
     }
 
     @Async
-    public void snedDM(String userSlackId, Payload payload) {
+    public void sendDM(String userSlackId, Payload payload) {
         ChatPostMessageRequest request = ChatPostMessageRequest.builder()
             .channel(userSlackId)
             .blocks(payload.getBlocks())

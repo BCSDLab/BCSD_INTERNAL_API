@@ -18,17 +18,20 @@ public class SlackNotificationFactory {
     private final String duesManagementDocumentLink;
     private final String internalDuesLink;
     private final String bankAccount;
+    private final String rulesLink;
 
     public SlackNotificationFactory(
         @Value("${google.docs.dues-payment}") String duesPaymentDocumentLink,
         @Value("${google.docs.dues-management}") String duesManagementDocumentLink,
         @Value("${internal.link.dues}") String internalDuesLink,
+        @Value("${internal.link.rules}") String rulesLink,
         @Value("${bank.account}") String bankAccount
         ) {
         this.duesManagementDocumentLink = duesManagementDocumentLink;
         this.duesPaymentDocumentLink = duesPaymentDocumentLink;
         this.internalDuesLink = internalDuesLink;
         this.bankAccount = bankAccount;
+        this.rulesLink = rulesLink;
     }
 
     public Payload generateSlackDuesNotificationByGlobal(
@@ -79,21 +82,28 @@ public class SlackNotificationFactory {
         String presidentSlackId,
         String vicePresidentSlackId
     ) {
-        String header = String.format("""
+        String header = """
                 *회비 미납 안내*
-                """);
+                """;
 
         String center = String.format("""
                 %s님은 %d원(%d회)의 회비를 미납하였습니다.
                 아래의 계좌를 통해 회비를 납부해 주시기 바랍니다.
                 회비납부계좌: `%s`
                 참고: <%s|회비 납부 내역>
+                
+                회비 3회 이상 미납 시, 회원 자격이 박탈될 수 있습니다.
+                회비 미납으로 인한 제명에 대한 자세한 내용은 회칙의 10조(제명) 1항 내용을 확인해주시기 바랍니다.
+                회칙: <%s|BCSDLab 회칙>
+                
                 """,
             name,
             price,
             unPaidCount,
             bankAccount,
-            internalDuesLink);
+            internalDuesLink,
+            rulesLink
+        );
 
         String footer = String.format("""
                 문의 사항이 있으시다면 <@%s>, <@%s>에게 문의해주시기 바랍니다.
