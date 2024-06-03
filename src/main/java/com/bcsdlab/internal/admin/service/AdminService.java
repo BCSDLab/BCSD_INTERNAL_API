@@ -13,6 +13,7 @@ import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteReques
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.admin.controller.dto.response.AdminSlackSyncResponse;
 import com.bcsdlab.internal.global.slack.SlackService;
+import com.bcsdlab.internal.member.MemberType;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.model.MemberWithdraw;
@@ -86,7 +87,7 @@ public class AdminService {
 
             if (emailMatched != null) {
                 idSyncCount++;
-                member.updateSlackId(emailMatched.getId());
+                member.setSlackId(emailMatched.getId());
                 if (emailMatched.isDeleted()) {
                     member.withdraw();
                 }
@@ -99,13 +100,33 @@ public class AdminService {
 
             if (slackIdMatched != null) {
                 imageSyncCount++;
-                member.updateImage(slackIdMatched.getProfile().getImage512());
+                member.setProfileImage(slackIdMatched.getProfile().getImage512());
                 if (slackIdMatched.isDeleted()) {
                     member.withdraw();
+                }
+
+                String statusEmoji = slackIdMatched.getProfile().getStatusEmoji();
+                if (statusEmoji != null) {
+                    if (isRegularEmoji(statusEmoji)) {
+                        member.setMemberType(MemberType.REGULAR);
+                    }
+                    if (isMentorEmoji(statusEmoji)) {
+                        member.setMemberType(MemberType.MENTOR);
+                    }
                 }
             }
         }
 
         return new AdminSlackSyncResponse(idSyncCount, imageSyncCount);
+    }
+
+    private boolean isRegularEmoji(String statusEmoji) {
+        return statusEmoji.equals(":tangerine:")
+            || statusEmoji.contains(":green_apple:")
+            || statusEmoji.contains(":apple:");
+    }
+
+    private boolean isMentorEmoji(String statusEmoji) {
+        return statusEmoji.equals(":sparkles:");
     }
 }

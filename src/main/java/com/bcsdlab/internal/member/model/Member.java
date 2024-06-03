@@ -183,12 +183,16 @@ public class Member extends RootEntity<Long> {
         this.isDeleted = updated.isDeleted;
     }
 
-    public void updateSlackId(String slackId) {
+    public void setSlackId(String slackId) {
         this.slackId = slackId;
     }
 
-    public void updateImage(String image) {
+    public void setProfileImage(String image) {
         this.profileImageUrl = image;
+    }
+
+    public void setMemberType(MemberType memberType) {
+        this.memberType = memberType;
     }
 
     public void withdraw() {
