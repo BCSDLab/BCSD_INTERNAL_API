@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bcsdlab.internal.auth.Auth;
+import com.bcsdlab.internal.job.Job;
 import com.bcsdlab.internal.job.repository.JobRepository;
 import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.model.Member;
@@ -44,17 +45,9 @@ public class TrackController implements TrackApi {
     public ResponseEntity<List<TrackWithLeaderResponse>> getTrack() {
         List<TrackWithLeaderResponse> result = new ArrayList<>();
         List<Track> tracks = trackRepository.findAllByIsDeleted(false);
-        for (long trackId = 1; trackId <= tracks.size(); trackId++) {
-            Optional<Member> trackLeader = jobRepository.searchJobWithLeader(trackId)
-                .stream()
-                .map(job -> memberRepository.getById(job.getMember().getId()))
-                .findFirst();
-
-            if (trackLeader.isEmpty()) {
-                result.add(TrackWithLeaderResponse.of(tracks.get((int) trackId - 1), null));
-            } else {
-                result.add(TrackWithLeaderResponse.of(tracks.get((int) trackId - 1), trackLeader.get()));
-            }
+        for (Track track: tracks) {
+            Optional<Job> trackLeader = jobRepository.findTrackLeaderByTrackId(track.getId()).stream().findFirst();
+            result.add(TrackWithLeaderResponse.of(track, trackLeader.isEmpty()? null: trackLeader.get().getMember()));
         }
         return ResponseEntity.ok(result);
     }

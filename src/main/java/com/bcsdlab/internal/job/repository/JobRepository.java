@@ -21,6 +21,17 @@ public interface JobRepository extends JpaRepository<Job, Long>, JobCustomReposi
     @Query("SELECT j FROM Job j WHERE j.type = :type AND j.startDate <= :now AND j.endDate >= :now")
     Optional<Job> findActiveJobByType(@Param("type") String type, @Param("now") YearMonth now);
 
+    @Query("""
+        SELECT j
+        FROM Job j
+        JOIN j.member m
+        WHERE j.type = '트랙장'
+        AND j.startDate <= now()
+        AND j.endDate >= now()
+        AND j.member.track.id = :trackId
+        """)
+    Optional<Job> findTrackLeaderByTrackId(@Param("trackId") Long trackId);
+
     default Job getById(Long id) {
         return findById(id).orElseThrow(() -> new JobException(JOB_NOT_FOUND));
     }
