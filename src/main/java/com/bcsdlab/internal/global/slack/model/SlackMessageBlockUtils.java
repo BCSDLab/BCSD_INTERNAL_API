@@ -13,7 +13,7 @@ import com.slack.api.model.block.composition.MarkdownTextObject;
 import lombok.Getter;
 
 @Getter
-public class SlackMessageBlockUtils {
+public class    SlackMessageBlockUtils {
 
     public static List<LayoutBlock> asBlocks(LayoutBlock... blocks) {
         return Arrays.asList(blocks);
