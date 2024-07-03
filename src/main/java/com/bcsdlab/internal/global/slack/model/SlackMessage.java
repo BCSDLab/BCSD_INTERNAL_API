@@ -1,8 +1,6 @@
-package com.bcsdlab.internal.bbot.model;
+package com.bcsdlab.internal.global.slack.model;
 
 import static lombok.AccessLevel.PROTECTED;
-
-import org.hibernate.annotations.Fetch;
 
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.model.Member;
@@ -22,33 +20,33 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "slack_thread")
+@Table(name = "slack_message")
 @NoArgsConstructor(access = PROTECTED)
-public class SlackThread extends RootEntity<Long> {
+public class SlackMessage extends RootEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ts", nullable = false, length = 10)
+    @Column(name = "ts", nullable = false, length = 25)
     private String ts;
 
     @Column(name = "content")
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "message_id", nullable = false)
-    private SlackMessage slackMessage;
+    @JoinColumn(name = "chnnel_id", nullable = false)
+    private SlackChannel slackChannel;
 
     @Builder
-    public SlackThread(Long id, String ts, String content, Member member, SlackMessage slackMessage) {
+    public SlackMessage(Long id, String ts, String content, Member member, SlackChannel slackChannel) {
         this.id = id;
         this.ts = ts;
         this.content = content;
         this.member = member;
-        this.slackMessage = slackMessage;
+        this.slackChannel = slackChannel;
     }
 }

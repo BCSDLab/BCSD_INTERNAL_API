@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.bbot.model;
+package com.bcsdlab.internal.global.slack.model;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -20,33 +20,33 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "slack_message")
+@Table(name = "slack_thread")
 @NoArgsConstructor(access = PROTECTED)
-public class SlackMessage extends RootEntity<Long> {
+public class SlackThread extends RootEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ts", nullable = false, length = 25)
+    @Column(name = "ts", nullable = false, length = 10)
     private String ts;
 
     @Column(name = "content")
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chnnel_id", nullable = false)
-    private SlackChannel slackChannel;
+    @JoinColumn(name = "message_id", nullable = false)
+    private SlackMessage slackMessage;
 
     @Builder
-    public SlackMessage(Long id, String ts, String content, Member member, SlackChannel slackChannel) {
+    public SlackThread(Long id, String ts, String content, Member member, SlackMessage slackMessage) {
         this.id = id;
         this.ts = ts;
         this.content = content;
         this.member = member;
-        this.slackChannel = slackChannel;
+        this.slackMessage = slackMessage;
     }
 }

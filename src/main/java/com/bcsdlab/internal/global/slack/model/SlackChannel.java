@@ -1,4 +1,4 @@
-package com.bcsdlab.internal.bbot.model;
+package com.bcsdlab.internal.global.slack.model;
 
 import static lombok.AccessLevel.PROTECTED;
 
