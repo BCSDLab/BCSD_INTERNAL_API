@@ -24,13 +24,13 @@ public class SlackChannel extends RootEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "channel_id", nullable = false, unique = true, length = 10)
+    @Column(name = "channel_id", nullable = false, unique = true)
     private String channelId;
 
     @Column(name = "channel_name")
     private String channelName;
 
-    @Column(name = "is_public")
+    @Column(name = "is_public", columnDefinition = "TINYINT(1)")
     private Boolean isPublic;
 
     @Builder

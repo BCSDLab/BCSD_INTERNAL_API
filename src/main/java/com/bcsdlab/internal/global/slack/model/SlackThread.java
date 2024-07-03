@@ -2,6 +2,8 @@ package com.bcsdlab.internal.global.slack.model;
 
 import static lombok.AccessLevel.PROTECTED;
 
+import java.math.BigDecimal;
+
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.model.Member;
 
@@ -27,8 +29,8 @@ public class SlackThread extends RootEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ts", nullable = false, length = 10)
-    private String ts;
+    @Column(name = "ts", nullable = false, precision = 16, scale = 6)
+    private BigDecimal ts;
 
     @Column(name = "content")
     private String content;
@@ -42,7 +44,7 @@ public class SlackThread extends RootEntity<Long> {
     private SlackMessage slackMessage;
 
     @Builder
-    public SlackThread(Long id, String ts, String content, Member member, SlackMessage slackMessage) {
+    public SlackThread(Long id, BigDecimal ts, String content, Member member, SlackMessage slackMessage) {
         this.id = id;
         this.ts = ts;
         this.content = content;

@@ -1,22 +1,27 @@
 package com.bcsdlab.internal.global.slack;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bcsdlab.internal.dues.MemberDuesCount;
 import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
 import com.bcsdlab.internal.global.exception.ExternalApiException;
+import com.bcsdlab.internal.global.slack.model.SlackChannel;
+import com.bcsdlab.internal.global.slack.model.SlackMessage;
 import com.bcsdlab.internal.global.slack.model.SlackNotificationFactory;
+import com.bcsdlab.internal.global.slack.repository.SlackChannelRepository;
+import com.bcsdlab.internal.global.slack.repository.SlackMessageRepository;
+import com.bcsdlab.internal.member.model.Member;
+import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.slack.api.Slack;
 import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
@@ -24,10 +29,7 @@ import com.slack.api.methods.request.chat.ChatPostMessageRequest;
 import com.slack.api.methods.request.users.UsersListRequest;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
 import com.slack.api.methods.response.conversations.ConversationsHistoryResponse;
-import com.slack.api.methods.response.conversations.ConversationsListResponse;
-import com.slack.api.methods.response.conversations.ConversationsRepliesResponse;
 import com.slack.api.methods.response.users.UsersListResponse;
-import com.slack.api.model.Channel;
 import com.slack.api.model.Conversation;
 import com.slack.api.model.Message;
 import com.slack.api.model.User;
@@ -39,19 +41,28 @@ public class SlackService {
     private final Slack slack;
     private final String token;
     private final SlackNotificationFactory slackNotificationFactory;
+    private final SlackChannelRepository slackChannelRepository;
+    private final SlackMessageRepository slackMessageRepository;
+    private final MemberRepository memberRepository;
     private final String notification;
     private final String bBot;
 
     public SlackService(
         Slack slack,
         SlackNotificationFactory slackNotificationFactory,
+        SlackChannelRepository slackChannelRepository,
+        SlackMessageRepository slackMessageRepository,
+        MemberRepository memberRepository,
         @Value("${slack.api.token}") String token,
-        @Value("${slack.notification}") String notification,
+        SlackMessageRepository slackMessageRepository1, MemberRepository memberRepository1, @Value("${slack.notification}") String notification,
         @Value("{slack.bbot-test}") String bBot
     ) {
         this.slack = slack;
         this.token = token;
         this.slackNotificationFactory = slackNotificationFactory;
+        this.slackChannelRepository = slackChannelRepository;
+        this.slackMessageRepository = slackMessageRepository1;
+        this.memberRepository = memberRepository1;
         this.notification = notification;
         this.bBot = bBot;
     }
@@ -112,35 +123,24 @@ public class SlackService {
         }
     }
 
-    public void getStatistics() {
-        Map<String, Integer> teamMessage = Map.of(
-            "CGQ6BJWBT", 0, // UIUX
-            "CGQK77GCB", 0, // back_end
-            "CGQKFN0KV", 0, // game
-            "CGQM7A3S8", 0, // front_end
-            "CGRQXU9PZ", 0, // android
-            "C06KP7Y53DJ", 0, // data
-            "C06N40APJAK", 0 // pm
-        );
-        Map<String, Integer> trackMessage = Map.of(
-            "C06NQT2TY9X", 0, // campus
-            "C06P3C96P9R", 0, // 인프라
-            "C06N99Z3D45", 0, // business
-            "C06NEM6EY3W", 0 // user
-        );
-        List<Message> messages = getAllChannelMessages();
-        for (Message message: messages) {
-            // message.
-        }
-    }
-
-    public List<Conversation> getChannels() {
+    public void syncSlackChannel() {
         try {
-            return slack.methods(token).conversationsList(req -> req)
+            slack.methods(token).conversationsList(req -> req)
                 .getChannels()
                 .stream()
                 .filter(Conversation::isMember)
-                .toList();
+                .forEach(it -> {
+                    Optional<SlackChannel> slackChannel = slackChannelRepository.findByChannelId(it.getId());
+                    if (!slackChannel.isPresent()) {
+                        slackChannelRepository.save(
+                            SlackChannel.builder()
+                            .channelName(it.getName())
+                            .channelId(it.getId())
+                            .isPublic(!it.isPrivate())
+                            .build()
+                        );
+                    }
+                });
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (SlackApiException e) {
@@ -148,54 +148,77 @@ public class SlackService {
         }
     }
 
-    private List<String> getChannelIds() {
+    @Transactional
+    public void syncSlackMessage() throws IOException {
+        List<SlackChannel> slackChannels = slackChannelRepository.findAll();
+        for (SlackChannel slackChannel: slackChannels) {
+            syncChannelMessage(slackChannel);
+        }
+    }
+
+    private long getOldest(int hours) {
+        Instant hoursAgo = Instant.now().minus(hours, ChronoUnit.HOURS);
+        return hoursAgo.getEpochSecond();
+    }
+
+    public List<Message> getChannelMessage(String channelId) throws IOException {
+        BigDecimal maxTs = slackMessageRepository.findMaxTs();
+        String oldestTs;
+        if (maxTs == null) {
+            oldestTs = String.valueOf(getOldest(24));
+        }else {
+            oldestTs = maxTs.toString();
+        }
         try {
-            return slack.methods(token).conversationsList(req -> req)
-                .getChannels()
-                .stream()
-                .filter(Conversation::isMember)
-                .map(Conversation::getId)
-                .toList();
+            ConversationsHistoryResponse response = slack.methods(token).conversationsHistory(req -> req
+                .channel(channelId)
+                .oldest(oldestTs)
+            );
+            if (response.isOk()) {
+                return response.getMessages();
+            } else {
+                throw new IOException("Slack API error: " + response.getError());
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new IOException("Error retrieving messages from Slack API: " + e.getMessage(), e);
         } catch (SlackApiException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<Message> getAllChannelMessages() {
-        List<String> channelIds = getChannelIds();
-        return channelIds.stream().flatMap(channelId -> getChannelMessages(
-                    channelId,
-                    Instant.now().minus(30, ChronoUnit.DAYS).getEpochSecond()
-                ).stream()
-            ).toList();
-    }
-
-    public List<Message> getChannelMessages(String channelId, long oldest) {
-        List<Message> allMessages = new ArrayList<>();
-        String cursor = null;
-        do {
-            String finalCursor = cursor;
-            ConversationsHistoryResponse response = null;
-            try {
-                response = slack.methods(token).conversationsHistory(req -> req
-                    .channel(channelId)
-                    .oldest(String.valueOf(oldest))
-                    .cursor(finalCursor)
-                );
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (SlackApiException e) {
-                throw new RuntimeException(e);
+    private void syncChannelMessage(SlackChannel slackChannel) throws IOException {
+        BigDecimal maxTs = slackMessageRepository.findMaxTs();
+        String oldestTs;
+        if (maxTs == null) {
+            oldestTs = String.valueOf(getOldest(24));
+        }else {
+            oldestTs = maxTs.toString();
+        }
+        System.out.println("dsa: " + oldestTs);
+        try {
+            ConversationsHistoryResponse response = slack.methods(token).conversationsHistory(req -> req
+                .channel(slackChannel.getChannelId())
+                .oldest(oldestTs)
+            );
+            if (response.isOk()) {
+                for (Message message: response.getMessages()) {
+                    Optional<Member> member = memberRepository.findBySlackId(message.getUser());
+                    slackMessageRepository.save(
+                        SlackMessage.builder()
+                            .content(message.getText())
+                            .slackChannel(slackChannel)
+                            .ts(new BigDecimal(message.getTs()))
+                            .member(member.isPresent()? member.get(): null)
+                            .build()
+                    );
+                }
+            } else {
+                throw new IOException("Slack API error: " + response.getError());
             }
-            if (!response.isOk()) {
-                throw new ExternalApiException("Slack API 실패");
-            }
-            allMessages.addAll(response.getMessages());
-            if (response.getResponseMetadata() == null) break;
-            cursor = response.getResponseMetadata().getNextCursor();
-        } while (cursor != null && !cursor.isEmpty());
-        return allMessages;
+        } catch (IOException e) {
+            throw new IOException("Error retrieving messages from Slack API: " + e.getMessage(), e);
+        } catch (SlackApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

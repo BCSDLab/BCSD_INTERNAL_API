@@ -21,6 +21,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     Optional<Member> findById(Long id);
 
+    Optional<Member> findBySlackId(String slackId);
+
     List<Member> findAllByIsDeletedFalse();
 
     default Member getByEmail(String email) {
@@ -30,6 +32,11 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     default Member getById(Long id) {
         return findById(id)
+            .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    default Member getBySlackId(String id) {
+        return findBySlackId(id)
             .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 

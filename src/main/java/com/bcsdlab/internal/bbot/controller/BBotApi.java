@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bcsdlab.internal.bbot.controller.dto.ThreadCreateRequest;
 import com.bcsdlab.internal.bbot.controller.dto.ThreadResponse;
 import com.slack.api.methods.SlackApiException;
-import com.slack.api.model.Conversation;
 import com.slack.api.model.Message;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -104,9 +102,9 @@ public interface BBotApi {
             ),
         }
     )
-    @Operation(summary = "채널 ID 조회")
-    @GetMapping("/b-bot/channel")
-    ResponseEntity<List<Conversation>> getChannel(
+    @Operation(summary = "채널 DB 동기화")
+    @PostMapping("/b-bot/sync/slack/channel")
+    ResponseEntity<Void> syncSlackChannel(
     ) throws SlackApiException, IOException;
 
     @ApiResponses(
@@ -130,10 +128,35 @@ public interface BBotApi {
             ),
         }
     )
-    @Operation(summary = "채널 댓글 조회")
-    @GetMapping("/b-bot/channel/{id}/message")
-    ResponseEntity<List<Message>> getChannelMessage(
-        @PathVariable("id") String channelId
+    @Operation(summary = "슬랙 메시지 DB 동기화")
+    @PostMapping("/b-bot/sync/slack/message")
+    ResponseEntity<Void> syncSlackMessage(
+    ) throws SlackApiException, IOException;
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "400",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "슬랙 메시지 DB 동기화")
+    @GetMapping("/b-bot/slack/message")
+    ResponseEntity<List<Message>> getSlackMessage(
     ) throws SlackApiException, IOException;
 
     // @ApiResponses(

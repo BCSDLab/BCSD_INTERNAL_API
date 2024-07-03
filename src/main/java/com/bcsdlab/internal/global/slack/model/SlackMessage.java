@@ -2,6 +2,8 @@ package com.bcsdlab.internal.global.slack.model;
 
 import static lombok.AccessLevel.PROTECTED;
 
+import java.math.BigDecimal;
+
 import com.bcsdlab.internal.global.RootEntity;
 import com.bcsdlab.internal.member.model.Member;
 
@@ -27,14 +29,14 @@ public class SlackMessage extends RootEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ts", nullable = false, length = 25)
-    private String ts;
+    @Column(name = "ts", nullable = false, precision = 16, scale = 6)
+    private BigDecimal ts;
 
     @Column(name = "content")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,7 +44,7 @@ public class SlackMessage extends RootEntity<Long> {
     private SlackChannel slackChannel;
 
     @Builder
-    public SlackMessage(Long id, String ts, String content, Member member, SlackChannel slackChannel) {
+    public SlackMessage(Long id, BigDecimal ts, String content, Member member, SlackChannel slackChannel) {
         this.id = id;
         this.ts = ts;
         this.content = content;
