@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.slack.api.bolt.App;
-import com.slack.api.bolt.AppConfig;
 import com.slack.api.bolt.socket_mode.SocketModeApp;
 import com.slack.api.methods.MethodsClient;
 import com.slack.api.methods.SlackApiException;
 import com.slack.api.methods.response.chat.ChatPostMessageResponse;
+import com.slack.api.model.event.MessageEvent;
 
 @Configuration
 public class SlackAppConfig {
@@ -40,31 +40,40 @@ public class SlackAppConfig {
     public App initSlackApp() {
         App app = new App();
 
-        app.command("/스프링부트테스트", (req, ctx) -> {
-            System.out.println("스프링부트환경테스트");
+        app.event(MessageEvent.class, (payload, ctx) -> {
+            MessageEvent event = payload.getEvent();
+            if (!event.getText().equals("hello!")) return ctx.ack();
 
+            // 메시지 내용 처리 로직
+            try {
+                ctx.client().chatPostMessage(r -> r
+                    .token(SLACK_BOT_TOKEN)
+                    .channel(event.getChannel())
+                    .text("You said: " + event.getText()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return ctx.ack();
+        });
+
+        app.command("/스프링부트테스트", (req, ctx) -> {
             // 커맨드 입력한 사용자에게 응답
             ctx.ack("스프링부트환경테스트");
-
             // 채널에 메시지 전송
             String channelId = req.getPayload().getChannelId();
-
             MethodsClient client = ctx.client();
-
             try {
                 ChatPostMessageResponse response = client.chatPostMessage(r -> r
                     .token(SLACK_BOT_TOKEN)
                     .channel(channelId)
                     .text("Spring Boot에서 볼트앱 연결 성공했다ㅋㅋ"));
-
                 if (!response.isOk()) {
                     System.err.println("Error posting message: " + response.getError());
                 }
-
             } catch (IOException | SlackApiException e) {
                 e.printStackTrace();
             }
-
             return ctx.ack();
         });
 
