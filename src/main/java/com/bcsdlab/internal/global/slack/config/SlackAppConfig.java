@@ -59,7 +59,7 @@ public class SlackAppConfig {
         if (config.getClientId() != null) {
             app.asOAuthApp(true);
         }
-        app.command("/test", (req, ctx) -> {
+        app.command("/스프링부트테스트", (req, ctx) -> {
             return ctx.ack("What's up?");
         });
         return app;
