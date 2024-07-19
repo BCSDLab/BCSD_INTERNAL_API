@@ -84,6 +84,7 @@ public class SlackAppConfig {
     public SocketModeApp socketModeApp(App app) throws Exception {
         SocketModeApp socketModeApp = new SocketModeApp(SLACK_APP_TOKEN, app);
         socketModeApp.start();
-        return socketModeApp;
+        return null;
+        // return socketModeApp;
     }
 }
