@@ -1,13 +1,11 @@
 package com.bcsdlab.internal.global.slack.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.slack.api.bolt.App;
 import com.slack.api.bolt.AppConfig;
-import com.slack.api.bolt.servlet.SlackAppServlet;
 import com.slack.api.model.event.MessageEvent;
 
 @Configuration
@@ -57,24 +55,28 @@ public class SlackAppConfig {
 
     @Bean
     public App initSlackApp(AppConfig config) {
-        App app = new App(config);
+        App app = new App(config).asOAuthApp(true);
         if (config.getClientId() != null) {
             app.asOAuthApp(true);
         }
-        app.event(MessageEvent.class, (payload, ctx) -> {
-            String text = payload.getEvent().getText();
-            // 특정 키워드 또는 조건에 따라 응답
-            System.out.println("dd");
-            if (text.contains("hello")) {
-                System.out.println("dsa");
-                ctx.say("Hello! How can I assist you today?");
-            } else if (text.contains("help")) {
-                ctx.say("Sure, what do you need help with?");
-            }
-            return ctx.ack();
+        app.command("/test", (req, ctx) -> {
+            return ctx.ack("What's up?");
         });
-
         return app;
+        // app.command(MessageEvent.class, (payload, ctx) -> {
+        //     String text = payload.getEvent().getText();
+        //     // 특정 키워드 또는 조건에 따라 응답
+        //     System.out.println("dd");
+        //     if (text.contains("hello")) {
+        //         System.out.println("dsa");
+        //         ctx.say("Hello! How can I assist you today?");
+        //     } else if (text.contains("help")) {
+        //         ctx.say("Sure, what do you need help with?");
+        //     }
+        //     return ctx.ack();
+        // });
+        //
+        // return app;
     }
 
 }

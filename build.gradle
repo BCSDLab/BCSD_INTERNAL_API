@@ -51,11 +51,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     // Slack Api
-    implementation 'com.slack.api:slack-api-client:1.24.0'
-    implementation("com.slack.api:bolt:1.40.3")
-    implementation("com.slack.api:bolt-servlet:1.40.3")
-    implementation("com.slack.api:bolt-jetty:1.40.3")
+    implementation("com.slack.api:bolt-socket-mode:1.28.1")
+    implementation 'com.slack.api:bolt-servlet:1.28.1'
+    implementation("com.slack.api:bolt:1.18.0")
+    implementation("com.slack.api:bolt-jetty:1.18.0")
+    implementation("javax.websocket:javax.websocket-api:1.1")
+    implementation("org.glassfish.tyrus.bundles:tyrus-standalone-client:1.19")
     implementation("org.slf4j:slf4j-simple:1.7.36")
+
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
