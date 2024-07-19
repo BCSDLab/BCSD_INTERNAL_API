@@ -149,10 +149,14 @@ public class SlackService {
     }
 
     @Transactional
-    public void syncSlackMessage() throws IOException {
+    public void syncSlackMessage() {
         List<SlackChannel> slackChannels = slackChannelRepository.findAll();
         for (SlackChannel slackChannel: slackChannels) {
-            syncChannelMessage(slackChannel);
+            try {
+                syncChannelMessage(slackChannel);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -194,7 +198,6 @@ public class SlackService {
         }else {
             oldestTs = maxTs.toString();
         }
-        System.out.println("dsa: " + oldestTs);
         try {
             ConversationsHistoryResponse response = slack.methods(token).conversationsHistory(req -> req
                 .channel(slackChannel.getChannelId())
