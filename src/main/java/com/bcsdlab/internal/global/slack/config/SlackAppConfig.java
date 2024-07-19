@@ -42,7 +42,7 @@ public class SlackAppConfig {
 
         app.event(MessageEvent.class, (payload, ctx) -> {
             MessageEvent event = payload.getEvent();
-            if (!event.getText().equals("hello!")) return ctx.ack();
+            // if (!event.getText().equals("hello!")) return ctx.ack();
 
             // 메시지 내용 처리 로직
             try {
