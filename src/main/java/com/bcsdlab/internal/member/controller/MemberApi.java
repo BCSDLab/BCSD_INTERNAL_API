@@ -20,6 +20,7 @@ import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberResetPasswordRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberResetTokenRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
+import com.bcsdlab.internal.member.controller.dto.response.HomepageMemberResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
@@ -29,6 +30,9 @@ import static com.bcsdlab.internal.auth.Authority.NORMAL;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
+
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -214,5 +218,26 @@ public interface MemberApi {
     @PostMapping("/password")
     ResponseEntity<Void> resetPassword(
         @RequestBody @Valid MemberResetPasswordRequest request
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200")
+        }
+    )
+    @Operation(summary = "회원정보 전체조회(권한X)-BCSDLab전용 API")
+    @GetMapping("/v2")
+    ResponseEntity<List<HomepageMemberResponse>> getMembers(
+    );
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+        }
+    )
+    @Operation(summary = "특정 회원정보 조회(권한X)-BCSDLab전용 API")
+    @GetMapping("/{memberId}/v2")
+    ResponseEntity<HomepageMemberResponse> getMemberById(
+        @Parameter(in = PATH) @PathVariable Long memberId
     );
 }

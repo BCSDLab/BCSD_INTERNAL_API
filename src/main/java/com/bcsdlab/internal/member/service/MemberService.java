@@ -7,6 +7,8 @@ import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_N
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.PASSWORD_EMPTY;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.PASSWORD_SAME_AS_BEFORE;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,7 @@ import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberResetPasswordRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberResetTokenRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
+import com.bcsdlab.internal.member.controller.dto.response.HomepageMemberResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.exception.MemberException;
@@ -154,5 +157,13 @@ public class MemberService {
         if (password.isEmpty()) {
             throw new MemberException(PASSWORD_EMPTY);
         }
+    }
+
+    public List<HomepageMemberResponse> getMembersForHompage() {
+        return memberRepository.findAll().stream().map(HomepageMemberResponse::from).toList();
+    }
+
+    public HomepageMemberResponse getMemberForHompage(Long memberId) {
+        return HomepageMemberResponse.from(memberRepository.getById(memberId));
     }
 }

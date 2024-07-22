@@ -1,5 +1,12 @@
 package com.bcsdlab.internal.member.controller;
 
+import static com.bcsdlab.internal.auth.Authority.ADMIN;
+import static com.bcsdlab.internal.auth.Authority.MANAGER;
+import static com.bcsdlab.internal.auth.Authority.NORMAL;
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,13 +29,12 @@ import com.bcsdlab.internal.member.controller.dto.request.MemberRegisterRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberResetPasswordRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberResetTokenRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberUpdateRequest;
+import com.bcsdlab.internal.member.controller.dto.response.HomepageMemberResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberLoginResponse;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.service.MemberService;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-import static com.bcsdlab.internal.auth.Authority.NORMAL;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -109,5 +115,20 @@ public class MemberController implements MemberApi {
     public ResponseEntity<Void> resetPassword(MemberResetPasswordRequest request) {
         memberService.resetPassword(request);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @GetMapping("/v2")
+    public ResponseEntity<List<HomepageMemberResponse>> getMembers(
+    ) {
+        return ResponseEntity.ok(memberService.getMembersForHompage());
+    }
+
+    @Override
+    @GetMapping("/{memberId}/v2")
+    public ResponseEntity<HomepageMemberResponse> getMemberById(
+        @Parameter(in = PATH) @PathVariable Long memberId
+    ) {
+        return ResponseEntity.ok(memberService.getMemberForHompage(memberId));
     }
 }
