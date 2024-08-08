@@ -7,8 +7,10 @@ import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -101,6 +103,10 @@ public class Member extends RootEntity<Long> {
     @OneToOne(mappedBy = "member")
     private MemberWithdraw memberWithdraw;
 
+    @Column(name = "birthday")
+    @ColumnDefault("1970-01-01")
+    private LocalDate birthday;
+
     public Member(
         YearMonth joinDate,
         Track track,
@@ -118,7 +124,8 @@ public class Member extends RootEntity<Long> {
         String profileImageUrl,
         String slackId,
         boolean isAuthed,
-        boolean isDeleted
+        boolean isDeleted,
+        LocalDate birthday
     ) {
         this.joinDate = joinDate;
         this.track = track;
@@ -137,14 +144,16 @@ public class Member extends RootEntity<Long> {
         this.slackId = slackId;
         this.isAuthed = isAuthed;
         this.isDeleted = isDeleted;
+        this.birthday = birthday;
     }
 
-    public void register(String studentNumber, String password, PasswordEncoder passwordEncoder) {
+    public void register(String studentNumber, String password, PasswordEncoder passwordEncoder, LocalDate birthday) {
         this.studentNumber = studentNumber;
         this.password = passwordEncoder.encode(password);
         this.authority = checkAuthority();
         this.isAuthed = false;
         this.isDeleted = false;
+        this.birthday = birthday;
     }
 
     private Authority checkAuthority() {
@@ -175,6 +184,7 @@ public class Member extends RootEntity<Long> {
         this.githubName = updated.githubName;
         this.profileImageUrl = updated.profileImageUrl;
         this.slackId = updated.slackId;
+        this.birthday = updated.birthday;
     }
 
     public void updateAll(Member updated) {

@@ -1,5 +1,6 @@
 package com.bcsdlab.internal.member.controller.dto.request;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 import com.bcsdlab.internal.auth.Authority;
@@ -7,8 +8,10 @@ import com.bcsdlab.internal.member.MemberStatus;
 import com.bcsdlab.internal.member.MemberType;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -64,8 +67,18 @@ public record MemberRegisterRequest(
     @NotBlank String githubName,
 
     @Schema(example = "https://example.com/image.png", description = "프로필 이미지 URL")
-    String profileImageUrl
+    String profileImageUrl,
+
+    @Column(name = "birthday")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    LocalDate birthday
 ) {
+    public MemberRegisterRequest{
+        if(birthday == null){
+            birthday = LocalDate.of(1970, 1, 1);
+        }
+    }
+
 
     public Member toEntity(Track track) {
         return new Member(
@@ -85,7 +98,8 @@ public record MemberRegisterRequest(
             profileImageUrl,
             null,
             false,
-            false
+            false,
+            birthday
         );
     }
 }

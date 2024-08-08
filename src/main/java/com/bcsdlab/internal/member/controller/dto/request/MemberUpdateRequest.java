@@ -1,6 +1,9 @@
 package com.bcsdlab.internal.member.controller.dto.request;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.member.MemberStatus;
@@ -9,6 +12,7 @@ import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -69,10 +73,14 @@ public record MemberUpdateRequest(
     @NotBlank String githubName,
 
     @Schema(example = "https://profile-image-url", description = "프로필 이미지 URL")
-    String profileImageUrl
+    String profileImageUrl,
+
+    @Column(name = "birthday")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    LocalDate birthday
 ) {
 
-    public Member toEntity(Track track, Member origin) {
+    public Member toEntity(Track track, Member origin, LocalDate birthday) {
         return new Member(
             YearMonth.of(joinedYear, joinedMonth),
             track,
@@ -90,7 +98,8 @@ public record MemberUpdateRequest(
             profileImageUrl,
             origin.getSlackId(),
             origin.isAuthed(),
-            origin.isDeleted()
+            origin.isDeleted(),
+            birthday
         );
     }
 }

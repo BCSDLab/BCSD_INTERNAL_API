@@ -1,6 +1,6 @@
 package com.bcsdlab.internal.member.controller.dto.response;
 
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.bcsdlab.internal.member.model.Member;
@@ -70,6 +70,10 @@ public record MemberResponse(
     @Schema(example = "false", description = "삭제 여부")
     boolean isDeleted,
 
+    @Schema(name = "birthday", description = "생년월일")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    LocalDate birthday,
+
     @Schema(example = "너무 힘들어요", description = "탈퇴 사유")
     String deleteReason
 ) {
@@ -99,6 +103,7 @@ public record MemberResponse(
             member.getUpdatedAt(),
             member.isAuthed(),
             member.isDeleted(),
+            member.getBirthday(),
             member.getMemberWithdraw() == null ? null : member.getMemberWithdraw().getReason()
         );
     }

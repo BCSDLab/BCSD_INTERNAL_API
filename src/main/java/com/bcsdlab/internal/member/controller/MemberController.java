@@ -1,8 +1,6 @@
 package com.bcsdlab.internal.member.controller;
 
-import static com.bcsdlab.internal.auth.Authority.ADMIN;
-import static com.bcsdlab.internal.auth.Authority.MANAGER;
-import static com.bcsdlab.internal.auth.Authority.NORMAL;
+import static com.bcsdlab.internal.auth.Authority.*;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 
 import java.util.List;

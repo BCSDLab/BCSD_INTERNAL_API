@@ -1,6 +1,9 @@
 package com.bcsdlab.internal.admin.controller.dto.request;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.bcsdlab.internal.auth.Authority;
 import com.bcsdlab.internal.member.MemberStatus;
@@ -9,6 +12,7 @@ import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.track.Track;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -73,7 +77,11 @@ public record AdminMemberCreateRequest(
     @NotNull Boolean isAuthed,
 
     @Schema(example = "false", description = "삭제 여부")
-    @NotNull Boolean isDeleted
+    @NotNull Boolean isDeleted,
+
+    @Column(name = "birthday")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    LocalDate birthday
 ) {
 
     public Member toEntity(Track track) {
@@ -94,7 +102,8 @@ public record AdminMemberCreateRequest(
             profileImageUrl,
             null,
             isAuthed,
-            isDeleted
+            isDeleted,
+            birthday
         );
     }
 }

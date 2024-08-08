@@ -67,7 +67,7 @@ public class AdminService {
     public Long createMember(AdminMemberCreateRequest request) {
         Track track = trackRepository.getById(request.trackId());
         Member member = request.toEntity(track);
-        member.register(request.studentNumber(), request.password(), passwordEncoder);
+        member.register(request.studentNumber(), request.password(), passwordEncoder, request.birthday());
         member.accept();
         memberRepository.save(member);
         return member.getId();

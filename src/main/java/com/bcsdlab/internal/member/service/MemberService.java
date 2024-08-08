@@ -69,7 +69,7 @@ public class MemberService {
         });
         Track track = trackRepository.getById(request.trackId());
         Member member = request.toEntity(track);
-        member.register(request.studentNumber(), request.password(), passwordEncoder);
+        member.register(request.studentNumber(), request.password(), passwordEncoder, request.birthday());
         memberRepository.save(member);
     }
 
@@ -89,7 +89,7 @@ public class MemberService {
         Member member = memberRepository.getById(memberId);
         validateDuplication(request, member);
         Track track = trackRepository.getById(request.trackId());
-        Member updated = request.toEntity(track, member);
+        Member updated = request.toEntity(track, member, request.birthday());
         member.update(updated);
         return MemberResponse.from(member);
     }
