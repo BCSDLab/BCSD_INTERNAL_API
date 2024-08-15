@@ -1,17 +1,7 @@
 package com.bcsdlab.internal.global.slack.config;
 
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.slack.api.bolt.App;
-import com.slack.api.bolt.socket_mode.SocketModeApp;
-import com.slack.api.methods.MethodsClient;
-import com.slack.api.methods.SlackApiException;
-import com.slack.api.methods.response.chat.ChatPostMessageResponse;
-import com.slack.api.model.event.MessageEvent;
 
 @Configuration
 public class SlackAppConfig {
@@ -67,7 +57,7 @@ public class SlackAppConfig {
     //             ChatPostMessageResponse response = client.chatPostMessage(r -> r
     //                 .token(SLACK_BOT_TOKEN)
     //                 .channel(channelId)
-    //                 .text("Spring Boot에서 볼트앱 연결 성공했다ㅋㅋ"));
+    //                 .text("볼트앱 연결 테스트"));
     //             if (!response.isOk()) {
     //                 System.err.println("Error posting message: " + response.getError());
     //             }
@@ -79,12 +69,11 @@ public class SlackAppConfig {
     //
     //     return app;
     // }
-
+    //
     // @Bean
     // public SocketModeApp socketModeApp(App app) throws Exception {
-        // SocketModeApp socketModeApp = new SocketModeApp(SLACK_APP_TOKEN, app);
-        // socketModeApp.start();
-        // return null;
-        // return socketModeApp;
+    //     SocketModeApp socketModeApp = new SocketModeApp(SLACK_APP_TOKEN, app);
+    //     socketModeApp.start();
+    //     return socketModeApp;
     // }
 }
