@@ -10,7 +10,6 @@ import static lombok.AccessLevel.PROTECTED;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,6 +21,7 @@ import com.bcsdlab.internal.member.MemberType;
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.track.Track;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -88,6 +88,7 @@ public class Member extends RootEntity<Long> {
     @Column(name = "authority", columnDefinition = "varchar(255)")
     private Authority authority;
 
+    @Nullable
     @Column(name = "github_name")
     private String githubName;
 
@@ -103,8 +104,8 @@ public class Member extends RootEntity<Long> {
     @OneToOne(mappedBy = "member")
     private MemberWithdraw memberWithdraw;
 
+    @Nullable
     @Column(name = "birthday")
-    @ColumnDefault("1970-01-01")
     private LocalDate birthday;
 
     public Member(
