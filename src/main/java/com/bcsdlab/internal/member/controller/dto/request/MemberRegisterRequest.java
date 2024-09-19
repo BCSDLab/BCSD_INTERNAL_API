@@ -99,6 +99,7 @@ public record MemberRegisterRequest(
             null,
             false,
             false,
+            false,
             birthday
         );
     }

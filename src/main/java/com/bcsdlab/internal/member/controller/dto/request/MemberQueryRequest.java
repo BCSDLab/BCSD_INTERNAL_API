@@ -13,7 +13,10 @@ public record MemberQueryRequest(
     Boolean deleted,
 
     @Schema(example = "true", description = "인증 여부")
-    Boolean authed
+    Boolean authed,
+
+    @Schema(example = "false", description = "회비 면제 여부")
+    Boolean feeExempted
 ) {
 
 }

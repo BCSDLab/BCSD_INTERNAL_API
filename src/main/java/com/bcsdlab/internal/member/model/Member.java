@@ -101,6 +101,9 @@ public class Member extends RootEntity<Long> {
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Column(name = "is_fee_exempt")
+    private boolean isFeeExempt;
+
     @OneToOne(mappedBy = "member")
     private MemberWithdraw memberWithdraw;
 
@@ -126,6 +129,7 @@ public class Member extends RootEntity<Long> {
         String slackId,
         boolean isAuthed,
         boolean isDeleted,
+        boolean isFeeExempt,
         LocalDate birthday
     ) {
         this.joinDate = joinDate;
@@ -145,6 +149,7 @@ public class Member extends RootEntity<Long> {
         this.slackId = slackId;
         this.isAuthed = isAuthed;
         this.isDeleted = isDeleted;
+        this.isFeeExempt = isFeeExempt;
         this.birthday = birthday;
     }
 
@@ -154,6 +159,7 @@ public class Member extends RootEntity<Long> {
         this.authority = checkAuthority();
         this.isAuthed = false;
         this.isDeleted = false;
+        this.isFeeExempt = false;
         this.birthday = birthday;
     }
 
@@ -192,6 +198,7 @@ public class Member extends RootEntity<Long> {
         this.update(updated);
         this.isAuthed = updated.isAuthed;
         this.isDeleted = updated.isDeleted;
+        this.isFeeExempt = updated.isFeeExempt;
     }
 
     public void setSlackId(String slackId) {

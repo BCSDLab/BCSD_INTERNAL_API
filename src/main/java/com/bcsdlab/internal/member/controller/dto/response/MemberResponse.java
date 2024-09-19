@@ -70,6 +70,9 @@ public record MemberResponse(
     @Schema(example = "false", description = "삭제 여부")
     boolean isDeleted,
 
+    @Schema(example = "false", description = "회비 면제 여부")
+    boolean isFeeExempt,
+
     @Schema(name = "birthday", description = "생년월일")
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate birthday,
@@ -103,6 +106,7 @@ public record MemberResponse(
             member.getUpdatedAt(),
             member.isAuthed(),
             member.isDeleted(),
+            member.isFeeExempt(),
             member.getBirthday(),
             member.getMemberWithdraw() == null ? null : member.getMemberWithdraw().getReason()
         );

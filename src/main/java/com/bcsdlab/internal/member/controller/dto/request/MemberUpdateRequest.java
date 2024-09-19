@@ -99,6 +99,7 @@ public record MemberUpdateRequest(
             origin.getSlackId(),
             origin.isAuthed(),
             origin.isDeleted(),
+            origin.isFeeExempt(),
             birthday
         );
     }
