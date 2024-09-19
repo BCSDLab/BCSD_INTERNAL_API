@@ -88,7 +88,6 @@ public class Member extends RootEntity<Long> {
     @Column(name = "authority", columnDefinition = "varchar(255)")
     private Authority authority;
 
-    @Nullable
     @Column(name = "github_name")
     private String githubName;
 
