@@ -111,7 +111,7 @@ public class MemberService {
     }
 
     private void checkAuthorized(Member member) {
-        if (member == null || !member.isAuthed() || member.isDeleted()) {
+        if (member == null || !member.getIsAuthed() || member.getIsDeleted()) {
             throw new MemberException(MEMBER_NOT_AUTHORIZED);
         }
     }
@@ -160,7 +160,7 @@ public class MemberService {
     }
 
     public List<HomepageMemberResponse> getMembersForHompage() {
-        return memberRepository.findAll().stream().map(HomepageMemberResponse::from).toList();
+        return memberRepository.findAllByIsDeletedFalse().stream().map(HomepageMemberResponse::from).toList();
     }
 
     public HomepageMemberResponse getMemberForHompage(Long memberId) {

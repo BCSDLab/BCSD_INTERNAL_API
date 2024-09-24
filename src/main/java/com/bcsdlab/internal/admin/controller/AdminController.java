@@ -4,6 +4,7 @@ package com.bcsdlab.internal.admin.controller;
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
 
+import java.io.IOException;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,9 @@ import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteReques
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.admin.service.AdminService;
 import com.bcsdlab.internal.auth.Auth;
+import com.bcsdlab.internal.global.google.service.GoogleSheetsService;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
+import com.slack.api.methods.SlackApiException;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 public class AdminController implements AdminApi {
 
     private final AdminService adminService;
+    private final GoogleSheetsService googleSheetsService;
 
     @PostMapping("/members")
     public ResponseEntity<Void> createMember(
@@ -71,11 +75,11 @@ public class AdminController implements AdminApi {
         return ResponseEntity.ok().build();
     }
 
-//    @PostMapping("/members/slack-sync")
-//    public ResponseEntity<AdminSlackSyncResponse> sync(
-//        @Auth(permit = {MANAGER, ADMIN}) Long adminId
-//    ) {
-//        var result = adminService.syncWithSlack();
-//        return ResponseEntity.ok(result);
-//    }
+    @PostMapping("/members/slack-sync")
+    public ResponseEntity<Void> sync(
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId
+    ) throws IOException, SlackApiException {
+        adminService.syncSlackMember();
+        return ResponseEntity.ok().build();
+    }
 }

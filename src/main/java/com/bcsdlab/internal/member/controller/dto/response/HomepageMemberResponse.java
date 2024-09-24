@@ -52,7 +52,7 @@ public record HomepageMemberResponse(
             member.getMemberType().toString(),
             member.getEmail(),
             member.getProfileImageUrl(),
-            member.isDeleted(),
+            member.getIsDeleted(),
             member.getCreatedAt(),
             member.getUpdatedAt()
         );

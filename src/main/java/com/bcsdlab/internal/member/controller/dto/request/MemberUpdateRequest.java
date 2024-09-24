@@ -97,9 +97,9 @@ public record MemberUpdateRequest(
             githubName,
             profileImageUrl,
             origin.getSlackId(),
-            origin.isAuthed(),
-            origin.isDeleted(),
-            origin.isFeeExempt(),
+            origin.getIsAuthed(),
+            origin.getIsDeleted(),
+            origin.getIsFeeExempt(),
             birthday
         );
     }

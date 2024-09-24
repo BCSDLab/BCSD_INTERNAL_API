@@ -106,9 +106,9 @@ public record MemberResponse(
             member.getProfileImageUrl(),
             member.getCreatedAt(),
             member.getUpdatedAt(),
-            member.isAuthed(),
-            member.isDeleted(),
-            member.isFeeExempt(),
+            member.getIsAuthed(),
+            member.getIsDeleted(),
+            member.getIsFeeExempt(),
             member.getBirthday(),
             member.getMemberWithdraw() == null ? null : member.getMemberWithdraw().getReason()
         );

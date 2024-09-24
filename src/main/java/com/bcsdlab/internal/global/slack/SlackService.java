@@ -107,6 +107,11 @@ public class SlackService {
         }
     }
 
+    public List<User> getAllUsers() throws IOException, SlackApiException {
+        UsersListResponse response = slack.methods(token).usersList(r -> r);
+        return response.getMembers();
+    }
+
     @Async
     public void sendDM(String userSlackId, Payload payload) {
         ChatPostMessageRequest request = ChatPostMessageRequest.builder()

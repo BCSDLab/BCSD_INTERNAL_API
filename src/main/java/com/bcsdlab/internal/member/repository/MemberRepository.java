@@ -15,6 +15,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     List<Member> findAllByTrackId(Long id);
 
+    void deleteBySlackId(String slackId);
+
     Optional<Member> findByStudentNumber(String studentNumber);
 
     Optional<Member> findByEmail(String email);

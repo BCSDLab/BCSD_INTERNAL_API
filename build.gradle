@@ -25,6 +25,9 @@ dependencies {
 
     implementation 'org.springframework.security:spring-security-core:6.2.1'
 
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev516-1.23.0'
+    implementation 'com.google.auth:google-auth-library-oauth2-http:0.20.0'
+
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'

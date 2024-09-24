@@ -12,8 +12,8 @@ import lombok.Getter;
 public enum MemberStatus {
     ATTEND("재학"),
     OFF("휴학"),
-    IPP("현장실습"),
-    ARMY("군 휴학"),
+    IPP("IPP"),
+    ARMY("군휴학"),
     COMPLETION("수료"),
     GRADUATE("졸업"),
     ;
@@ -30,5 +30,18 @@ public enum MemberStatus {
             .filter(type -> type.name().equals(status.toUpperCase()))
             .findAny()
             .orElseThrow(() -> new MemberException(MEMBER_STATUS_NOT_FOUND.withDetail(status)));
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public static MemberStatus fromView(String view) {
+        for (MemberStatus status : MemberStatus.values()) {
+            if (status.getView().equals(view)) {
+                return status;
+            }
+        }
+        return null;
     }
 }

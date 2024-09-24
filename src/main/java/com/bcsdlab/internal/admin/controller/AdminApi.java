@@ -4,6 +4,8 @@ import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +19,7 @@ import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteReques
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
+import com.slack.api.methods.SlackApiException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -134,26 +137,26 @@ public interface AdminApi {
         @PathVariable Long memberId
     );
 
-//    @ApiResponses(
-//        value = {
-//            @ApiResponse(responseCode = "200"),
-//            @ApiResponse(
-//                responseCode = "401",
-//                content = @Content(schema = @Schema(hidden = true))
-//            ),
-//            @ApiResponse(
-//                responseCode = "403",
-//                content = @Content(schema = @Schema(hidden = true))
-//            ),
-//            @ApiResponse(
-//                responseCode = "404",
-//                content = @Content(schema = @Schema(hidden = true))
-//            ),
-//        }
-//    )
-//    @Operation(summary = "회원 슬랙 아이디, 슬랙 프로필 동기화")
-//    @PostMapping("/members/slack-sync")
-//    ResponseEntity<AdminSlackSyncResponse> sync(
-//        @Auth(permit = {MANAGER, ADMIN}) Long adminId
-//    );
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "회원 슬랙 아이디, 슬랙 프로필 동기화")
+    @PostMapping("/members/slack-sync")
+    ResponseEntity<Void> sync(
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId
+    ) throws IOException, SlackApiException;
 }

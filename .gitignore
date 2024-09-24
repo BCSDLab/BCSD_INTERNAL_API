@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+client_secret_340135824028-jrui25kd70v5j9frqrbribiiut5d02r2.apps.googleusercontent.com.json
+
 ### STS ###
 .apt_generated
 .classpath

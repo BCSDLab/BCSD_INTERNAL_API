@@ -31,6 +31,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -95,13 +96,13 @@ public class Member extends RootEntity<Long> {
     private String slackId;
 
     @Column(name = "is_authed")
-    private boolean isAuthed;
+    private Boolean isAuthed;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
     @Column(name = "is_fee_exempt")
-    private boolean isFeeExempt;
+    private Boolean isFeeExempt;
 
     @OneToOne(mappedBy = "member")
     private MemberWithdraw memberWithdraw;
@@ -110,6 +111,7 @@ public class Member extends RootEntity<Long> {
     @Column(name = "birthday")
     private LocalDate birthday;
 
+    @Builder
     public Member(
         YearMonth joinDate,
         Track track,
@@ -198,6 +200,32 @@ public class Member extends RootEntity<Long> {
         this.isAuthed = updated.isAuthed;
         this.isDeleted = updated.isDeleted;
         this.isFeeExempt = updated.isFeeExempt;
+    }
+
+    public void updateMember(
+        String name,
+        Track track,
+        String company,
+        String department,
+        String studentNumber,
+        String phoneNumber,
+        String githubName,
+        LocalDate birthday,
+        MemberType memberType,
+        MemberStatus memberStatus,
+        Boolean isDeleted
+    ) {
+        this.name = name;
+        this.track = track;
+        this.company = company;
+        this.department = department;
+        this.studentNumber = studentNumber;
+        this.phoneNumber = phoneNumber;
+        this.githubName = githubName;
+        this.birthday = birthday;
+        this.memberType = memberType;
+        this.status = memberStatus;
+        this.isDeleted = false;
     }
 
     public void setSlackId(String slackId) {

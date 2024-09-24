@@ -20,4 +20,14 @@ public enum MemberType {
             .findAny()
             .orElseThrow(() -> new MemberException(TRACK_NOT_FOUND.withDetail(memberType)));
     }
+
+    public static MemberType getMemberTypeByEmoji(String emoji) {
+        if (emoji.equals(":seedling:")) {
+            return MemberType.BEGINNER;
+        } else if (emoji.equals(":sparkles:")) {
+            return MemberType.MENTOR;
+        } else {
+            return MemberType.REGULAR;
+        }
+    }
 }

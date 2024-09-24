@@ -1,8 +1,13 @@
 package com.bcsdlab.internal.admin.service;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
-import com.bcsdlab.internal.admin.controller.dto.response.AdminSlackSyncResponse;
+import com.bcsdlab.internal.auth.Authority;
+import com.bcsdlab.internal.global.google.service.GoogleSheetsService;
 import com.bcsdlab.internal.global.slack.SlackService;
+import com.bcsdlab.internal.member.MemberStatus;
 import com.bcsdlab.internal.member.MemberType;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 import com.bcsdlab.internal.member.model.Member;
@@ -21,6 +28,7 @@ import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.repository.MemberWithdrawRepository;
 import com.bcsdlab.internal.track.Track;
 import com.bcsdlab.internal.track.repository.TrackRepository;
+import com.slack.api.methods.SlackApiException;
 import com.slack.api.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +43,7 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final MemberWithdrawRepository memberWithdrawRepository;
     private final SlackService slackService;
+    private final GoogleSheetsService googleSheetsService;
 
     public void acceptMember(Long memberId) {
         Member member = memberRepository.getById(memberId);
@@ -73,51 +82,77 @@ public class AdminService {
         return member.getId();
     }
 
-    @Transactional
-    public AdminSlackSyncResponse syncWithSlack() {
-        List<User> users = slackService.getMembers();
+    public Map<String, Member> getAllMemberMap() {
         List<Member> members = memberRepository.findAll();
-        int idSyncCount = 0;
-        int imageSyncCount = 0;
-        for (Member member : members) {
-            User emailMatched = users.stream()
-                .filter(user -> Objects.equals(user.getProfile().getEmail(), member.getEmail()))
-                .findAny()
-                .orElse(null);
+        Map<String, Member> memberMap = new HashMap<>(members.size());
+        for (Member member: members) {
+            memberMap.put(member.getEmail(), member);
+        }
+        return memberMap;
+    }
 
-            if (emailMatched != null) {
-                idSyncCount++;
-                member.setSlackId(emailMatched.getId());
-                if (emailMatched.isDeleted()) {
-                    member.withdraw();
-                }
-            }
+    public Map<String, Track> getAllTrackMap() {
+        List<Track> tracks = trackRepository.findAll();
+        Map<String, Track> trackMap = new HashMap<>(tracks.size());
+        for (Track track: tracks) {
+            trackMap.put(track.getName(), track);
+        }
+        return trackMap;
+    }
 
-            User slackIdMatched = users.stream()
-                .filter(user -> Objects.equals(user.getId(), member.getSlackId()))
-                .findAny()
-                .orElse(null);
-
-            if (slackIdMatched != null) {
-                imageSyncCount++;
-                member.setProfileImage(slackIdMatched.getProfile().getImage512());
-                if (slackIdMatched.isDeleted()) {
-                    member.withdraw();
-                }
-
-                String statusEmoji = slackIdMatched.getProfile().getStatusEmoji();
-                if (statusEmoji != null) {
-                    if (isRegularEmoji(statusEmoji)) {
-                        member.setMemberType(MemberType.REGULAR);
-                    }
-                    if (isMentorEmoji(statusEmoji)) {
-                        member.setMemberType(MemberType.MENTOR);
-                    }
-                }
+    @Transactional
+    public void syncSlackMember() throws SlackApiException, IOException {
+        List<User> slackUsers = slackService.getAllUsers();
+        List<List<Object>> googleSheetUsers = googleSheetsService.readSheet();
+        Map<String, Member> memberMap = getAllMemberMap();
+        Set<String> googleSheetUserEmailSet = new HashSet<>(googleSheetUsers.size());
+        Map<String, Track> trackMap = getAllTrackMap();
+        final int EMAIL_INDEX = 10;
+        final int NAME_INDEX = 5;
+        final int TRACK_INDEX = 2;
+        final int COMPANY_INDEX = 6;
+        final int DEPARTMENT_INDEX = 7;
+        final int STUDENT_NUMBER_INDEX = 8;
+        final int PHONE_NUMBER_INDEX = 9;
+        final int GITHUB_NAME_INDEX = 12;
+        final int BIRTHDATE_INDEX = 13;
+        final int MEMBER_TYPE_INDEX = 3;
+        final int STATUS_INDEX = 4;
+        for (List<Object> googleSheetUser: googleSheetUsers) {
+            googleSheetUserEmailSet.add(googleSheetUser.get(EMAIL_INDEX).toString());
+            Member member = memberMap.getOrDefault(googleSheetUser.get(EMAIL_INDEX), Member.builder()
+                .email(googleSheetUser.get(EMAIL_INDEX).toString())
+                .authority(Authority.NORMAL)
+                .build());
+            member.updateMember(
+                googleSheetUser.get(NAME_INDEX).toString(),
+                trackMap.get(googleSheetUser.get(TRACK_INDEX).toString()),
+                googleSheetUser.get(COMPANY_INDEX).toString(),
+                googleSheetUser.get(DEPARTMENT_INDEX).toString(),
+                googleSheetUser.get(STUDENT_NUMBER_INDEX).toString(),
+                googleSheetUser.get(PHONE_NUMBER_INDEX).toString(),
+                googleSheetUser.size() > GITHUB_NAME_INDEX? googleSheetUser.get(GITHUB_NAME_INDEX).toString(): null,
+                googleSheetUser.size() > BIRTHDATE_INDEX? LocalDate.parse(googleSheetUser.get(BIRTHDATE_INDEX).toString()): null,
+                MemberType.from(googleSheetUser.get(MEMBER_TYPE_INDEX).toString()),
+                MemberStatus.fromView(googleSheetUser.get(STATUS_INDEX).toString()),
+                false
+            );
+            Member savedMember = memberRepository.save(member);
+            memberMap.put(savedMember.getEmail(), savedMember);
+        }
+        for (User slackUser: slackUsers) {
+            String email = slackUser.getProfile().getEmail();
+            if (memberMap.containsKey(email)) {
+                Member member = memberMap.get(email);
+                member.setSlackId(slackUser.getId());
+                member.setProfileImage(slackUser.getProfile().getImage512());
             }
         }
-
-        return new AdminSlackSyncResponse(idSyncCount, imageSyncCount);
+        for (Member member : memberMap.values()) {
+            if (!googleSheetUserEmailSet.contains(member.getEmail())) {
+                memberRepository.deleteById(member.getId());
+            }
+        }
     }
 
     private boolean isRegularEmoji(String statusEmoji) {
