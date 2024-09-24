@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
-import com.bcsdlab.internal.admin.controller.dto.response.AdminSlackSyncResponse;
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
 
@@ -135,26 +134,26 @@ public interface AdminApi {
         @PathVariable Long memberId
     );
 
-    @ApiResponses(
-        value = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(
-                responseCode = "401",
-                content = @Content(schema = @Schema(hidden = true))
-            ),
-            @ApiResponse(
-                responseCode = "403",
-                content = @Content(schema = @Schema(hidden = true))
-            ),
-            @ApiResponse(
-                responseCode = "404",
-                content = @Content(schema = @Schema(hidden = true))
-            ),
-        }
-    )
-    @Operation(summary = "회원 슬랙 아이디, 슬랙 프로필 동기화")
-    @PostMapping("/members/slack-sync")
-    ResponseEntity<AdminSlackSyncResponse> sync(
-        @Auth(permit = {MANAGER, ADMIN}) Long adminId
-    );
+//    @ApiResponses(
+//        value = {
+//            @ApiResponse(responseCode = "200"),
+//            @ApiResponse(
+//                responseCode = "401",
+//                content = @Content(schema = @Schema(hidden = true))
+//            ),
+//            @ApiResponse(
+//                responseCode = "403",
+//                content = @Content(schema = @Schema(hidden = true))
+//            ),
+//            @ApiResponse(
+//                responseCode = "404",
+//                content = @Content(schema = @Schema(hidden = true))
+//            ),
+//        }
+//    )
+//    @Operation(summary = "회원 슬랙 아이디, 슬랙 프로필 동기화")
+//    @PostMapping("/members/slack-sync")
+//    ResponseEntity<AdminSlackSyncResponse> sync(
+//        @Auth(permit = {MANAGER, ADMIN}) Long adminId
+//    );
 }

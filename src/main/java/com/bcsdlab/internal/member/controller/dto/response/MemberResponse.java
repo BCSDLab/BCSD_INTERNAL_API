@@ -2,6 +2,7 @@ package com.bcsdlab.internal.member.controller.dto.response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.team.model.TeamMap;
@@ -86,10 +87,11 @@ public record MemberResponse(
     }
 
     public static MemberResponse from(Member member) {
+        YearMonth joinDate = member.getJoinDate();
         return new MemberResponse(
             member.getId(),
-            member.getJoinDate().getYear(),
-            member.getJoinDate().getMonthValue(),
+            joinDate == null ? null : joinDate.getYear(),
+            joinDate == null ? null : joinDate.getMonthValue(),
             TrackResponse.from(member.getTrack()),
             member.getMemberType().name(),
             member.getStatus().name(),

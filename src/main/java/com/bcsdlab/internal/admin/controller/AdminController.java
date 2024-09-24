@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
-import com.bcsdlab.internal.admin.controller.dto.response.AdminSlackSyncResponse;
 import com.bcsdlab.internal.admin.service.AdminService;
 import com.bcsdlab.internal.auth.Auth;
 import com.bcsdlab.internal.member.controller.dto.response.MemberResponse;
@@ -72,11 +71,11 @@ public class AdminController implements AdminApi {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/members/slack-sync")
-    public ResponseEntity<AdminSlackSyncResponse> sync(
-        @Auth(permit = {MANAGER, ADMIN}) Long adminId
-    ) {
-        var result = adminService.syncWithSlack();
-        return ResponseEntity.ok(result);
-    }
+//    @PostMapping("/members/slack-sync")
+//    public ResponseEntity<AdminSlackSyncResponse> sync(
+//        @Auth(permit = {MANAGER, ADMIN}) Long adminId
+//    ) {
+//        var result = adminService.syncWithSlack();
+//        return ResponseEntity.ok(result);
+//    }
 }
