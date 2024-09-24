@@ -3,6 +3,7 @@ package com.bcsdlab.internal.global.google.config;
 import java.io.IOException;
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -15,9 +16,16 @@ import com.google.auth.oauth2.GoogleCredentials;
 @Configuration
 public class GoogleApiConfig {
 
+    String credentialsFilePath;
+
+    public GoogleApiConfig(
+        @Value("${google.spreadsheet.directory.credentials-path}") String credentialsFilePath
+    ) {
+        this.credentialsFilePath = credentialsFilePath;
+    }
+
     @Bean
     public Sheets sheets() throws IOException {
-        String credentialsFilePath = "client_secret_340135824028-jrui25kd70v5j9frqrbribiiut5d02r2.apps.googleusercontent.com.json";
         GoogleCredentials credentials = GoogleCredentials.fromStream(new ClassPathResource(credentialsFilePath).getInputStream())
             .createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
         return new Sheets.Builder(new com.google.api.client.http.javanet.NetHttpTransport(),
