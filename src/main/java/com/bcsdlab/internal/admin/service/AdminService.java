@@ -154,14 +154,4 @@ public class AdminService {
             }
         }
     }
-
-    private boolean isRegularEmoji(String statusEmoji) {
-        return statusEmoji.equals(":tangerine:")
-            || statusEmoji.contains(":green_apple:")
-            || statusEmoji.contains(":apple:");
-    }
-
-    private boolean isMentorEmoji(String statusEmoji) {
-        return statusEmoji.equals(":sparkles:");
-    }
 }
