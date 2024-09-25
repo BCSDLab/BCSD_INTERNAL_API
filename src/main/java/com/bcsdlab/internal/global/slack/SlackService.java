@@ -45,6 +45,7 @@ public class SlackService {
     private final SlackMessageRepository slackMessageRepository;
     private final MemberRepository memberRepository;
     private final String notification;
+    private final String chatRoom;
     private final String bBot;
 
     public SlackService(
@@ -54,7 +55,9 @@ public class SlackService {
         SlackMessageRepository slackMessageRepository,
         MemberRepository memberRepository,
         @Value("${slack.api.token}") String token,
-        SlackMessageRepository slackMessageRepository1, MemberRepository memberRepository1, @Value("${slack.notification}") String notification,
+        SlackMessageRepository slackMessageRepository1, MemberRepository memberRepository1,
+        @Value("${slack.notification}") String notification,
+        @Value("${slack.chat-room}") String chatRoom,
         @Value("{slack.bbot-test}") String bBot
     ) {
         this.slack = slack;
@@ -64,6 +67,7 @@ public class SlackService {
         this.slackMessageRepository = slackMessageRepository1;
         this.memberRepository = memberRepository1;
         this.notification = notification;
+        this.chatRoom = chatRoom;
         this.bBot = bBot;
     }
 
@@ -139,10 +143,10 @@ public class SlackService {
                     if (!slackChannel.isPresent()) {
                         slackChannelRepository.save(
                             SlackChannel.builder()
-                            .channelName(it.getName())
-                            .channelId(it.getId())
-                            .isPublic(!it.isPrivate())
-                            .build()
+                                .channelName(it.getName())
+                                .channelId(it.getId())
+                                .isPublic(!it.isPrivate())
+                                .build()
                         );
                     }
                 });
@@ -156,7 +160,7 @@ public class SlackService {
     @Transactional
     public void syncSlackMessage() {
         List<SlackChannel> slackChannels = slackChannelRepository.findAll();
-        for (SlackChannel slackChannel: slackChannels) {
+        for (SlackChannel slackChannel : slackChannels) {
             try {
                 syncChannelMessage(slackChannel);
             } catch (IOException e) {
@@ -175,7 +179,7 @@ public class SlackService {
         String oldestTs;
         if (maxTs == null) {
             oldestTs = String.valueOf(getOldest(24));
-        }else {
+        } else {
             oldestTs = maxTs.toString();
         }
         try {
@@ -200,7 +204,7 @@ public class SlackService {
         String oldestTs;
         if (maxTs == null) {
             oldestTs = String.valueOf(getOldest(24));
-        }else {
+        } else {
             oldestTs = maxTs.toString();
         }
         try {
@@ -209,14 +213,14 @@ public class SlackService {
                 .oldest(oldestTs)
             );
             if (response.isOk()) {
-                for (Message message: response.getMessages()) {
+                for (Message message : response.getMessages()) {
                     Optional<Member> member = memberRepository.findBySlackId(message.getUser());
                     slackMessageRepository.save(
                         SlackMessage.builder()
                             .content(message.getText())
                             .slackChannel(slackChannel)
                             .ts(new BigDecimal(message.getTs()))
-                            .member(member.isPresent()? member.get(): null)
+                            .member(member.isPresent() ? member.get() : null)
                             .build()
                     );
                 }
@@ -228,5 +232,10 @@ public class SlackService {
         } catch (SlackApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void generateSlackCelebrateBirthday(List<String> birthdayPeopleSlackId) {
+        Payload payload = slackNotificationFactory.generateSlackCelebrateBirthday(birthdayPeopleSlackId);
+        sendChannelMessage(chatRoom, payload);
     }
 }

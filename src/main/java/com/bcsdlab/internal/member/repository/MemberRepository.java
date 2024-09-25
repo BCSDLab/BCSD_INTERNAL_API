@@ -3,19 +3,21 @@ package com.bcsdlab.internal.member.repository;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.EMAIL_NOT_FOUND;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.bcsdlab.internal.member.exception.MemberException;
 import com.bcsdlab.internal.member.model.Member;
 
+import io.lettuce.core.dynamic.annotation.Param;
+
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberCustomRepository {
 
     List<Member> findAllByTrackId(Long id);
-
-    void deleteBySlackId(String slackId);
 
     Optional<Member> findByStudentNumber(String studentNumber);
 
@@ -46,4 +48,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
         return findByStudentNumber(studentNumber)
             .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
+
+    @Query("SELECT m FROM Member m WHERE FUNCTION('MONTH', m.birthday) = :month AND FUNCTION('DAY', m.birthday) = :day")
+    List<Member> findAllByBirthday(@Param("month") int month, @Param("day") int day);
 }

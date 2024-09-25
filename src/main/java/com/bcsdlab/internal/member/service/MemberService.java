@@ -7,7 +7,9 @@ import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_N
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.PASSWORD_EMPTY;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.PASSWORD_SAME_AS_BEFORE;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bcsdlab.internal.auth.JwtProvider;
+import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
 import com.bcsdlab.internal.global.ses.CertificationCodeGenerator;
 import com.bcsdlab.internal.global.ses.MailSender;
+import com.bcsdlab.internal.global.slack.SlackService;
 import com.bcsdlab.internal.member.PasswordResetToken;
 import com.bcsdlab.internal.member.controller.dto.request.MemberEmailRequest;
 import com.bcsdlab.internal.member.controller.dto.request.MemberLoginRequest;
@@ -35,6 +39,7 @@ import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.member.repository.PasswordResetTokenRepository;
 import com.bcsdlab.internal.track.Track;
 import com.bcsdlab.internal.track.repository.TrackRepository;
+import com.slack.api.webhook.Payload;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,6 +54,7 @@ public class MemberService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final TrackRepository trackRepository;
     private final MailSender mailSender;
+    private final SlackService slackService;
 
     public MemberLoginResponse login(MemberLoginRequest request) {
         Member member = memberRepository.getByStudentNumber(request.studentNumber());
@@ -160,10 +166,27 @@ public class MemberService {
     }
 
     public List<HomepageMemberResponse> getMembersForHompage() {
-        return memberRepository.findAllByIsDeletedFalse().stream().map(HomepageMemberResponse::from).toList();
+        return memberRepository.findAll().stream().map(HomepageMemberResponse::from).toList();
     }
 
     public HomepageMemberResponse getMemberForHompage(Long memberId) {
         return HomepageMemberResponse.from(memberRepository.getById(memberId));
+    }
+
+    public void celebrateBirthday() {
+        LocalDate today = LocalDate.now();
+        int month = today.getMonthValue();
+
+        int day = today.getDayOfMonth();
+        System.out.println(month + " " + day);
+
+        List<Member> birthdayPeople = memberRepository.findAllByBirthday(month, day);
+
+        if (!birthdayPeople.isEmpty()) {
+            List<String> birthdayPeopleSlackId = birthdayPeople.stream()
+                .map(Member::getSlackId)
+                .collect(Collectors.toList());
+            slackService.generateSlackCelebrateBirthday(birthdayPeopleSlackId);
+        }
     }
 }

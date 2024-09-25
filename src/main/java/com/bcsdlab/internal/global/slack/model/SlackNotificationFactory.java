@@ -5,10 +5,14 @@ import static com.bcsdlab.internal.global.slack.model.SlackMessageBlockUtils.div
 import static com.bcsdlab.internal.global.slack.model.SlackMessageBlockUtils.markdownText;
 import static com.bcsdlab.internal.global.slack.model.SlackMessageBlockUtils.section;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.bcsdlab.internal.dues.controller.dto.request.SendSlackMessage;
+import com.bcsdlab.internal.member.model.Member;
 import com.slack.api.webhook.Payload;
 
 @Component
@@ -26,7 +30,7 @@ public class SlackNotificationFactory {
         @Value("${internal.link.dues}") String internalDuesLink,
         @Value("${internal.link.rules}") String rulesLink,
         @Value("${bank.account}") String bankAccount
-        ) {
+    ) {
         this.duesManagementDocumentLink = duesManagementDocumentLink;
         this.duesPaymentDocumentLink = duesPaymentDocumentLink;
         this.internalDuesLink = internalDuesLink;
@@ -83,19 +87,19 @@ public class SlackNotificationFactory {
         String vicePresidentSlackId
     ) {
         String header = """
-                *회비 미납 안내*
-                """;
+            *회비 미납 안내*
+            """;
 
         String center = String.format("""
                 %s님은 %d원(%d회)의 회비를 미납하였습니다.
                 아래의 계좌를 통해 회비를 납부해 주시기 바랍니다.
                 회비납부계좌: `%s`
                 참고: <%s|회비 납부 내역>
-                
+                                
                 회비 3회 이상 미납 시, 회원 자격이 박탈될 수 있습니다.
                 회비 미납으로 인한 제명에 대한 자세한 내용은 회칙의 10조(제명) 1항 내용을 확인해주시기 바랍니다.
                 회칙: <%s|BCSDLab 회칙>
-                
+                                
                 """,
             name,
             price,
@@ -152,5 +156,30 @@ public class SlackNotificationFactory {
                 section(s -> s.text(markdownText(footer)))
             ))
             .build();
+    }
+
+    public Payload generateSlackCelebrateBirthday(
+        List<String> birthdayPeopleSlackId
+    ) {
+        String header = String.format("""
+            🎉 생일을 진심으로 축하드립니다!! 🎉
+             """);
+        String mentions = birthdayPeopleSlackId.stream()
+            .map(id -> String.format("<@%s>", id))
+            .collect(Collectors.joining(", "));
+
+        String center = String.format("""
+            🎂 오늘은 %s 님의 생일입니다 🎂
+            """, mentions);
+
+        String footer = String.format("""
+            생일을 맞은 %s 님을 위해서 축하의 말을 남겨주세요!!
+            """, mentions
+        );
+        return buildPayload(
+            header,
+            center,
+            footer
+        );
     }
 }
