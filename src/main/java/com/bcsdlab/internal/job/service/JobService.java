@@ -34,7 +34,7 @@ public class JobService {
 
     @Transactional
     public JobResponse create(JobCreateQueryRequest request) {
-        Member member = memberRepository.getById(request.memberId());
+        Member member = memberRepository.getByStudentNumber(request.studentNumber());
         Job savedJob = jobRepository.save(request.toEntity(member));
         return JobResponse.from(savedJob);
     }

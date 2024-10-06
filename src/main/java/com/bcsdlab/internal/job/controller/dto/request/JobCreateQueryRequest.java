@@ -8,8 +8,8 @@ import com.bcsdlab.internal.member.model.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record JobCreateQueryRequest(
-    @Schema(description = "회원 ID", example = "1")
-    Long memberId,
+    @Schema(description = "학번", example = "2020136021")
+    String studentNumber,
 
     @Schema(description = "직무 이름", example = "회장")
     String type,
