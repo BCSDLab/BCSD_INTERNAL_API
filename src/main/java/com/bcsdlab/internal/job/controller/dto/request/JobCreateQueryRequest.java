@@ -8,8 +8,8 @@ import com.bcsdlab.internal.member.model.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record JobCreateQueryRequest(
-    @Schema(description = "학번", example = "2020136021")
-    String studentNumber,
+    @Schema(example = "example@koreatech.ac.kr", description = "이메일")
+    String email,
 
     @Schema(description = "직무 이름", example = "회장")
     String type,
