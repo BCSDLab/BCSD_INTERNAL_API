@@ -76,35 +76,31 @@ public record AdminMemberUpdateRequest(
     @Schema(example = "false", description = "삭제 여부")
     @NotNull Boolean isDeleted,
 
-    @Schema(example = "false", description = "회비 면제 여부")
-    @NotNull Boolean isFeeExempt,
-
     @Column(name = "birthday")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate birthday
 ) {
 
     public Member toEntity(Track track, Member origin) {
-        return new Member(
-            YearMonth.of(joinedYear, joinedMonth),
-            track,
-            memberType,
-            status,
-            name,
-            company,
-            department,
-            studentNumber,
-            phoneNumber,
-            email,
-            null,
-            authority,
-            githubName,
-            profileImageUrl,
-            origin.getSlackId(),
-            isAuthed,
-            isDeleted,
-            isFeeExempt,
-            birthday
-        );
+        return Member.builder()
+            .joinDate(YearMonth.of(joinedYear, joinedMonth))
+            .track(track)
+            .memberType(memberType)
+            .status(status)
+            .name(name)
+            .company(company)
+            .department(department)
+            .studentNumber(studentNumber)
+            .phoneNumber(phoneNumber)
+            .email(email)
+            .password(null)
+            .authority(authority)
+            .githubName(githubName)
+            .profileImageUrl(profileImageUrl)
+            .slackId(origin.getSlackId())
+            .isAuthed(isAuthed)
+            .isDeleted(isDeleted)
+            .birthday(birthday)
+            .build();
     }
 }
