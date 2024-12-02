@@ -47,7 +47,7 @@ public class TrackController implements TrackApi {
         List<Track> tracks = trackRepository.findAllByIsDeleted(false);
         for (Track track: tracks) {
             Optional<Job> trackLeader = jobRepository.findTrackLeaderByTrackId(track.getId()).stream().findFirst();
-            result.add(TrackWithLeaderResponse.of(track, trackLeader.isEmpty()? null: trackLeader.get().getMember()));
+            result.add(TrackWithLeaderResponse.of(track, trackLeader.map(Job::getMember).orElse(null)));
         }
         return ResponseEntity.ok(result);
     }

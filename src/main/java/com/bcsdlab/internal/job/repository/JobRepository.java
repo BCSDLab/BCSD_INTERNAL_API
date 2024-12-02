@@ -27,7 +27,7 @@ public interface JobRepository extends JpaRepository<Job, Long>, JobCustomReposi
         JOIN j.member m
         WHERE j.type = '트랙장'
         AND j.startDate <= now()
-        AND j.endDate >= now()
+        AND FUNCTION('MONTH', j.endDate) = FUNCTION('MONTH', now())
         AND j.member.track.id = :trackId
         """)
     Optional<Job> findTrackLeaderByTrackId(@Param("trackId") Long trackId);
