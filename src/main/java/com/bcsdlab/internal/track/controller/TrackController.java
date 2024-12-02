@@ -1,5 +1,6 @@
 package com.bcsdlab.internal.track.controller;
 
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +47,12 @@ public class TrackController implements TrackApi {
         List<TrackWithLeaderResponse> result = new ArrayList<>();
         List<Track> tracks = trackRepository.findAllByIsDeleted(false);
         for (Track track: tracks) {
-            Optional<Job> trackLeader = jobRepository.findTrackLeaderByTrackId(track.getId()).stream().findFirst();
-            result.add(TrackWithLeaderResponse.of(track, trackLeader.map(Job::getMember).orElse(null)));
+            Job trackLeader = jobRepository.findAllTrackLeadersByTrackId(track.getId()).stream()
+                .filter(job -> job.getStartDate().minusMonths(1).isBefore(YearMonth.now()))
+                .filter(job -> job.getEndDate().plusMonths(1).isAfter(YearMonth.now()))
+                .findFirst()
+                .orElse(null);
+            result.add(TrackWithLeaderResponse.of(track, trackLeader == null ? null : trackLeader.getMember()));
         }
         return ResponseEntity.ok(result);
     }

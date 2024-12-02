@@ -3,6 +3,7 @@ package com.bcsdlab.internal.job.repository;
 import static com.bcsdlab.internal.job.exception.JobExceptionType.JOB_NOT_FOUND;
 
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,11 +27,9 @@ public interface JobRepository extends JpaRepository<Job, Long>, JobCustomReposi
         FROM Job j
         JOIN j.member m
         WHERE j.type = '트랙장'
-        AND j.startDate <= now()
-        AND FUNCTION('MONTH', j.endDate) = FUNCTION('MONTH', now())
         AND j.member.track.id = :trackId
         """)
-    Optional<Job> findTrackLeaderByTrackId(@Param("trackId") Long trackId);
+    List<Job> findAllTrackLeadersByTrackId(@Param("trackId") Long trackId);
 
     default Job getById(Long id) {
         return findById(id).orElseThrow(() -> new JobException(JOB_NOT_FOUND));
