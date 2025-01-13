@@ -24,6 +24,9 @@ import com.bcsdlab.internal.dues.service.DuesService;
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
+
+import java.io.IOException;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -85,6 +88,14 @@ public class DuesController implements DuesApi {
         @Auth(permit = {MANAGER, ADMIN}) Long memberId
     ) {
         duesService.sendDuesDM();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/members/slack-sync")
+    public ResponseEntity<Void> sync(
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId
+    ) throws IOException {
+        duesService.syncGoogleSheet();
         return ResponseEntity.ok().build();
     }
 }

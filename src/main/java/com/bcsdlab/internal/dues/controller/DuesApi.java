@@ -22,6 +22,9 @@ import com.bcsdlab.internal.dues.controller.dto.response.DuesResponse;
 import static com.bcsdlab.internal.auth.Authority.ADMIN;
 import static com.bcsdlab.internal.auth.Authority.MANAGER;
 import static com.bcsdlab.internal.auth.Authority.NORMAL;
+
+import java.io.IOException;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -197,4 +200,10 @@ public interface DuesApi {
     ResponseEntity<Void> sendSlackDMMessage(
         @Auth(permit = {MANAGER, ADMIN}) Long memberId
     );
+
+    @Operation(summary = "회비 납부 내역 동기화")
+    @PostMapping("/dues/sheet-sync")
+    ResponseEntity<Void> sync(
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId
+    ) throws IOException;
 }
