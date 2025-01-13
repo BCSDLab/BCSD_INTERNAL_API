@@ -3,7 +3,6 @@ package com.bcsdlab.internal.member.repository;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.EMAIL_NOT_FOUND;
 import static com.bcsdlab.internal.member.exception.MemberExceptionType.MEMBER_NOT_FOUND;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +26,8 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     Optional<Member> findBySlackId(String slackId);
 
+    Optional<Member> findByNameAndTrackId(String name, Long trackId);
+
     List<Member> findAllByIsDeletedFalse();
 
     default Member getByEmail(String email) {
@@ -46,6 +47,12 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 
     default Member getByStudentNumber(String studentNumber) {
         return findByStudentNumber(studentNumber)
+            .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
+    }
+
+    // 동명이인이 동일 트랙에 존재할 경우 문제 발생
+    default Member getByNameAndTrackId(String name, Long trackId) {
+        return findByNameAndTrackId(name, trackId)
             .orElseThrow(() -> new MemberException(MEMBER_NOT_FOUND));
     }
 

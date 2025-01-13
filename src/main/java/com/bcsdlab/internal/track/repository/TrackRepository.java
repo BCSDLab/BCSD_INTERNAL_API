@@ -19,4 +19,10 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     List<Track> findAllByIsDeleted(Boolean isDeleted);
 
     Optional<Track> findByNameAndIsDeleted(String name, Boolean isDeleted);
+
+    Optional<Track> findByName(String name);
+
+    default Track getByName(String name) {
+        return findByName(name).orElseThrow(() -> new TrackException(TRACK_NOT_FOUND));
+    }
 }
