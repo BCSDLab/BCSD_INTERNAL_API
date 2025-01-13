@@ -91,7 +91,7 @@ public class DuesController implements DuesApi {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/members/slack-sync")
+    @PostMapping("/sheet-sync")
     public ResponseEntity<Void> sync(
         @Auth(permit = {MANAGER, ADMIN}) Long adminId
     ) throws IOException {
