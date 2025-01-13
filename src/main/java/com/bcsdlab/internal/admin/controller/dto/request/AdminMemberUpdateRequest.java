@@ -18,10 +18,10 @@ import jakarta.validation.constraints.NotNull;
 
 public record AdminMemberUpdateRequest(
     @Schema(example = "2023", description = "가입 년도")
-    @NotNull Integer joinedYear,
+    Integer joinedYear,
 
     @Schema(example = "3", description = "가입 월")
-    @NotNull Integer joinedMonth,
+    Integer joinedMonth,
 
     @Schema(example = "1", description = "트랙 ID")
     @NotNull Long trackId,
