@@ -28,7 +28,7 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
     Optional<Member> findBySlackId(String slackId);
 
     // 동명이인이 동일 트랙에 존재할 경우 문제 발생
-    Optional<Member> findByNameAndTrackIdAndStatusIsNotIgnoreCase(String name, Long trackId, MemberStatus status);
+    Optional<Member> findByNameAndTrackIdAndStatusIsNot(String name, Long trackId, String status);
 
     List<Member> findAllByIsDeletedFalse();
 

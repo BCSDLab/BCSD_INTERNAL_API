@@ -136,8 +136,8 @@ public class DuesService {
                 Track track = trackRepository.getByName(trackName);
                 // String note = googleSheetUser.get(NOTE_INDEX).toString();
 
-                Optional<Member> optionalMember = memberRepository.findByNameAndTrackIdAndStatusIsNotIgnoreCase(
-                    name, track.getId(), MemberStatus.GRADUATE
+                Optional<Member> optionalMember = memberRepository.findByNameAndTrackIdAndStatusIsNot(
+                    name, track.getId(), MemberStatus.GRADUATE.name()
                 );
 
                 if (optionalMember.isEmpty()) { continue; }
