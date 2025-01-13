@@ -83,7 +83,7 @@ public record AdminMemberUpdateRequest(
 
     public Member toEntity(Track track, Member origin) {
         return Member.builder()
-            .joinDate(YearMonth.of(joinedYear, joinedMonth))
+            .joinDate((joinedYear == null || joinedMonth == null) ? null : YearMonth.of(joinedYear, joinedMonth))
             .track(track)
             .memberType(memberType)
             .status(status)
