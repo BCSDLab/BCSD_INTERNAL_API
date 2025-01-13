@@ -131,7 +131,8 @@ public class DuesService {
 
             for (List<Object> googleSheetUser : googleSheetUsers) {
                 String name = googleSheetUser.get(NAME_INDEX).toString();
-                Track track = trackRepository.getByName(googleSheetUser.get(TRACK_INDEX).toString());
+                String trackName = googleSheetUser.get(TRACK_INDEX).toString().replace("-", "");
+                Track track = trackRepository.getByName(trackName);
                 // String note = googleSheetUser.get(NOTE_INDEX).toString();
 
                 Member member = memberRepository.getByNameAndTrackId(name, track.getId());
