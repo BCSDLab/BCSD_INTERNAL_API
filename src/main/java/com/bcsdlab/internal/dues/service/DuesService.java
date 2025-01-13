@@ -135,7 +135,11 @@ public class DuesService {
                 Track track = trackRepository.getByName(trackName);
                 // String note = googleSheetUser.get(NOTE_INDEX).toString();
 
-                Member member = memberRepository.getByNameAndTrackId(name, track.getId());
+                Optional<Member> optionalMember = memberRepository.findByNameAndTrackId(name, track.getId());
+
+                if (optionalMember.isEmpty()) { continue; }
+
+                Member member = optionalMember.get();
 
                 String duesStringStatus = googleSheetUser.get(MONTH_START_INDEX + date.getMonthValue() - 1).toString();
 
