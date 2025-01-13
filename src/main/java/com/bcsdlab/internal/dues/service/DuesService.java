@@ -30,6 +30,7 @@ import com.bcsdlab.internal.global.google.service.GoogleSheetsService;
 import com.bcsdlab.internal.global.slack.SlackService;
 import com.bcsdlab.internal.global.slack.model.SlackNotificationFactory;
 import com.bcsdlab.internal.job.repository.JobRepository;
+import com.bcsdlab.internal.member.MemberStatus;
 import com.bcsdlab.internal.member.model.Member;
 import com.bcsdlab.internal.member.repository.MemberRepository;
 import com.bcsdlab.internal.track.Track;
@@ -135,7 +136,9 @@ public class DuesService {
                 Track track = trackRepository.getByName(trackName);
                 // String note = googleSheetUser.get(NOTE_INDEX).toString();
 
-                Optional<Member> optionalMember = memberRepository.findByNameAndTrackId(name, track.getId());
+                Optional<Member> optionalMember = memberRepository.findByNameAndTrackIdAndStatusIsNotIgnoreCase(
+                    name, track.getId(), MemberStatus.GRADUATE
+                );
 
                 if (optionalMember.isEmpty()) { continue; }
 
