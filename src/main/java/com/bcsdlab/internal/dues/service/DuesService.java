@@ -115,7 +115,7 @@ public class DuesService {
     public void syncGoogleSheet() throws IOException {
         final int TRACK_INDEX = 0;
         final int NAME_INDEX = 1;
-        final int NOTE_INDEX = 2;
+        // final int NOTE_INDEX = 2;
         final int MONTH_START_INDEX = 3;
 
         YearMonth current = YearMonth.now();
@@ -132,7 +132,7 @@ public class DuesService {
             for (List<Object> googleSheetUser : googleSheetUsers) {
                 String name = googleSheetUser.get(NAME_INDEX).toString();
                 Track track = trackRepository.getByName(googleSheetUser.get(TRACK_INDEX).toString());
-                String note = googleSheetUser.get(NOTE_INDEX).toString();
+                // String note = googleSheetUser.get(NOTE_INDEX).toString();
 
                 Member member = memberRepository.getByNameAndTrackId(name, track.getId());
 
