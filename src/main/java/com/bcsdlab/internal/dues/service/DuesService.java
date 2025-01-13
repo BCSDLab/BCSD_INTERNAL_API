@@ -5,6 +5,7 @@ import static com.bcsdlab.internal.dues.exception.DuesExceptionType.DUES_NOT_FOU
 
 import java.io.IOException;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,17 +113,21 @@ public class DuesService {
 
     @Transactional
     public void syncGoogleSheet() throws IOException {
-        int currentYear = YearMonth.now().getYear();
-        int[] years = {currentYear - 1, currentYear};
-        String range = "!C5:Q";
-
         final int TRACK_INDEX = 0;
         final int NAME_INDEX = 1;
         final int NOTE_INDEX = 2;
         final int MONTH_START_INDEX = 3;
 
-        for (int year: years) {
-            List<List<Object>> googleSheetUsers = googleSheetsService.readSheetData(spreadsheetId, year + range);
+        YearMonth current = YearMonth.now();
+        // 1년 전 1월부터 시작 (e.g. 2025년 03월에 동기화 실행할 경우, 2024년 1월 ~ 2024년 03월 데이터 동기화)
+        YearMonth start = current.withMonth(1).minusYears(1);
+
+        List<List<Object>> googleSheetUsers = new ArrayList<>();
+        for (YearMonth date = start; !date.isAfter(current); date = date.plusMonths(1)) {
+            // 1월일 때만(년도가 바뀔때만) 데이터를 가져옴
+            if (date.getMonthValue() == 1) {
+                googleSheetUsers = getGoogleSheetUsers(date.getYear());
+            }
 
             for (List<Object> googleSheetUser : googleSheetUsers) {
                 String name = googleSheetUser.get(NAME_INDEX).toString();
@@ -131,25 +136,36 @@ public class DuesService {
 
                 Member member = memberRepository.getByNameAndTrackId(name, track.getId());
 
-                for (int month = 1; month <= 12; month++) {
-                    DuesStatus duesStatus = switch (googleSheetUser.get(MONTH_START_INDEX + month - 1).toString()) {
-                        case "O" -> DuesStatus.PAID;
-                        case "-" -> DuesStatus.SKIP;
-                        default -> DuesStatus.NOT_PAID;
-                    };
-                    YearMonth date = YearMonth.of(year, month);
+                String duesStringStatus = googleSheetUser.get(MONTH_START_INDEX + date.getMonthValue() - 1).toString();
 
-                    Optional<Dues> dues = duesRepository.findByDateAndMemberId(date, member.getId());
-                    if (dues.isEmpty()) {
-                        duesRepository.save(new Dues(null, member, date, duesStatus, false));
-                    } else {
-                        Dues existingDues = dues.get();
-                        existingDues.update(duesStatus, existingDues.getMemo());
-                    }
+                // 납부 정보가 없을 경우 제거
+                if (duesStringStatus == null || duesStringStatus.isBlank()) {
+                    duesRepository.findByDateAndMemberId(date, member.getId())
+                        .ifPresent(duesRepository::delete);
+                    continue;
+                }
 
+                // 납부 정보가 있을 경우 동기화
+                DuesStatus duesStatus = switch (duesStringStatus) {
+                    case "O" -> DuesStatus.PAID;
+                    case "-" -> DuesStatus.SKIP;
+                    default -> DuesStatus.NOT_PAID;
+                };
+
+                Optional<Dues> dues = duesRepository.findByDateAndMemberId(date, member.getId());
+                if (dues.isEmpty()) {
+                    duesRepository.save(new Dues(null, member, date, duesStatus, false));
+                } else {
+                    Dues existingDues = dues.get();
+                    existingDues.update(duesStatus, existingDues.getMemo());
                 }
             }
-
         }
+    }
+
+    private List<List<Object>> getGoogleSheetUsers(int year) throws IOException {
+        final String range = "!C5:Q";
+
+        return googleSheetsService.readSheetData(spreadsheetId, year + range);
     }
 }
