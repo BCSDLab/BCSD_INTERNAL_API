@@ -119,8 +119,8 @@ public class DuesService {
         // final int NOTE_INDEX = 2;
         final int MONTH_START_INDEX = 3;
 
-        YearMonth current = YearMonth.now();
-        // 1년 전 1월부터 시작 (e.g. 2025년 03월에 동기화 실행할 경우, 2024년 1월 ~ 2024년 03월 데이터 동기화)
+        // 1년 전 1월부터 시작 (e.g. 2025년 03월에 동기화 실행할 경우, 2024년 1월 ~ 2025년 12월 데이터 동기화)
+        YearMonth current = YearMonth.now().withMonth(12);
         YearMonth start = current.withMonth(1).minusYears(1);
 
         List<List<Object>> googleSheetUsers = new ArrayList<>();
@@ -130,11 +130,11 @@ public class DuesService {
                 googleSheetUsers = getGoogleSheetUsers(date.getYear());
             }
 
-            for (List<Object> googleSheetUser : googleSheetUsers) {
-                String name = googleSheetUser.get(NAME_INDEX).toString();
-                String trackName = googleSheetUser.get(TRACK_INDEX).toString().replace("-", "");
+            for (List<Object> row : googleSheetUsers) {
+                String name = row.get(NAME_INDEX).toString();
+                String trackName = row.get(TRACK_INDEX).toString().replace("-", "");
                 Track track = trackRepository.getByName(trackName);
-                // String note = googleSheetUser.get(NOTE_INDEX).toString();
+                // String note = row.get(NOTE_INDEX).toString();
 
                 Optional<Member> optionalMember = memberRepository.findByNameAndTrackIdAndStatusIsNot(
                     name, track.getId(), MemberStatus.GRADUATE
@@ -144,7 +144,10 @@ public class DuesService {
 
                 Member member = optionalMember.get();
 
-                String duesStringStatus = googleSheetUser.get(MONTH_START_INDEX + date.getMonthValue() - 1).toString();
+                String duesStringStatus = "";
+                if (date.getMonthValue() <= row.size() - 3) {
+                    duesStringStatus = row.get(MONTH_START_INDEX + date.getMonthValue() - 1).toString();
+                }
 
                 // 납부 정보가 없을 경우 제거
                 if (duesStringStatus == null || duesStringStatus.isBlank()) {
