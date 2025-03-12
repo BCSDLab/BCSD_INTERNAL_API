@@ -13,7 +13,7 @@ public class BirthdayScheduler {
 
     private final MemberService memberService;
 
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void celebrateBirthday() {
         memberService.celebrateBirthday();
     }
