@@ -16,7 +16,10 @@ public record MemberQueryRequest(
     Boolean authed,
 
     @Schema(example = "false", description = "회비 면제 여부")
-    Boolean feeExempted
+    Boolean feeExempted,
+
+    @Schema(example = "true", description = "활동 여부")
+    Boolean isActive
 ) {
 
 }

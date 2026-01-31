@@ -7,5 +7,5 @@ import com.bcsdlab.internal.member.model.Member;
 
 public interface MemberCustomRepository {
 
-    Page<Member> searchMembers(String name, Long trackId, Boolean deleted, Boolean authed, Pageable pageable);
+    Page<Member> searchMembers(String name, Long trackId, Boolean deleted, Boolean authed, Boolean isActive, Pageable pageable);
 }

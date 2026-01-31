@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberActiveRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
@@ -80,6 +81,16 @@ public class AdminController implements AdminApi {
         @Auth(permit = {MANAGER, ADMIN}) Long adminId
     ) throws IOException, SlackApiException {
         adminService.syncSlackMember();
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/members/{memberId}/active")
+    public ResponseEntity<Void> updateMemberActive(
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId,
+        @PathVariable Long memberId,
+        @RequestBody @Valid AdminMemberActiveRequest request
+    ) {
+        adminService.updateMemberActive(memberId, request.isActive());
         return ResponseEntity.ok().build();
     }
 }

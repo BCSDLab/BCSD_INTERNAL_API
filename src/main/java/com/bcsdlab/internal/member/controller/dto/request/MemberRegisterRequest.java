@@ -100,6 +100,7 @@ public record MemberRegisterRequest(
             false,
             false,
             false,
+            true,
             birthday
         );
     }

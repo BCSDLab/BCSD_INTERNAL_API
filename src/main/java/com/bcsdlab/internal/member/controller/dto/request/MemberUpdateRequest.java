@@ -100,6 +100,7 @@ public record MemberUpdateRequest(
             origin.getIsAuthed(),
             origin.getIsDeleted(),
             origin.getIsFeeExempt(),
+            origin.getIsActive(),
             birthday
         );
     }

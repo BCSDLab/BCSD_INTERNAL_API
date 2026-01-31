@@ -82,6 +82,9 @@ public record AdminMemberCreateRequest(
     @Schema(example = "false", description = "회비 면제 여부")
     @NotNull Boolean isFeeExempt,
 
+    @Schema(example = "true", description = "활동 여부")
+    @NotNull Boolean isActive,
+
     @Column(name = "birthday")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate birthday
@@ -107,6 +110,7 @@ public record AdminMemberCreateRequest(
             isAuthed,
             isDeleted,
             isFeeExempt,
+            isActive,
             birthday
         );
     }

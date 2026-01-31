@@ -21,13 +21,14 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Member> searchMembers(String name, Long trackId, Boolean deleted, Boolean authed, Pageable pageable) {
+    public Page<Member> searchMembers(String name, Long trackId, Boolean deleted, Boolean authed, Boolean isActive, Pageable pageable) {
         List<Member> result = jpaQueryFactory.selectFrom(member)
             .where(
                 containName(name),
                 eqTrackId(trackId),
                 inDeleted(deleted),
-                isAuthed(authed)
+                isAuthed(authed),
+                isActive(isActive)
             )
             .orderBy(
                 member.joinDate.asc(),
@@ -36,10 +37,10 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
-        return new PageImpl<>(result, pageable, countMembers(name, trackId, deleted, authed));
+        return new PageImpl<>(result, pageable, countMembers(name, trackId, deleted, authed, isActive));
     }
 
-    private Long countMembers(String name, Long trackId, Boolean deleted, Boolean authed) {
+    private Long countMembers(String name, Long trackId, Boolean deleted, Boolean authed, Boolean isActive) {
         return jpaQueryFactory
             .select(member.count())
             .from(member)
@@ -47,7 +48,8 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
                 containName(name),
                 eqTrackId(trackId),
                 inDeleted(deleted),
-                isAuthed(authed)
+                isAuthed(authed),
+                isActive(isActive)
             )
             .fetchOne();
     }
@@ -66,5 +68,9 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
     private BooleanExpression eqTrackId(Long trackId) {
         return trackId == null ? null : member.track.id.eq(trackId);
+    }
+
+    private BooleanExpression isActive(Boolean isActive) {
+        return isActive == null ? null : member.isActive.eq(isActive);
     }
 }

@@ -73,6 +73,11 @@ public class AdminService {
         return MemberResponse.from(member);
     }
 
+    public void updateMemberActive(Long memberId, Boolean isActive) {
+        Member member = memberRepository.getById(memberId);
+        member.updateActive(isActive);
+    }
+
     public Long createMember(AdminMemberCreateRequest request) {
         Track track = trackRepository.getById(request.trackId());
         Member member = request.toEntity(track);

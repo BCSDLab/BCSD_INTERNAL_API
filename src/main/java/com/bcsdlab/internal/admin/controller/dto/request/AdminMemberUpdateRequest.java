@@ -76,6 +76,9 @@ public record AdminMemberUpdateRequest(
     @Schema(example = "false", description = "삭제 여부")
     @NotNull Boolean isDeleted,
 
+    @Schema(example = "true", description = "활동 여부")
+    @NotNull Boolean isActive,
+
     @Column(name = "birthday")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate birthday
@@ -100,6 +103,7 @@ public record AdminMemberUpdateRequest(
             .slackId(origin.getSlackId())
             .isAuthed(isAuthed)
             .isDeleted(isDeleted)
+            .isActive(isActive)
             .birthday(birthday)
             .build();
     }

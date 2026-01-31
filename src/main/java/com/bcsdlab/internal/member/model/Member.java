@@ -104,6 +104,9 @@ public class Member extends RootEntity<Long> {
     @Column(name = "is_fee_exempt")
     private Boolean isFeeExempt;
 
+    @Column(name = "is_active", columnDefinition = "tinyint(1)")
+    private Boolean isActive;
+
     @OneToOne(mappedBy = "member")
     private MemberWithdraw memberWithdraw;
 
@@ -131,6 +134,7 @@ public class Member extends RootEntity<Long> {
         boolean isAuthed,
         boolean isDeleted,
         boolean isFeeExempt,
+        Boolean isActive,
         LocalDate birthday
     ) {
         this.joinDate = joinDate;
@@ -151,6 +155,7 @@ public class Member extends RootEntity<Long> {
         this.isAuthed = isAuthed;
         this.isDeleted = isDeleted;
         this.isFeeExempt = isFeeExempt;
+        this.isActive = isActive;
         this.birthday = birthday;
     }
 
@@ -161,6 +166,7 @@ public class Member extends RootEntity<Long> {
         this.isAuthed = false;
         this.isDeleted = false;
         this.isFeeExempt = false;
+        this.isActive = true;
         this.birthday = birthday;
     }
 
@@ -200,6 +206,7 @@ public class Member extends RootEntity<Long> {
         this.isAuthed = updated.isAuthed;
         this.isDeleted = updated.isDeleted;
         this.isFeeExempt = updated.isFeeExempt;
+        this.isActive = updated.isActive;
     }
 
     public void updateMember(
@@ -238,6 +245,10 @@ public class Member extends RootEntity<Long> {
 
     public void setMemberType(MemberType memberType) {
         this.memberType = memberType;
+    }
+
+    public void updateActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public void withdraw() {

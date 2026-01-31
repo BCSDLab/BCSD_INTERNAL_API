@@ -86,7 +86,7 @@ public class MemberService {
 
     public Page<MemberResponse> getMembers(MemberQueryRequest request, Pageable pageable) {
         Page<Member> members = memberRepository
-            .searchMembers(request.name(), request.trackId(), request.deleted(), request.authed(), pageable);
+            .searchMembers(request.name(), request.trackId(), request.deleted(), request.authed(), request.isActive(), pageable);
         return members.map(MemberResponse::from);
     }
 

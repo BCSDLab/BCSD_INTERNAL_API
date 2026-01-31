@@ -35,6 +35,9 @@ public record HomepageMemberResponse(
     @Schema(example = "1", description = "사용자 고유 ID")
     boolean idDeleted,
 
+    @Schema(example = "true", description = "활동 여부")
+    Boolean isActive,
+
     @Schema(example = "1", description = "사용자 고유 ID")
     LocalDateTime createdAt,
 
@@ -53,6 +56,7 @@ public record HomepageMemberResponse(
             member.getEmail(),
             member.getProfileImageUrl(),
             member.getIsDeleted(),
+            member.getIsActive(),
             member.getCreatedAt(),
             member.getUpdatedAt()
         );

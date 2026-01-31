@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberActiveRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberCreateRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberDeleteRequest;
 import com.bcsdlab.internal.admin.controller.dto.request.AdminMemberUpdateRequest;
@@ -159,4 +160,29 @@ public interface AdminApi {
     ResponseEntity<Void> sync(
         @Auth(permit = {MANAGER, ADMIN}) Long adminId
     ) throws IOException, SlackApiException;
+
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(
+                responseCode = "401",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "403",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                content = @Content(schema = @Schema(hidden = true))
+            ),
+        }
+    )
+    @Operation(summary = "회원 활동 상태 변경")
+    @PatchMapping("/members/{memberId}/active")
+    ResponseEntity<Void> updateMemberActive(
+        @Auth(permit = {MANAGER, ADMIN}) Long adminId,
+        @Parameter(in = PATH) @PathVariable Long memberId,
+        @RequestBody @Valid AdminMemberActiveRequest request
+    );
 }
